@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Responder session 3 of 8. Contain before you fix: pause downstream schedules, quarantine the partition, trip circuit breakers and hold exports, then see on the bench what containment can and cannot reach.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Stop a bad load spreading - learn incident response for data teams with phoebe">
+<meta property="og:description" content="Responder session 3 of 8. Close the valves on every outgoing edge before you start the fix, and know which copies no valve can reach.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/courses/b3-stop-a-bad-load-spreading.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Stop a bad load spreading - learn incident response for data teams with phoebe">
+<meta name="twitter:description" content="Containment stops new copies. The fix can wait on a quiet table; the spread cannot wait for the fix.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Responder session 3 · Stop a bad load spreading - learn incident response for data teams with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-data-incident-response-with-phoebe</a> / Responder session 3 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Incident Response for Data Teams with Phoebe · Responder session 3 of 8</div>
+    <h1>Stop a bad load <span class="accent">spreading</span></h1>
+    <p class="sub">You know what read Quarrybank's bad load. Every hour the partition stays open, that list gets longer: the next dashboard refresh, the scheduled sales email, the next model run. Tonight you close the valves on every outgoing edge before anyone starts the fix, learn the one thing containment can never do, and see on the bench why the team that fixes first ends up with almost three times as many people reading bad data.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Building</span>
+      <span class="chip audience">Data and analytics engineers on call</span>
+      <span class="chip audience">Pipeline owners</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Valves, limits, order</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: the bad-load playbook</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Contain first, because the fix takes hours and the spread takes minutes</h2>
+    </div>
+    <p class="lede">A correct fix for a duplicated partition is real work: find the duplicate, rebuild the rows, rerun what depends on them, check the result. On the bench it lands hours after the first signal under every plan. Containment is different. It is a handful of switches that take minutes, and every one of them you flip early is a copy that never gets made. Tonight is about flipping them in the right order, before the fix, at 3am, without waiting for anyone's permission you could have arranged in advance.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A bad-load playbook: the first 15 minutes after a bad partition is confirmed, in order, with who may do each step at 3am. It becomes page 3 of the responder half of Quarrybank's plan. Plus a clear answer to the question every head of data asks the morning after: "you contained it, so why are people still holding the wrong number?"</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>What containment means, in one sentence<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>NIST SP 800-61 Rev. 3 puts it plainly under RS.MI-01: "Containment refers to preventing the expansion of an incident." Not undoing it, not fixing it. Preventing it from getting bigger. For a bad load, bigger means more copies: more tables built from the partition, more dashboards rendered from it, more files sent, more models trained on it, more people reading a number that is wrong.</p>
+        <p>That framing settles most 3am arguments. If an action makes the list of copies stop growing, it is containment and it goes first. If it makes the data right, it is the fix and it can wait for a quiet table.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. The on-call engineer confirmed the duplicated partition within minutes of the 02:40Z alert and immediately started writing a deduplication query. Nobody paused the morning sales email, which went out on schedule to its 40 recipients with revenue doubled for two regions. The fix was correct. It was also late for everyone on that list.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where tonight sits between sessions 2 and 4<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Session 2</strong> gave you the consumer trace: every table, dashboard, extract, email and model that read the bad load. Tonight that trace becomes the list of edges you put a valve on.</li>
+          <li><strong>Tonight</strong> is the bad load: data that is wrong and still flowing downstream.</li>
+          <li><strong>Session 4</strong> is the leaked table: data that is right but in the wrong hands. Same principle, different valves: doors to close rather than schedules to pause.</li>
+          <li><strong>Session 5</strong> is the fix itself, and how to prove it reached every copy.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers containment as preventing expansion, NIST RS.MI-01</span>
+      <h2>A valve on every outgoing edge</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">Take the consumer trace from session 2 and look at it as a set of edges leaving the bad partition. Each edge has a mechanism that makes the next copy, a schedule, a query, an export, a job, and each mechanism has an off switch. Containment is putting your hand on every one of those switches. It does nothing to copies already made, and that limit is drawn in on purpose.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The bad partition of 2026-02-10 on the left with five outgoing edges, each with a valve. Executive dashboard: quarantine, new reads stopped. Sales email: pause schedule, the send at bad write plus 5h00 held. Partner extract: hold export, but the file was already sent at bad write plus 0h30. Forecast model: circuit breaker, but the model already ran at bad write plus 0h35. Finance mart: pause schedule, next refresh held. Containment stops new copies only; the two copies made before the signal stay wrong.">
+        <defs>
+          <filter id="ib3aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib3aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ib3aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib3aH { font: 800 12px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #0D1F14; }
+          .ib3aL { font: 600 12px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #0D1F14; }
+          .ib3aK { font: 700 11px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #0D1F14; }
+          .ib3aS { font: 400 11px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #4A5F52; }
+          .ib3aR { font: 700 11px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #991B1B; }
+          .ib3aA { font: 700 11px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #053D1E; }
+          .ib3aN { font: 400 12px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib3aH" x="40" y="30">ONE BAD PARTITION, FIVE OUTGOING EDGES, FIVE VALVES</text>
+
+        <g filter="url(#ib3aSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="50" width="160" height="320" rx="10" fill="url(#ib3aHc)" transform="rotate(-0.5 120 210)"/>
+          <rect x="52" y="176" width="136" height="68" rx="6" fill="#FFFFFF" transform="rotate(1 120 210)"/>
+
+          <path d="M204 70 L326 70"/>
+          <rect x="330" y="57" width="128" height="26" rx="6" fill="#F2A900" transform="rotate(-1.5 394 70)"/>
+          <path d="M462 70 L630 70" marker-end="url(#ib3aAr)"/>
+          <rect x="636" y="53" width="200" height="34" rx="7" fill="#ECF7F0" transform="rotate(1 736 70)"/>
+
+          <path d="M204 140 L326 140"/>
+          <rect x="330" y="127" width="128" height="26" rx="6" fill="#F2A900" transform="rotate(1.2 394 140)"/>
+          <path d="M462 140 L630 140" marker-end="url(#ib3aAr)"/>
+          <rect x="636" y="123" width="200" height="34" rx="7" fill="#ECF7F0" transform="rotate(-1 736 140)"/>
+
+          <path d="M204 210 L326 210"/>
+          <rect x="330" y="197" width="128" height="26" rx="6" fill="#F2A900" transform="rotate(-1 394 210)"/>
+          <path d="M462 210 L630 210" marker-end="url(#ib3aAr)"/>
+          <rect x="636" y="193" width="200" height="34" rx="7" fill="#FEF2F2" stroke="#991B1B" transform="rotate(1.5 736 210)"/>
+
+          <path d="M204 280 L326 280"/>
+          <rect x="330" y="267" width="128" height="26" rx="6" fill="#F2A900" transform="rotate(1.4 394 280)"/>
+          <path d="M462 280 L630 280" marker-end="url(#ib3aAr)"/>
+          <rect x="636" y="263" width="200" height="34" rx="7" fill="#FEF2F2" stroke="#991B1B" transform="rotate(-1.2 736 280)"/>
+
+          <path d="M204 350 L326 350"/>
+          <rect x="330" y="337" width="128" height="26" rx="6" fill="#F2A900" transform="rotate(-1.3 394 350)"/>
+          <path d="M462 350 L630 350" marker-end="url(#ib3aAr)"/>
+          <rect x="636" y="333" width="200" height="34" rx="7" fill="#ECF7F0" transform="rotate(0.8 736 350)"/>
+        </g>
+
+        <text class="ib3aL" x="64" y="200">bad partition</text>
+        <text class="ib3aS" x="64" y="217">2026-02-10, rows x2</text>
+        <text class="ib3aS" x="64" y="233">kept, never deleted</text>
+
+        <text class="ib3aK" x="394" y="74" text-anchor="middle">quarantine</text>
+        <text class="ib3aK" x="394" y="144" text-anchor="middle">pause schedule</text>
+        <text class="ib3aK" x="394" y="214" text-anchor="middle">hold export</text>
+        <text class="ib3aK" x="394" y="284" text-anchor="middle">circuit breaker</text>
+        <text class="ib3aK" x="394" y="354" text-anchor="middle">pause schedule</text>
+
+        <text class="ib3aL" x="648" y="75">executive dashboard</text>
+        <text class="ib3aL" x="648" y="145">sales email</text>
+        <text class="ib3aL" x="648" y="215">partner extract</text>
+        <text class="ib3aL" x="648" y="285">forecast model</text>
+        <text class="ib3aL" x="648" y="355">finance mart</text>
+
+        <text class="ib3aA" x="648" y="104">new reads stopped</text>
+        <text class="ib3aA" x="648" y="174">send at bad write + 5h00 held</text>
+        <text class="ib3aR" x="648" y="244">file sent at bad write + 0h30</text>
+        <text class="ib3aR" x="648" y="314">model ran at bad write + 0h35</text>
+        <text class="ib3aA" x="648" y="384">next refresh held</text>
+
+        <text class="ib3aN" x="40" y="414">Containment stops NEW copies only. The two red copies were made before the 0h40 signal. Constructed.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - five edges, five switches, and two copies that left before anyone could reach a switch.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The four moves, and what each one stops<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <thead><tr><th>Move</th><th>What you do</th><th>What it stops</th></tr></thead>
+          <tbody>
+            <tr><td>Pause downstream schedules</td><td>Pause the orchestrator jobs that read the partition: mart refreshes, scheduled emails, report builds</td><td>The next scheduled copy</td></tr>
+            <tr><td>Quarantine the partition</td><td>Revoke read on it, or move it out of reach of readers. Never delete it (responder session 1)</td><td>Ad hoc queries and live dashboards</td></tr>
+            <tr><td>Circuit breaker</td><td>A check on a job's input that stops the job when the input fails it, instead of running on bad rows</td><td>Jobs you forgot to pause</td></tr>
+            <tr><td>Hold exports</td><td>Stop any file, share or API push that leaves the warehouse for someone outside the team</td><td>Copies you cannot recall once sent</td></tr>
+          </tbody>
+        </table>
+        <div class="callout tip">
+          <p><strong>Pause, never cancel.</strong> A paused schedule remembers what it was going to do and resumes after the fix. A cancelled one has to be rebuilt from memory at the end of a long night, and that is where the second incident comes from.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why exports go first<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every copy inside the warehouse can be corrected by you later: rerun the mart, refresh the dashboard. A copy that has left the building, a partner file, an emailed report, can only be corrected by someone else, after you tell them. So the order of the valves follows the cost of the copy they stop: outgoing exports and sends first, then scheduled jobs, then the partition itself.</p>
+        <p>This is practitioner ordering, not a NIST rule. NIST tells you what containment is for; the order is how data teams make the most of the first minutes.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Circuit breakers, built before the incident<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A circuit breaker is the only valve that closes itself. It is a check placed on a job's input, a row count range, a uniqueness test on the key, a freshness check, that makes the job stop instead of writing its output. During an incident it saves you from the job you forgot was downstream. Before an incident it is the difference between a bad load that spreads for an hour and one that stops at the first table.</p>
+        <p>Designing which checks catch a bad partition is detection work, and it belongs to observability. The incident question is simpler: which of your downstream jobs have a breaker, and which will happily run on whatever they are given? Write that list down before you need it.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers what containment cannot do</span>
+      <h2>No valve reaches a copy that has already left</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Containment works forward in time. It stops the next copy, not the last one. Any copy made before the valves closed stays wrong until someone corrects it or tells the people holding it, and the bench applies exactly that rule. That is why a much faster containment can leave the headline number unchanged and still be worth every minute of the drill.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two timelines of the bad load, measured from the bad write. Both show the partner extract sent at 0h30 and the forecast model run at 0h35, before the signal at 0h40. In R2, containment lands at signal plus 2h35; in R3 with the containment playbook, at signal plus 0h50. In both, the sales email due at 5h00 is held. The two early copies are untouched by either containment time. Leaked table rows exposed: 12,800 under R2, 8,400 under R3; headline 7 plus 3 under both.">
+        <defs>
+          <filter id="ib3bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib3bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+        </defs>
+        <style>
+          .ib3bH { font: 800 12px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #0D1F14; }
+          .ib3bL { font: 600 12px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #0D1F14; }
+          .ib3bM { font: 700 11px ui-monospace, Menlo, monospace; fill: #053D1E; }
+          .ib3bS { font: 400 11px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #4A5F52; }
+          .ib3bR { font: 700 11px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #991B1B; }
+          .ib3bA { font: 700 11px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #053D1E; }
+          .ib3bN { font: 400 12px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib3bH" x="40" y="30">R2 · NO PLAYBOOK · CONTAINED AT SIGNAL + 2h35</text>
+        <text class="ib3bH" x="40" y="180">R3 · CONTAINMENT PLAYBOOK · CONTAINED AT SIGNAL + 0h50</text>
+
+        <g filter="url(#ib3bSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="380" y="70" width="250" height="16" rx="4" fill="url(#ib3bHc)" stroke="none"/>
+          <path d="M60 78 L840 78"/>
+          <circle cx="80" cy="78" r="7" fill="#FFFFFF"/>
+          <circle cx="200" cy="78" r="7" fill="#FEF2F2" stroke="#991B1B"/>
+          <circle cx="290" cy="78" r="7" fill="#FEF2F2" stroke="#991B1B"/>
+          <circle cx="380" cy="78" r="7" fill="#FFFFFF"/>
+          <rect x="632" y="64" width="16" height="28" rx="3" fill="#075A2C" transform="rotate(2 640 78)"/>
+          <circle cx="790" cy="78" r="7" fill="#ECF7F0" stroke="#075A2C"/>
+
+          <rect x="380" y="220" width="110" height="16" rx="4" fill="url(#ib3bHc)" stroke="none"/>
+          <path d="M60 228 L840 228"/>
+          <circle cx="80" cy="228" r="7" fill="#FFFFFF"/>
+          <circle cx="200" cy="228" r="7" fill="#FEF2F2" stroke="#991B1B"/>
+          <circle cx="290" cy="228" r="7" fill="#FEF2F2" stroke="#991B1B"/>
+          <circle cx="380" cy="228" r="7" fill="#FFFFFF"/>
+          <rect x="492" y="214" width="16" height="28" rx="3" fill="#075A2C" transform="rotate(-2 500 228)"/>
+          <circle cx="790" cy="228" r="7" fill="#ECF7F0" stroke="#075A2C"/>
+        </g>
+
+        <text class="ib3bM" x="80" y="58" text-anchor="middle">0h00</text>
+        <text class="ib3bM" x="200" y="58" text-anchor="middle">0h30</text>
+        <text class="ib3bM" x="290" y="58" text-anchor="middle">0h35</text>
+        <text class="ib3bM" x="380" y="58" text-anchor="middle">0h40</text>
+        <text class="ib3bM" x="640" y="58" text-anchor="middle">S + 2h35</text>
+        <text class="ib3bM" x="790" y="58" text-anchor="middle">5h00</text>
+        <text class="ib3bL" x="80" y="108" text-anchor="middle">bad write</text>
+        <text class="ib3bR" x="200" y="108" text-anchor="middle">extract sent</text>
+        <text class="ib3bR" x="290" y="108" text-anchor="middle">model ran</text>
+        <text class="ib3bL" x="380" y="108" text-anchor="middle">signal</text>
+        <text class="ib3bL" x="640" y="108" text-anchor="middle">contained</text>
+        <text class="ib3bL" x="790" y="108" text-anchor="middle">sales email held</text>
+        <text class="ib3bA" x="40" y="138">Leaked table under the same plan: 12,800 rows exposed · headline 7 + 3 · people who read bad data 17</text>
+
+        <text class="ib3bM" x="80" y="208" text-anchor="middle">0h00</text>
+        <text class="ib3bM" x="200" y="208" text-anchor="middle">0h30</text>
+        <text class="ib3bM" x="290" y="208" text-anchor="middle">0h35</text>
+        <text class="ib3bM" x="380" y="208" text-anchor="middle">0h40</text>
+        <text class="ib3bM" x="500" y="208" text-anchor="middle">S + 0h50</text>
+        <text class="ib3bM" x="790" y="208" text-anchor="middle">5h00</text>
+        <text class="ib3bL" x="80" y="258" text-anchor="middle">bad write</text>
+        <text class="ib3bR" x="200" y="258" text-anchor="middle">extract sent</text>
+        <text class="ib3bR" x="290" y="258" text-anchor="middle">model ran</text>
+        <text class="ib3bL" x="380" y="258" text-anchor="middle">signal</text>
+        <text class="ib3bL" x="500" y="258" text-anchor="middle">contained</text>
+        <text class="ib3bL" x="790" y="258" text-anchor="middle">sales email held</text>
+        <text class="ib3bA" x="40" y="288">Leaked table under the same plan: 8,400 rows exposed · headline 7 + 3 · people who read bad data 17</text>
+
+        <text class="ib3bN" x="40" y="316">Plain times from the bad write; S + from the first signal. Spaced for reading, not to scale. Constructed.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - faster containment shrinks the hatched spread, and the two red copies sit to its left on both lines.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>R2 to R3: what moved, and what did not<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>R3 is R2 plus one thing: a containment playbook. The bench models plan times by stated rules, and with a playbook containment lands 15 minutes after assessment instead of 120. Measured from the first signal, containment moves from 2h35 to 0h50.</p>
+        <table class="clean">
+          <thead><tr><th>Measured on the bench</th><th>R2 severity and roles</th><th>R3 containment playbook</th></tr></thead>
+          <tbody>
+            <tr><td>Contained, after the first signal</td><td>2h35</td><td>0h50</td></tr>
+            <tr><td>Rows exposed on the leaked table</td><td>12,800</td><td>8,400</td></tr>
+            <tr><td>Consumers + decisions on bad data</td><td>7 + 3</td><td>7 + 3</td></tr>
+            <tr><td>People who read bad data</td><td>17</td><td>17</td></tr>
+            <tr><td>Deadlines met</td><td>3 of 4</td><td>3 of 4</td></tr>
+          </tbody>
+        </table>
+        <p>The headline does not move because, on the bad load, the consumers it counts were reached before R2's containment ever landed. The partner extract went out 0h30 after the bad write and the forecast model ran 0h35 after it, both before the 0h40 signal. No containment time, however fast, starts before the signal.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>So why does R3 still matter?<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Because the headline is not the only number. The same playbook, applied to the leaked table, closes its doors sooner, and the bench measures 8,400 rows exposed instead of 12,800. Fewer customers' contact and credit-limit details were fetched before the doors closed. And the 0h50 is a capability: the next bad load may not have its worst copies made in the first 35 minutes.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. After the quarter's review, the head of data asked why the containment drill had not changed the headline. The answer the responder gave was the honest one: the two copies that count were made before anyone could know, so they are a notice problem, and session 6 deals with notice. The drill cut the leak's exposure from 12,800 rows to 8,400, and the next bad load gets the same 0h50.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Copies already made become a notice list<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every copy to the left of your valves goes into the record as its own row: what was copied, when, to whom, and who owns it. That list is the input to two later jobs, correcting the copies you control (session 5) and telling the owners of the ones you do not (session 6). On the bench, R2 and R3 leave the partner extract and the forecast model never told, and the partner contract notice missed. R4's lineage-driven notice is what clears them, not faster valves.</p>
+        <p>Keep the evidence while you build that list. NIST RS.AN-07 notes that collected incident data "is still considered evidence", so the quarantined partition, the job run ids and the export log are what prove which copies existed and when.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers stopping the spread before the fix</span>
+      <h2>Fix first, and the bad load keeps travelling while you work</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Every engineer's instinct is to fix the thing. It is also the fastest way to turn one incident into a bigger one, because a correct fix takes hours and nothing stops the copies while you write it. The bench has a trap for exactly this: T1, fix before you contain, which takes R4's plan and makes containment wait for the fix.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 386" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Before and after, times from the first signal. Top panel, fix first, trap T1: the bad load keeps spreading from the signal until the fix lands at 6h50, and the sales email to 40 recipients goes out inside that window, at bad write plus 5h00. Result: 37 people read bad data, 7 plus 1 consumers and decisions, 18,400 leaked rows exposed. Bottom panel, contain first, R4: spread stops at 0h50, then the table is quiet until the fix lands at 6h50. Result: 13 people, 5 plus 1, 8,400 rows.">
+        <defs>
+          <filter id="ib3cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="47" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib3cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+        </defs>
+        <style>
+          .ib3cH { font: 800 12px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #0D1F14; }
+          .ib3cR { font: 800 12px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #991B1B; }
+          .ib3cL { font: 600 12px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #0D1F14; }
+          .ib3cK { font: 700 11px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #0D1F14; }
+          .ib3cM { font: 700 11px ui-monospace, Menlo, monospace; fill: #053D1E; }
+          .ib3cS { font: 400 11px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #4A5F52; }
+          .ib3cV { font: 800 18px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #053D1E; }
+          .ib3cVR { font: 800 18px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #991B1B; }
+          .ib3cN { font: 400 12px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ib3cSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="30" width="800" height="150" rx="12" fill="#FEF2F2" stroke="#FCA5A5" transform="rotate(-0.3 440 105)"/>
+          <rect x="40" y="196" width="800" height="150" rx="12" fill="#ECF7F0" stroke="#075A2C" transform="rotate(0.3 440 271)"/>
+
+          <rect x="60" y="96" width="492" height="22" rx="5" fill="url(#ib3cHc)" transform="rotate(-0.4 310 107)"/>
+          <path d="M377 82 L377 94"/>
+          <rect x="554" y="88" width="12" height="38" rx="3" fill="#075A2C"/>
+
+          <rect x="60" y="262" width="54" height="22" rx="5" fill="url(#ib3cHc)" transform="rotate(0.5 91 273)"/>
+          <rect x="116" y="254" width="12" height="38" rx="3" fill="#075A2C"/>
+          <rect x="132" y="262" width="418" height="22" rx="5" fill="#FFFFFF" transform="rotate(-0.3 341 273)"/>
+          <rect x="554" y="254" width="12" height="38" rx="3" fill="#075A2C"/>
+        </g>
+
+        <text class="ib3cR" x="60" y="58">✗ Fix first · trap T1 · containment waits for the fix</text>
+        <text class="ib3cK" x="377" y="76" text-anchor="middle">sales email, 40 recipients</text>
+        <text class="ib3cM" x="60" y="140">0h00 signal</text>
+        <text class="ib3cM" x="566" y="140" text-anchor="end">6h50 fix lands</text>
+        <text class="ib3cS" x="60" y="160">spreads the whole time · email at bad write + 5h00</text>
+        <text class="ib3cVR" x="620" y="96">37</text>
+        <text class="ib3cL" x="690" y="94">people read it</text>
+        <text class="ib3cVR" x="620" y="126">7 + 1</text>
+        <text class="ib3cL" x="690" y="124">on bad data</text>
+        <text class="ib3cVR" x="620" y="156">18,400</text>
+        <text class="ib3cL" x="690" y="154">leaked rows</text>
+
+        <text class="ib3cH" x="60" y="224">✓ Contain first · R4 · valves at 0h50, fix on a quiet table</text>
+        <text class="ib3cK" x="122" y="246" text-anchor="middle">contained 0h50</text>
+        <text class="ib3cS" x="200" y="277">quiet table: no new copies</text>
+        <text class="ib3cM" x="60" y="306">0h00 signal</text>
+        <text class="ib3cM" x="566" y="306" text-anchor="end">6h50 fix lands</text>
+        <text class="ib3cS" x="60" y="326">same fix, same time · the sales email is held</text>
+        <text class="ib3cV" x="620" y="262">13</text>
+        <text class="ib3cL" x="690" y="260">people read it</text>
+        <text class="ib3cV" x="620" y="292">5 + 1</text>
+        <text class="ib3cL" x="690" y="290">on bad data</text>
+        <text class="ib3cV" x="620" y="322">8,400</text>
+        <text class="ib3cL" x="690" y="320">leaked rows</text>
+
+        <text class="ib3cN" x="40" y="370">Bench, same plan both sides except the order. Bars from the first signal. Constructed Quarrybank example.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the fix lands at 6h50 either way; only the order decides how far the bad load travels first.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>T1 against R4, number by number<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <thead><tr><th>Measured on the bench</th><th>R4 contain, then fix</th><th>T1 fix before you contain</th></tr></thead>
+          <tbody>
+            <tr><td>Contained, after the first signal</td><td>0h50</td><td>6h50 (with the fix)</td></tr>
+            <tr><td>Corrected, after the first signal</td><td>6h50</td><td>6h50</td></tr>
+            <tr><td>Consumers + decisions on bad data</td><td>5 + 1</td><td>7 + 1</td></tr>
+            <tr><td>People who read bad data</td><td>13</td><td>37</td></tr>
+            <tr><td>Rows exposed on the leaked table</td><td>8,400</td><td>18,400</td></tr>
+          </tbody>
+        </table>
+        <p>The correction lands at exactly the same moment. Everything T1 loses, it loses in the six hours between 0h50 and 6h50 when the valves could have been shut and were not. On the bad load alone, T1 reaches the sales email, sent 5h00 after the bad write to its 40 recipients, and the forecast model, and 24 people read bad data from it. On the leaked table, the doors stay open until the fix and all 18,400 rows are exposed.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>"But the fix is nearly done"<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>It always is, at 3am. Containment does not compete with the fix for the same person or the same hour: pausing a schedule and holding an export take minutes, and they make the fix safer, because you are no longer correcting a table that is being copied while you work. Contain, write it in the record, then fix on a quiet table.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. Under the fix-first plan, the deduplication query felt nearly ready an hour in, and the engineer kept going rather than stop to pause anything. The correction landed 6h50 after the signal, the same time as under the contain-first plan, and by then the sales email had gone out. 37 people read bad data instead of 13.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where the fix itself is taught<span class="mini">1 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>How to rebuild the partition and rerun what depends on it is backfill work, and it belongs to reliability: <a href="https://phoebefu6.github.io/learn-data-reliability-with-phoebe/courses/b5-backfills.html">Learn Data Reliability, backfills ↗</a>. Choosing between fixing forward and rolling back, and proving the correction reached every copy, is session 5. Tonight stops at the quiet table.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Write the bad-load playbook</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">You are on call at 02:40Z on 10 February and the partition is confirmed bad. Run the bench through four plans to see what a playbook buys and what fixing first costs, then write the first 15 minutes as a playbook anyone on the rota could follow alone. It becomes page 3 of the responder half of Quarrybank's plan.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The bad-load playbook as five ordered steps with who may do each at 3am. 1 hold every outgoing export and send: on-call alone. 2 pause downstream schedules: on-call alone. 3 quarantine the partition by revoking read, never deleting: on-call alone, permission granted in advance. 4 check which breakers tripped and list copies already made: on-call, written in the record. 5 tell the incident commander and the owners of copies already made: commander decides next. Then, and only then, the fix.">
+        <defs>
+          <filter id="ib3dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib3dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#075A2C" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ib3dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib3dH { font: 800 12px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #0D1F14; }
+          .ib3dL { font: 600 12px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #0D1F14; }
+          .ib3dS { font: 400 11px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #4A5F52; }
+          .ib3dW { font: 800 12px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #FFFFFF; }
+          .ib3dA { font: 700 11px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #053D1E; }
+          .ib3dN { font: 400 12px Inter, -apple-system, Segoe UI, Arial, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib3dH" x="40" y="30">FIRST 15 MINUTES AFTER THE PARTITION IS CONFIRMED BAD</text>
+        <text class="ib3dH" x="580" y="30">WHO MAY DO IT AT 3AM</text>
+
+        <g filter="url(#ib3dSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="46" width="480" height="44" rx="8" fill="#F2A900" transform="rotate(-0.6 280 68)"/>
+          <rect x="40" y="102" width="480" height="44" rx="8" fill="#FFFFFF" transform="rotate(0.5 280 124)"/>
+          <rect x="40" y="158" width="480" height="44" rx="8" fill="#FFFFFF" transform="rotate(-0.4 280 180)"/>
+          <rect x="40" y="214" width="480" height="44" rx="8" fill="#FFFFFF" transform="rotate(0.6 280 236)"/>
+          <rect x="40" y="270" width="480" height="44" rx="8" fill="#FFFFFF" transform="rotate(-0.5 280 292)"/>
+
+          <rect x="570" y="52" width="270" height="32" rx="16" fill="#075A2C"/>
+          <rect x="570" y="108" width="270" height="32" rx="16" fill="#075A2C"/>
+          <rect x="570" y="164" width="270" height="32" rx="16" fill="#075A2C"/>
+          <rect x="570" y="220" width="270" height="32" rx="16" fill="#ECF7F0"/>
+          <rect x="570" y="276" width="270" height="32" rx="16" fill="#ECF7F0"/>
+
+          <path d="M280 320 L280 344" marker-end="url(#ib3dAr)"/>
+          <rect x="40" y="350" width="480" height="40" rx="8" fill="url(#ib3dHc)" stroke-dasharray="6 5" transform="rotate(0.4 280 370)"/>
+        </g>
+
+        <text class="ib3dL" x="56" y="66">1 · Hold every outgoing export and send</text>
+        <text class="ib3dS" x="56" y="82" style="fill:#0D1F14">partner extract, scheduled emails, API pushes</text>
+        <text class="ib3dL" x="56" y="122">2 · Pause downstream schedules</text>
+        <text class="ib3dS" x="56" y="138">from the consumer trace; pause, never cancel</text>
+        <text class="ib3dL" x="56" y="178">3 · Quarantine the partition</text>
+        <text class="ib3dS" x="56" y="194">revoke read or move it out of reach; never delete</text>
+        <text class="ib3dL" x="56" y="234">4 · Check the breakers, list copies already made</text>
+        <text class="ib3dS" x="56" y="250">each copy is a record row: what, when, owner</text>
+        <text class="ib3dL" x="56" y="290">5 · Tell the commander and the copy owners</text>
+        <text class="ib3dS" x="56" y="306">containment status goes in the status block</text>
+
+        <text class="ib3dW" x="586" y="73">on-call, alone</text>
+        <text class="ib3dW" x="586" y="129">on-call, alone</text>
+        <text class="ib3dW" x="586" y="185">on-call, permission granted ahead</text>
+        <text class="ib3dA" x="586" y="241">on-call, written in the record</text>
+        <text class="ib3dA" x="586" y="297">commander decides what comes next</text>
+
+        <text class="ib3dL" x="56" y="375">Then, and only then: the fix, on a quiet table</text>
+
+        <text class="ib3dN" x="40" y="414">Practitioner order: exports cannot be recalled, so they close first. Constructed Quarrybank example.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three switches the on-call engineer flips alone, two that bring other people in, and the fix last.</figcaption>
+    </figure>
+
+    <div data-ird-bench="lite" data-presets="r2,r3,r4,t1" data-start="r2"></div>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Run R2, then R3, and read containment and leaked rows.</strong> In the bench table, read the contain column for each: 2h35 after the first signal under R2, 0h50 under R3. Then read rows exposed on the leaked table: 12,800, then 8,400. The headline stays at 7 + 3 on both. Say out loud why, using the partner extract and forecast model times from the bench's "what it reached" panel, which are measured from the bad write.</p>
+      </div>
+      <div class="step">
+        <p><strong>Run R4, then T1, and read the headline and the people count.</strong> R4 shows 5 + 1 and 13 people who read bad data. T1, the same plan with containment waiting for the fix, shows 7 + 1 and 37. Find the sales email in T1's reached list and note when it went out relative to the bad write.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · what to write in your notes</span>R2  contained 2h35 after signal   leaked rows 12,800   headline 7 + 3   people 17
+R3  contained 0h50 after signal   leaked rows 8,400    headline 7 + 3   people 17
+R4  contained 0h50, fixed 6h50    leaked rows 8,400    headline 5 + 1   people 13
+T1  contained 6h50 = fixed 6h50   leaked rows 18,400   headline 7 + 1   people 37
+Lesson: a faster valve cannot reach copies made before the signal.
+Lesson: waiting for the fix lets the bad load reach the sales email.</div>
+      </div>
+      <div class="step">
+        <p><strong>List your valves.</strong> Take your consumer trace from session 2 and write, for each edge, the switch that stops it: pause, quarantine, breaker or hold. Any edge with no switch is a gap to close before the next incident, not during it.</p>
+      </div>
+      <div class="step">
+        <p><strong>Decide who may flip each switch at 3am.</strong> A playbook step that needs a manager's approval at night does not run at night. For each step, either the on-call engineer is allowed to do it alone, agreed in advance and written down, or the step names who is called and how.</p>
+      </div>
+      <div class="step">
+        <p><strong>Write the playbook.</strong> Five steps in order, each with who may do it and what goes in the record. Strip Quarrybank's specifics where they would not survive the next incident and keep the shape.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · plan, responder page 3, bad-load playbook</span>QUARRYBANK INCIDENT RESPONSE PLAN · responder page 3 · bad-load playbook
+Use when a loaded partition is confirmed wrong. Contain before any fix.
+FIRST 15 MINUTES, in order:
+ 1 Hold every outgoing export and send (partner extract, scheduled emails, API pushes).
+   Who: on-call, alone. Record: each hold, with run id.
+ 2 Pause every downstream schedule on the consumer trace. Pause, never cancel.
+   Who: on-call, alone. Record: job names paused.
+ 3 Quarantine the partition: revoke read or move it out of reach. Never delete.
+   Who: on-call, permission granted in advance. Record: where it is, who can read it.
+ 4 Check which circuit breakers tripped. List every copy made before step 1.
+   Who: on-call. Record: one row per copy, with what, when (UTC), owner.
+ 5 Tell the incident commander that containment is in place, and hand over the copy list.
+   Who: on-call to commander. Commander decides the fix and the notices.
+THEN: fix on the quiet table (responder page 5 owns the correction check).
+Rule: copies made before containment stay wrong until corrected or told.</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Rehearse the permissions, not just the steps.</strong> The most common reason a playbook step does not run at 3am is that the person on call does not have the grant to pause a job they do not own. Test every switch on a harmless table during the day.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 4</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li>For one important table where you work, list every outgoing edge and the switch that stops each one. Mark the edges with no switch.</li>
+      <li>Check whether your on-call engineer can, tonight, pause a job they do not own, revoke read on a partition, and hold an outgoing export. Write down who grants each permission if not.</li>
+      <li>Pick two downstream jobs and write the input check that would make each one stop on a duplicated partition. You do not have to build it yet; name it and its owner.</li>
+      <li>For the last bad load you handled, list every copy made before anyone noticed. Note which were corrected and which owners were never told.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">You have paused every schedule and quarantined the partition. What has that done to the partner extract that went out 0h30 after the bad write?</p>
+      <button class="qopt" type="button">A · Pulled it back, because the source partition is no longer readable</button>
+      <button class="qopt" type="button">B · Nothing: containment stops new copies only, so it stays wrong until corrected or the partner is told</button>
+      <button class="qopt" type="button">C · Corrected it automatically when the schedule resumes</button>
+      <p class="qwhy">NIST RS.MI-01: containment prevents expansion. A copy made before the valves closed is outside their reach; it becomes a row on the notice list.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">On the bench, T1 and R4 both land the correction 6h50 after the first signal. Why does T1 end with 37 people who read bad data instead of 13?</p>
+      <button class="qopt" type="button">A · T1's fix is less thorough, so some rows stay wrong</button>
+      <button class="qopt" type="button">B · T1 has no lineage notice, so nobody is told</button>
+      <button class="qopt" type="button">C · Containment waits for the fix, so the bad load keeps spreading until 6h50 and reaches the sales email and the forecast model</button>
+      <p class="qwhy">Same fix, same time; only the order differs. Under T1 the valves stay open for six hours longer, so the sales email to 40 recipients goes out and the leaked table exposes all 18,400 rows.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">R3 adds a containment playbook to R2, and the headline stays at 7 + 3. Why does R3 still matter?</p>
+      <button class="qopt" type="button">A · Containment drops from 2h35 to 0h50 after the signal, and the leaked table's exposure from 12,800 rows to 8,400</button>
+      <button class="qopt" type="button">B · It raises deadlines met from 3 of 4 to 4 of 4</button>
+      <button class="qopt" type="button">C · It reaches the partner extract before it was sent</button>
+      <p class="qwhy">The headline counts copies made before the 0h40 signal, which no containment can reach. The playbook still cuts the leak from 12,800 exposed rows to 8,400 and gives a 0h50 containment for the next incident.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, RS.MI-01 (read 2026-11-10)</span><span class="note">"Containment refers to preventing the expansion of an incident."</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, RS.AN-07 (read 2026-11-10)</span><span class="note">Collected incident data "is still considered evidence": keep the partition, run ids and export log</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Containment moves: pause, quarantine, circuit breaker, hold export</span><span class="note">Practitioner conventions built on RS.MI-01; the order is practice, not a NIST rule</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Bench numbers (2h35, 0h50, 6h50, 12,800, 8,400, 18,400, 7 + 3, 5 + 1, 7 + 1, 37, 13)</span><span class="note">Computed in your browser by replaying a constructed event log under stated rules</span></div>
+      <div class="covered-row"><span class="status pill inkpill">·</span><span class="name">Backfill mechanics</span><span class="note">Not covered here: owned by <a href="https://phoebefu6.github.io/learn-data-reliability-with-phoebe/courses/b5-backfills.html">reliability b5 ↗</a></span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Responder session 3 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Containment</b><span>Preventing the expansion of an incident (NIST RS.MI-01). Not the fix.</span></div>
+      <div class="cheat-item"><b>Four valves</b><span>Hold exports, pause schedules, quarantine the partition, circuit breakers.</span></div>
+      <div class="cheat-item"><b>Order</b><span>Exports first: a copy outside the building can only be fixed by someone you tell.</span></div>
+      <div class="cheat-item"><b>The limit</b><span>Copies made before containment stay wrong until corrected or told.</span></div>
+      <div class="cheat-item"><b>Playbook on the bench</b><span>R2 to R3: contained 2h35 to 0h50, leaked rows 12,800 to 8,400, headline 7 + 3.</span></div>
+      <div class="cheat-item"><b>Fix first costs</b><span>T1 vs R4: 37 people vs 13, 7 + 1 vs 5 + 1, 18,400 rows vs 8,400.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>A bad load is wrong data flowing. A leaked table is right data in the wrong hands, and its valves are doors: a public link, a vendor share, a key that still works. Session 4 closes every one of them, snapshots first, and faces the copies that already left.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Responder session 3 of 8 · learn-data-incident-response-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b2-what-read-the-bad-data.html">← Prev: What read the bad data</a> &nbsp;·&nbsp; <a href="b4-close-a-leaked-tables-doors.html">Next: Close a leaked table's doors →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/ird-sample.js?v=1"></script>
+<script src="../assets/ird-live.js?v=2"></script>
+</body>
+</html>

@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 6 of 6. A tabletop run on paper with the real roles, three readiness numbers timed from the first signal, and the leader half of Quarrybank's incident response plan, signed. Rehearsal moves time to correct from 6h50 to 3h25 on the bench, and the 5 + 1 headline does not move.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Ready before the next one - learn incident response for data teams with phoebe">
+<meta property="og:description" content="Leader session 6 of 6. Rehearse the plan, measure it with three numbers, and sign it.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/courses/a6-ready-before-the-next-one.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ready before the next one - learn incident response for data teams with phoebe">
+<meta name="twitter:description" content="Time to declare, time to contain, time to correct. What rehearsal buys, and what it cannot.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 6 · Ready before the next one - learn incident response for data teams with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-data-incident-response-with-phoebe</a> / Leader session 6 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Incident Response for Data Teams with Phoebe · Leader session 6 of 6</div>
+    <h1>Ready before the <span class="accent">next one</span></h1>
+    <p class="sub">Five pages of plan sit in a folder. The question tonight is whether they work when the 0h40 alarm fires on a Tuesday night and the person on call has never read them. You find out the cheap way: run one of Quarrybank's incidents on paper with the real people in the room, time every move, and turn what you learn into three numbers you report to the board. Then the leader half of the plan gets signed.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Advanced</span>
+      <span class="chip audience">Heads of data and analytics managers</span>
+      <span class="chip audience">Privacy and compliance partners</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Rehearse, measure, hand on</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: the readiness plan</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The capstone of the leader track</h2>
+    </div>
+    <p class="lede">Session 1 wrote the declare rule, session 2 the severity matrix, session 3 the roles card, session 4 the comms templates and session 5 the restatement rule. Each one moved Quarrybank's quarter on the bench. Tonight adds the last page, the one that keeps the other five honest: a readiness plan with three numbers, a target for each, and a date for the next rehearsal. A plan nobody has rehearsed is a plan you are testing for the first time during a real incident.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A tabletop script you can run next month, three readiness numbers with a current value and a target, and page 6 of Quarrybank's incident response plan: the readiness plan. Then the six leader pages assembled into one signed document. On the bench, rehearsal takes time to correct from 6h50 to 3h25 after the first signal, and the honest part is what it leaves alone.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the last page is about practice<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every page so far answers "what do we do". This page answers "how do we know we can". The two fail differently. A missing rule shows up on paper. A rule nobody can find at 3am, a role nobody accepts, a template nobody knows exists: those only show up when people try to use them under a clock.</p>
+        <p>So the readiness plan has three parts: a rehearsal on a date, a set of numbers that say whether the rehearsal went well, and a name that signs for both. Without the date the rehearsal drifts. Without the numbers it becomes a pleasant meeting. Without the name nobody notices when it stops happening.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. After the third incident of the quarter the head of data asked a simple question in the review: if the bad load landed again tonight, who would declare it? Three people answered with three different names. Pages 1 to 5 existed. Nobody had walked through them together.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where tonight sits in the whole plan<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Quarrybank's incident response plan has two halves. The leader half (six pages, this track) decides when to declare, how bad it is, who runs the room, who is told, what happens to a number the board used, and how the plan is kept ready. The responder half (seven pages, the responder track) is the hands-on work: the timeline, the consumer trace, the playbooks, the correction check, the notice and the close-out record. Responder session 8 runs both halves together on the full bench.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the tabletop exercise and NIST's continuous improvement</span>
+      <h2>Rehearse on paper, with the real people</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A tabletop is an incident run in a meeting room. A facilitator hands out the events one card at a time, in the order they happened, and each person in their real role says out loud what they would do and when. A scribe writes the time against every move. Nothing is touched in production. What you get is the plan's first contact with the people who have to run it, at the price of an hour.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 372" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A tabletop on the bad load. The facilitator hands out three inject cards in event order: the 0h40 volume monitor signal, the sales email going out to 40 people, and the 7h10 complaint. For each card the room says who does what, and the scribe writes a time in a blank. Each written time is then checked against the plan: declare by 0h55, contained before the email sends, and the complaint should find an open record.">
+        <defs>
+          <filter id="ia6aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="61" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia6aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ia6aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia6aH { font: 800 12px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ia6aL { font: 600 12px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ia6aS { font: 400 11px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #4A5F52; }
+          .ia6aA { font: 700 11px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #053D1E; }
+          .ia6aN { font: 400 12px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia6aH" x="20" y="24">FACILITATOR INJECTS</text>
+        <text class="ia6aH" x="330" y="24">THE ROOM SAYS WHAT IT DOES</text>
+        <text class="ia6aH" x="660" y="24">CHECKED AGAINST THE PLAN</text>
+
+        <g filter="url(#ia6aSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="20" y="44" width="230" height="80" rx="10" fill="#FFFFFF" transform="rotate(-1.5 135 84)"/>
+          <rect x="20" y="144" width="230" height="80" rx="10" fill="url(#ia6aHc)" transform="rotate(1.2 135 184)"/>
+          <rect x="20" y="244" width="230" height="80" rx="10" fill="#FFFFFF" transform="rotate(-1 135 284)"/>
+
+          <path d="M256 84 L322 84" marker-end="url(#ia6aAr)"/>
+          <path d="M256 184 L322 184" marker-end="url(#ia6aAr)"/>
+          <path d="M256 284 L322 284" marker-end="url(#ia6aAr)"/>
+
+          <rect x="330" y="44" width="300" height="80" rx="10" fill="#ECF7F0" transform="rotate(0.4 480 84)"/>
+          <rect x="330" y="144" width="300" height="80" rx="10" fill="#ECF7F0" transform="rotate(-0.4 480 184)"/>
+          <rect x="330" y="244" width="300" height="80" rx="10" fill="#ECF7F0" transform="rotate(0.3 480 284)"/>
+
+          <rect x="516" y="94" width="104" height="24" rx="5" fill="#F2A900" transform="rotate(-2 568 106)"/>
+          <rect x="516" y="194" width="104" height="24" rx="5" fill="#F2A900" transform="rotate(1.5 568 206)"/>
+          <rect x="516" y="294" width="104" height="24" rx="5" fill="#F2A900" transform="rotate(-1.5 568 306)"/>
+
+          <path d="M636 84 L654 84" marker-end="url(#ia6aAr)"/>
+          <path d="M636 184 L654 184" marker-end="url(#ia6aAr)"/>
+          <path d="M636 284 L654 284" marker-end="url(#ia6aAr)"/>
+
+          <rect x="660" y="44" width="200" height="80" rx="10" fill="#FFFFFF" transform="rotate(0.5 760 84)"/>
+          <rect x="660" y="144" width="200" height="80" rx="10" fill="#FFFFFF" transform="rotate(-0.5 760 184)"/>
+          <rect x="660" y="244" width="200" height="80" rx="10" fill="#FFFFFF" transform="rotate(0.4 760 284)"/>
+        </g>
+
+        <text class="ia6aA" x="34" y="66">CARD 1 · THE SIGNAL</text>
+        <text class="ia6aL" x="34" y="86">0h40 volume monitor fires</text>
+        <text class="ia6aS" x="34" y="104">handed to the on-call engineer</text>
+        <text class="ia6aA" x="34" y="166">CARD 2 · A COPY GOES OUT</text>
+        <text class="ia6aL" x="34" y="186">the daily sales email</text>
+        <text class="ia6aS" x="34" y="204">bad revenue to 40 people</text>
+        <text class="ia6aA" x="34" y="266">CARD 3 · THE COMPLAINT</text>
+        <text class="ia6aL" x="34" y="286">7h10 regional sales head</text>
+        <text class="ia6aS" x="34" y="304">why has revenue doubled?</text>
+
+        <text class="ia6aL" x="344" y="68">Who declares, and in which channel?</text>
+        <text class="ia6aS" x="344" y="86">IC named out loud, record opened</text>
+        <text class="ia6aL" x="526" y="111">scribe: __h__</text>
+        <text class="ia6aL" x="344" y="168">Who stops it, who tells the 40?</text>
+        <text class="ia6aS" x="344" y="186">ops pauses, comms drafts</text>
+        <text class="ia6aL" x="526" y="211">scribe: __h__</text>
+        <text class="ia6aL" x="344" y="268">Does it find an open record?</text>
+        <text class="ia6aS" x="344" y="286">or does the response start here?</text>
+        <text class="ia6aL" x="526" y="311">scribe: __h__</text>
+
+        <text class="ia6aL" x="672" y="78">plan: declare by 0h55</text>
+        <text class="ia6aS" x="672" y="96">signal + 15 min, page 1</text>
+        <text class="ia6aL" x="672" y="178">plan: contained first</text>
+        <text class="ia6aS" x="672" y="196">this email never sends</text>
+        <text class="ia6aL" x="672" y="278">plan: already declared</text>
+        <text class="ia6aS" x="672" y="296">else the plan failed here</text>
+
+        <text class="ia6aN" x="20" y="356">Constructed Quarrybank example. Card times from the bad write. Keep the scribe's times, not the mood.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the facilitator controls the clock, the room controls the moves, and the blanks are what you take away.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>How to run one in an hour<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>This is practice, not a published method: the shape most teams arrive at after a few attempts.</p>
+        <ol>
+          <li><strong>Pick one real incident.</strong> A Quarrybank one for the first run, then your own. Real beats invented because people already half remember it.</li>
+          <li><strong>Seat the real roles.</strong> The person actually on call next week, the head of data, the privacy partner, the finance controller. Not their deputies, and not the person who wrote the plan.</li>
+          <li><strong>Inject in order, one card at a time.</strong> The signal first. Do not show the next card until the room has said what it does with this one.</li>
+          <li><strong>Make people say the move and the time.</strong> "I would look into it" is not a move. "I declare in #incident at 0h50 and name myself owner" is.</li>
+          <li><strong>The scribe writes every time.</strong> Those times are the output. Everything else is conversation.</li>
+          <li><strong>Stop at the first broken page.</strong> When nobody can find the severity matrix, that is the finding. Write it down and move to the next card.</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>NIST: lessons do not wait for the end<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>NIST SP 800-61 Revision 3 (April 2025) replaced its old four-phase life cycle, which ended with post-incident activity, with a model built on the six CSF 2.0 Functions. Improvement, ID.IM, now feeds lessons back at all times rather than at the end. The guide gives its reason plainly: "Today, incidents occur frequently and cause far more damage." And on lessons learned, they "should often be shared as soon as they are identified, not delayed until after recovery concludes."</p>
+        <p>A tabletop is that idea applied before any incident at all. You identify the lesson in a meeting room on a quiet Thursday, and the page is fixed before it is needed. NIST is written for cybersecurity incidents; the improvement loop carries over to quality and decision incidents unchanged.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. At Quarrybank's first tabletop the on-call engineer took card 1 and said she would keep an eye on it. Nobody in the room had read page 1. The scribe's first time went in against card 3, at the complaint. That is exactly how the no-plan run on the bench behaves, and it took 40 minutes to find out on paper instead of a quarter to find out in production.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What a tabletop cannot tell you<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Whether the tools work.</strong> Saying "I pause the load" in a room is not pausing the load. The responder track's playbooks are tested against systems, not slides.</li>
+          <li><strong>How tired people behave.</strong> A room at 10am is calmer than a call at 3am. Expect real times to be slower than tabletop times, and set targets with that margin in mind.</li>
+          <li><strong>Whether detection will fire.</strong> The facilitator hands out the signal card. In real life someone has to build the monitor that produces it, which is the observability side (<a href="https://phoebefu6.github.io/learn-data-observability-with-phoebe/">Data Observability ↗</a>).</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers three readiness numbers and the data downtime framing</span>
+      <h2>Three numbers, all timed from the first signal</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A board cannot read a plan. It can read three numbers. Time to declare: from the first signal to somebody saying the word. Time to contain: from the first signal to the bad data stopping spreading or the door closing. Time to correct: from the first signal to every consumer reading correct rows. All three start at the first signal, because that is the earliest moment the response could have started, and every minute after it belongs to the plan.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Readiness numbers on the bench, measured from the first signal. No plan, R0: bad load 6h30 to declare, 12h30 to contain, 18h30 to correct; leaked table 45h00, 51h00, 57h00; board deck 120h00, 126h00, 132h00. With the full plan, R4: 0h15, 0h50, 6h50 on all three. Rehearsed, R5: 0h05, 0h25, 3h25 on all three. The headline stays 5 consumers and 1 decision from R4 to R5, and leaked rows fall from 8,400 to 7,600.">
+        <defs>
+          <filter id="ia6bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="73" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia6bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ia6bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia6bH { font: 800 12px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ia6bL { font: 600 12px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ia6bS { font: 400 11px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #4A5F52; }
+          .ia6bA { font: 700 11px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #053D1E; }
+          .ia6bV { font: 800 12px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #053D1E; }
+          .ia6bN { font: 400 12px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia6bH" x="20" y="28">PLAN · INCIDENT</text>
+        <text class="ia6bH" x="180" y="28">DECLARE / CONTAIN / CORRECT</text>
+        <text class="ia6bH" x="400" y="28">SIGNAL TO CORRECTED, TO SCALE</text>
+
+        <g filter="url(#ia6bSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="400" y="48" width="23" height="24" fill="url(#ia6bHc)"/>
+          <rect x="423" y="48" width="42" height="24" fill="#FFFFFF"/>
+          <rect x="400" y="92" width="157" height="24" fill="url(#ia6bHc)"/>
+          <rect x="557" y="92" width="42" height="24" fill="#FFFFFF"/>
+          <rect x="400" y="136" width="418" height="24" fill="url(#ia6bHc)"/>
+          <rect x="818" y="136" width="42" height="24" fill="#FFFFFF"/>
+          <path d="M20 180 L860 180" stroke="#C3D3C8" stroke-dasharray="4 6"/>
+          <rect x="400" y="196" width="24" height="24" fill="#ECF7F0"/>
+          <rect x="400" y="240" width="12" height="24" fill="#F2A900"/>
+          <rect x="20" y="284" width="24" height="14" fill="url(#ia6bHc)"/>
+          <rect x="330" y="284" width="24" height="14" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ia6bL" x="20" y="65">R0 · bad load</text>
+        <text class="ia6bL" x="180" y="65">6h30 / 12h30 / 18h30</text>
+        <text class="ia6bL" x="20" y="109">R0 · leaked table</text>
+        <text class="ia6bL" x="180" y="109">45h00 / 51h00 / 57h00</text>
+        <text class="ia6bL" x="20" y="153">R0 · board deck</text>
+        <text class="ia6bL" x="180" y="153">120h00 / 126h00 / 132h00</text>
+
+        <text class="ia6bL" x="20" y="213">R4 · all three</text>
+        <text class="ia6bV" x="180" y="213">0h15 / 0h50 / 6h50</text>
+        <text class="ia6bS" x="440" y="213">full plan: headline 5 + 1, leaked rows 8,400</text>
+        <text class="ia6bL" x="20" y="257">R5 · all three</text>
+        <text class="ia6bV" x="180" y="257">0h05 / 0h25 / 3h25</text>
+        <text class="ia6bS" x="440" y="257">rehearsed: headline still 5 + 1, leaked rows 7,600</text>
+
+        <text class="ia6bS" x="52" y="295">signal to declare: bad data spreading, nobody owns it</text>
+        <text class="ia6bS" x="362" y="295">declare to corrected (amber: rehearsed)</text>
+
+        <text class="ia6bN" x="20" y="326">Bench times, from the first signal, not the bad write. Scale: 132h00 = 460 px.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the no-plan bars are mostly waiting; with a plan the bars nearly vanish, and rehearsal halves what is left.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why these three, and why from the first signal<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <thead><tr><th>Number</th><th>Stops when</th><th>Which page moves it</th><th>Bench, R0 bad load to R5</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Time to declare</strong></td><td>Somebody says the word and owns it</td><td>Page 1, declare rule</td><td>6h30 to 0h05</td></tr>
+            <tr><td><strong>Time to contain</strong></td><td>The bad data stops spreading, or the door is closed</td><td>Pages 2 and 3, plus the responder playbooks</td><td>12h30 to 0h25</td></tr>
+            <tr><td><strong>Time to correct</strong></td><td>Every consumer reads correct rows</td><td>Responder correction check</td><td>18h30 to 3h25</td></tr>
+          </tbody>
+        </table>
+        <p>Measuring from the first signal is a choice with a reason. The bad write happened earlier, but nothing a response plan does can act before somebody could have known. Starting the clock at the signal makes the numbers belong to the plan and not to the monitor. The other choice, from the bad write, is what the bench uses for deadlines due and done, because a regulator's or partner's clock does not care when you noticed. Say which one you mean every time you quote a number.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What rehearsal buys, and what it cannot<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>On the bench R4 is the full plan written down: declare rule, severity and roles, containment playbook, lineage-driven notice. R5 is the same plan, rehearsed. The bench models plan times by stated rules: rehearsal declares 5 minutes after the signal instead of 15, assesses faster, contains faster and corrects faster. The three readiness numbers fall from 0h15 / 0h50 / 6h50 to 0h05 / 0h25 / 3h25.</p>
+        <p>The headline does not move. Consumers and decisions on bad data stay at 5 + 1, never told stays at 0, deadlines met stay at 4 of 4. R4 already reached the floor: the 5 + 1 that remain were reached before the first signal, so no faster response can reach them first. Rehearsal buys time, not reach.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. The one number that does move besides time is the leaked table: rows exposed fall from 8,400 under the written plan to 7,600 rehearsed, because the doors close sooner and the vendor reads less in between. Time and rows exposed are what a rehearsal shows up in. A board that asks why the headline stayed at 5 + 1 is asking the right question, and the answer is detection, not response.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The data downtime framing, taught as a claim<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Barr Moses of Monte Carlo, a data observability vendor, defines data downtime as "periods of time when your data is partial, erroneous, missing or otherwise inaccurate" and gives it as "Number of incidents x (average time to detection + average time to resolution)".</p>
+        <p>It is a vendor's framing, written to make a case for observability tooling, and it is useful on its own terms: it splits the cost of a bad table into a detection half and a resolution half. The three readiness numbers live inside the resolution half. The detection half, from the bad write to the first signal, is the observability course's side of the seam, and it is the half that moves the 5 + 1. Read the formula as a way to argue, not as a measured law; no public base rate for data incident frequency was found to put into it.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the one-page plan, the hand-offs and the floor</span>
+      <h2>One page, signed, and what it hands on</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Six leader pages become one page the on-call engineer can read at 3am, each page reduced to the line that matters. Around it sit three things the plan does not own and should say so: the write-up after an incident, the evidence package, and the consumers who were reached before anybody could have known.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Six leader pages, one per session, each feed one line of Quarrybank's one-page plan: declare within 15 minutes of a signal, reach times sensitivity times reversibility, the roles, the three templates, restate or footnote or fix next time, and the readiness plan with three numbers and the next tabletop. A signature line closes the page. Two things are handed off: the write-up to the planned runbooks and postmortems course, and the incident package to reliability. One thing no plan moves: the 5 consumers and 1 decision reached before the first signal, which only earlier detection can change.">
+        <defs>
+          <filter id="ia6cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="89" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia6cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".6"/></pattern>
+          <marker id="ia6cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia6cH { font: 800 12px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ia6cL { font: 600 12px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ia6cS { font: 400 11px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #4A5F52; }
+          .ia6cA { font: 700 11px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #053D1E; }
+          .ia6cN { font: 400 12px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia6cH" x="20" y="28">LEADER PAGES, SESSIONS 1 TO 6</text>
+        <text class="ia6cH" x="330" y="28">QUARRYBANK'S PLAN, ONE PAGE</text>
+        <text class="ia6cH" x="660" y="28">HANDED OFF</text>
+
+        <g filter="url(#ia6cSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="20" y="50" width="220" height="40" rx="8" fill="#FFFFFF" transform="rotate(-2 130 70)"/>
+          <rect x="20" y="100" width="220" height="40" rx="8" fill="#FFFFFF" transform="rotate(1.5 130 120)"/>
+          <rect x="20" y="150" width="220" height="40" rx="8" fill="#FFFFFF" transform="rotate(-1 130 170)"/>
+          <rect x="20" y="200" width="220" height="40" rx="8" fill="#FFFFFF" transform="rotate(2 130 220)"/>
+          <rect x="20" y="250" width="220" height="40" rx="8" fill="#FFFFFF" transform="rotate(-1.5 130 270)"/>
+          <rect x="20" y="300" width="220" height="40" rx="8" fill="#ECF7F0" transform="rotate(1 130 320)"/>
+
+          <path d="M246 70 L332 70" marker-end="url(#ia6cAr)"/>
+          <path d="M246 120 L332 120" marker-end="url(#ia6cAr)"/>
+          <path d="M246 170 L332 170" marker-end="url(#ia6cAr)"/>
+          <path d="M246 220 L332 220" marker-end="url(#ia6cAr)"/>
+          <path d="M246 270 L332 270" marker-end="url(#ia6cAr)"/>
+          <path d="M246 320 L332 320" marker-end="url(#ia6cAr)"/>
+
+          <rect x="330" y="40" width="290" height="380" rx="10" fill="#FAFCFA" transform="rotate(-0.3 475 230)"/>
+          <rect x="342" y="52" width="266" height="36" rx="6" fill="#FFFFFF"/>
+          <rect x="342" y="102" width="266" height="36" rx="6" fill="#FFFFFF"/>
+          <rect x="342" y="152" width="266" height="36" rx="6" fill="#FFFFFF"/>
+          <rect x="342" y="202" width="266" height="36" rx="6" fill="#FFFFFF"/>
+          <rect x="342" y="252" width="266" height="36" rx="6" fill="#FFFFFF"/>
+          <rect x="342" y="302" width="266" height="36" rx="6" fill="#F2A900"/>
+          <path d="M352 384 L600 384"/>
+
+          <path d="M624 95 L656 95" marker-end="url(#ia6cAr)"/>
+          <path d="M624 195 L656 195" marker-end="url(#ia6cAr)"/>
+          <rect x="660" y="60" width="200" height="70" rx="10" fill="#FFFFFF" transform="rotate(1 760 95)"/>
+          <rect x="660" y="160" width="200" height="70" rx="10" fill="#FFFFFF" transform="rotate(-1 760 195)"/>
+          <rect x="660" y="272" width="200" height="96" rx="10" fill="url(#ia6cHc)" transform="rotate(0.8 760 320)"/>
+        </g>
+
+        <text class="ia6cL" x="34" y="67">page 1 · declare rule</text>
+        <text class="ia6cS" x="34" y="82">session 1</text>
+        <text class="ia6cL" x="34" y="117">page 2 · severity matrix</text>
+        <text class="ia6cS" x="34" y="132">session 2</text>
+        <text class="ia6cL" x="34" y="167">page 3 · roles card</text>
+        <text class="ia6cS" x="34" y="182">session 3</text>
+        <text class="ia6cL" x="34" y="217">page 4 · comms templates</text>
+        <text class="ia6cS" x="34" y="232">session 4</text>
+        <text class="ia6cL" x="34" y="267">page 5 · restatement rule</text>
+        <text class="ia6cS" x="34" y="282">session 5</text>
+        <text class="ia6cL" x="34" y="317">page 6 · readiness plan</text>
+        <text class="ia6cA" x="34" y="332">tonight</text>
+
+        <text class="ia6cL" x="352" y="75">Declare within 15 min of a signal</text>
+        <text class="ia6cL" x="352" y="125">Reach x sensitivity x reversibility</text>
+        <text class="ia6cL" x="352" y="175">IC, ops, comms, scribe, liaisons</text>
+        <text class="ia6cL" x="352" y="225">Holding note, exec update, partner</text>
+        <text class="ia6cL" x="352" y="275">Restate, footnote or fix next time</text>
+        <text class="ia6cL" x="352" y="325">Three numbers + the next tabletop</text>
+        <text class="ia6cS" x="352" y="402">signed: head of data, privacy partner</text>
+
+        <text class="ia6cL" x="674" y="86">The write-up</text>
+        <text class="ia6cS" x="674" y="104">runbooks and postmortems</text>
+        <text class="ia6cS" x="674" y="119">course, planned (hub)</text>
+        <text class="ia6cL" x="674" y="186">The incident package</text>
+        <text class="ia6cS" x="674" y="204">reliability b6 owns it</text>
+        <text class="ia6cA" x="660" y="258">WHAT NO PLAN MOVES</text>
+        <text class="ia6cL" x="674" y="296">The floor: 5 + 1</text>
+        <text class="ia6cS" x="674" y="314">reached before the first</text>
+        <text class="ia6cS" x="674" y="330">signal; only earlier</text>
+        <text class="ia6cS" x="674" y="346">detection moves it</text>
+
+        <text class="ia6cN" x="20" y="446">Constructed Quarrybank example. One page the on-call can read at 3am, signed by the people it binds.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - six sessions become six lines and a signature; the write-up, the evidence and the floor are named and handed on.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why one page, and why signed<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The full pages stay in the folder for the people who need detail. The one page is what goes on the on-call laptop, in the incident channel's pinned message and on the back of the roles card. If the on-call engineer has to open six documents to find out whether to declare, the declare rule has quietly become "when somebody senior notices".</p>
+        <p>The signature is not ceremony. Pages 4 and 5 commit the privacy partner and the finance controller to clocks and decisions they own. A plan signed only by the data team binds only the data team. Quarrybank's leader half is signed by the head of data, who owns the plan, and the privacy partner, who owns the notice clocks it feeds.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Three things the plan hands on<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>The write-up.</strong> What happened, why, and what changes, written after the incident and read by people who were not on the call. That craft belongs to the planned runbooks and postmortems course; it is not yet live, so follow it from the <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe hub ↗</a>. The plan's job is to make sure the timeline and decisions it needs were written down at the time.</li>
+          <li><strong>The incident package.</strong> The evidence bundle a reliability team assembles for an incident: owned by reliability (<a href="https://phoebefu6.github.io/learn-data-reliability-with-phoebe/courses/b6-incident-package.html">Reliability, the incident package ↗</a>).</li>
+          <li><strong>The floor.</strong> On the bench, 5 consumers + 1 decision survive any response plan, because they were reached before the first signal: the vendor's early download and the unknown address on the leaked table, and the board pack read, with the "Hold prices in two regions" decision made at 24h00, before the 48h00 signal. The only lever left is earlier detection, which is the observability side (<a href="https://phoebefu6.github.io/learn-data-observability-with-phoebe/">Data Observability ↗</a>).</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. When the head of data showed the board the rehearsed plan, the chair asked why the headline was still 5 + 1 after six pages of work. The honest answer took one sentence: those five consumers and one decision were reached before any alarm fired, so the next investment is a monitor, not another page.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Keeping the plan alive between incidents<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Practice, not a finding: plans decay through people moving, not through rules aging. Tie the plan's review to events that already happen. When the on-call rota changes, the new person reads the one page (<a href="https://phoebefu6.github.io/learn-data-reliability-with-phoebe/courses/a3-on-call-is-a-design.html">Reliability, on-call rota ↗</a>). When a privacy partner or finance controller changes, the plan is re-signed. When a real incident closes, its scribe's times go next to the tabletop times on page 6, and any page that slowed the response gets an owner and a date, in line with NIST's advice not to wait for recovery to share a lesson.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Read the clock three ways, then sign page 6</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">No code. Read the three readiness numbers for every incident on no plan, the written plan and the rehearsed plan. Turn them into board targets, put the next tabletop in a calendar, write page 6, and assemble the leader half of Quarrybank's plan.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Quarrybank's readiness plan. Three rows, each from the first signal. Time to declare: today with no plan 6h30, 45h00 and 120h00 per incident; with the plan 0h15; rehearsed 0h05. Time to contain: 12h30, 51h00, 126h00; then 0h50; then 0h25. Time to correct: 18h30, 57h00, 132h00; then 6h50; then 3h25. Below, a quarterly loop: run a tabletop, read the three numbers, report to the board, fix the slowest page, and back to the next tabletop.">
+        <defs>
+          <filter id="ia6dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="97" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia6dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".6"/></pattern>
+          <marker id="ia6dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia6dH { font: 800 12px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ia6dL { font: 600 12px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ia6dS { font: 400 11px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #4A5F52; }
+          .ia6dV { font: 800 16px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #053D1E; }
+          .ia6dK { font: 800 16px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ia6dA { font: 700 11px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #053D1E; }
+          .ia6dN { font: 400 12px Inter, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia6dH" x="190" y="30">TODAY · R0, PER INCIDENT</text>
+        <text class="ia6dH" x="430" y="30">PLAN · R4</text>
+        <text class="ia6dH" x="640" y="30">REHEARSED · R5</text>
+
+        <g filter="url(#ia6dSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="190" y="46" width="200" height="44" rx="8" fill="url(#ia6dHc)" transform="rotate(-0.8 290 68)"/>
+          <rect x="190" y="104" width="200" height="44" rx="8" fill="url(#ia6dHc)" transform="rotate(0.6 290 126)"/>
+          <rect x="190" y="162" width="200" height="44" rx="8" fill="url(#ia6dHc)" transform="rotate(-0.5 290 184)"/>
+          <path d="M396 68 L424 68" marker-end="url(#ia6dAr)"/>
+          <path d="M396 126 L424 126" marker-end="url(#ia6dAr)"/>
+          <path d="M396 184 L424 184" marker-end="url(#ia6dAr)"/>
+          <rect x="430" y="46" width="160" height="44" rx="8" fill="#ECF7F0" transform="rotate(0.7 510 68)"/>
+          <rect x="430" y="104" width="160" height="44" rx="8" fill="#ECF7F0" transform="rotate(-0.6 510 126)"/>
+          <rect x="430" y="162" width="160" height="44" rx="8" fill="#ECF7F0" transform="rotate(0.5 510 184)"/>
+          <path d="M596 68 L634 68" marker-end="url(#ia6dAr)"/>
+          <path d="M596 126 L634 126" marker-end="url(#ia6dAr)"/>
+          <path d="M596 184 L634 184" marker-end="url(#ia6dAr)"/>
+          <rect x="640" y="46" width="160" height="44" rx="8" fill="#F2A900" transform="rotate(-0.7 720 68)"/>
+          <rect x="640" y="104" width="160" height="44" rx="8" fill="#F2A900" transform="rotate(0.6 720 126)"/>
+          <rect x="640" y="162" width="160" height="44" rx="8" fill="#F2A900" transform="rotate(-0.5 720 184)"/>
+
+          <rect x="20" y="240" width="180" height="44" rx="8" fill="#FFFFFF" transform="rotate(-1.5 110 262)"/>
+          <rect x="240" y="240" width="180" height="44" rx="8" fill="#FFFFFF" transform="rotate(1.2 330 262)"/>
+          <rect x="460" y="240" width="180" height="44" rx="8" fill="#FFFFFF" transform="rotate(-1 550 262)"/>
+          <rect x="680" y="240" width="180" height="44" rx="8" fill="#ECF7F0" transform="rotate(1.5 770 262)"/>
+          <path d="M204 262 L234 262" marker-end="url(#ia6dAr)"/>
+          <path d="M424 262 L454 262" marker-end="url(#ia6dAr)"/>
+          <path d="M644 262 L674 262" marker-end="url(#ia6dAr)"/>
+          <path d="M770 290 C770 322 110 322 110 294" marker-end="url(#ia6dAr)"/>
+        </g>
+
+        <text class="ia6dL" x="20" y="64">time to declare</text>
+        <text class="ia6dS" x="20" y="80">from the first signal</text>
+        <text class="ia6dL" x="20" y="122">time to contain</text>
+        <text class="ia6dS" x="20" y="138">from the first signal</text>
+        <text class="ia6dL" x="20" y="180">time to correct</text>
+        <text class="ia6dS" x="20" y="196">from the first signal</text>
+
+        <text class="ia6dL" x="202" y="64">6h30 / 45h00 / 120h00</text>
+        <text class="ia6dS" x="202" y="80">bad load / leak / board</text>
+        <text class="ia6dL" x="202" y="122">12h30 / 51h00 / 126h00</text>
+        <text class="ia6dS" x="202" y="138">bad load / leak / board</text>
+        <text class="ia6dL" x="202" y="180">18h30 / 57h00 / 132h00</text>
+        <text class="ia6dS" x="202" y="196">bad load / leak / board</text>
+
+        <text class="ia6dV" x="444" y="74">0h15</text>
+        <text class="ia6dS" x="500" y="73">all three</text>
+        <text class="ia6dV" x="444" y="132">0h50</text>
+        <text class="ia6dS" x="500" y="131">all three</text>
+        <text class="ia6dV" x="444" y="190">6h50</text>
+        <text class="ia6dS" x="500" y="189">all three</text>
+
+        <text class="ia6dK" x="654" y="74">0h05</text>
+        <text class="ia6dL" x="710" y="73">target</text>
+        <text class="ia6dK" x="654" y="132">0h25</text>
+        <text class="ia6dL" x="710" y="131">target</text>
+        <text class="ia6dK" x="654" y="190">3h25</text>
+        <text class="ia6dL" x="710" y="189">target</text>
+
+        <text class="ia6dL" x="32" y="258">Run a tabletop</text>
+        <text class="ia6dS" x="32" y="275">date: ________</text>
+        <text class="ia6dL" x="252" y="258">Read the three</text>
+        <text class="ia6dS" x="252" y="275">the scribe's times</text>
+        <text class="ia6dL" x="472" y="258">Report to the board</text>
+        <text class="ia6dS" x="472" y="275">current vs target</text>
+        <text class="ia6dL" x="692" y="258">Fix the slowest page</text>
+        <text class="ia6dS" x="692" y="275">an owner and a date</text>
+
+        <text class="ia6dA" x="250" y="342">every quarter; lessons go back as soon as they are found (NIST ID.IM)</text>
+        <text class="ia6dN" x="20" y="366">Constructed Quarrybank example. Bench times from the first signal; your own targets will differ.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three numbers with a current value and a target, and a loop that keeps measuring them.</figcaption>
+    </figure>
+
+    <div data-ird-bench="lite" data-presets="r0,r4,r5" data-start="r0"></div>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Read R0, no plan.</strong> In the bench table, read time to declare, contain and correct for each incident. They are measured from the first signal. Write all nine. Notice that the board deck's 120h00 to declare is mostly waiting for the external auditor's question.</p>
+      </div>
+      <div class="step">
+        <p><strong>Switch to R4, the full written plan.</strong> All three incidents now read 0h15 / 0h50 / 6h50. Read the headline too: 5 consumers + 1 decision on bad data, 0 never told, 4 of 4 deadlines met. This is the floor.</p>
+      </div>
+      <div class="step">
+        <p><strong>Switch to R5, rehearsed.</strong> The times fall to 0h05 / 0h25 / 3h25. The headline stays at 5 + 1. Find the one other number that moves: leaked rows exposed, 8,400 on R4 and 7,600 on R5. Write one sentence for the board explaining why rehearsal moved the time and not the headline.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · the board sentence, Quarrybank</span>Rehearsing the plan cut our time to correct from 6h50 to 3h25 after
+the first signal, and the leaked table exposed 7,600 rows instead of 8,400.
+It does not change the 5 consumers and 1 decision reached before any alarm
+fired: only earlier detection can, and that is next year's ask.</div>
+      </div>
+      <div class="step">
+        <p><strong>Set the targets and book the next tabletop.</strong> Decide what you will report to the board each quarter: the three numbers, current against target. Quarrybank takes R4 as the committed target and R5 as the stretch. Then put the next tabletop in the calendar before you leave, with a facilitator who did not write the plan.</p>
+      </div>
+      <div class="step">
+        <p><strong>Write the readiness plan.</strong> Page 6 of Quarrybank's incident response plan.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · plan, leader page 6, readiness plan</span>QUARRYBANK INCIDENT RESPONSE PLAN · leader page 6 · readiness plan
+All three numbers are measured FROM THE FIRST SIGNAL, at every tabletop
+and every real incident, and written down by the scribe.
+
+                  CURRENT (no plan, per incident)   TARGET    STRETCH
+time to declare   6h30 / 45h00 / 120h00             0h15      0h05
+time to contain   12h30 / 51h00 / 126h00            0h50      0h25
+time to correct   18h30 / 57h00 / 132h00            6h50      3h25
+
+Reported to the board every quarter: current vs target, one line each.
+Next tabletop:  date ____________   incident ____________
+                facilitator ____________ (did not write the plan)
+After each tabletop: the slowest page gets an owner and a date.
+Lessons are shared as soon as they are found, not after recovery.
+Signed: ____________ head of data   ____________ privacy partner</div>
+      </div>
+      <div class="step">
+        <p><strong>Assemble the leader half.</strong> Page titles only, in order, then the signatures. The detail stays on each page; this is the cover sheet.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · Quarrybank's plan, leader half, signed</span>QUARRYBANK INCIDENT RESPONSE PLAN · leader half
+page 1   declare rule
+page 2   severity matrix
+page 3   roles card
+page 4   comms templates
+page 5   restatement rule
+page 6   readiness plan
+
+Responder half (pages 1 to 7): built in the responder track.
+Write-ups: runbooks and postmortems course (planned).
+
+Signed: ____________ head of data        date ________
+        ____________ privacy partner     date ________
+        ____________ finance controller  date ________</div>
+      </div>
+    </div>
+
+    <div class="prompt-box bad"><span class="label">✕ The readiness plan most teams actually have</span>We will review the incident process annually and update it as needed.</div>
+
+    <div class="callout tip">
+      <p><strong>"As needed" means after the next incident.</strong> A review with no date, no numbers and no name is a review that happens when something has already gone wrong. A tabletop on a date, timed by a scribe, is the review happening first.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before the next one</h2>
+      <span class="tag exercise">60 min</span>
+    </div>
+    <ol>
+      <li>Run a tabletop on one incident, Quarrybank's or your own, with the real roles and a scribe. Keep the scribe's times.</li>
+      <li>Take your last real incident and measure the three numbers from its first signal. If nobody knows when the first signal was, that is your first finding.</li>
+      <li>Put the next tabletop in the calendars of everyone who signs page 6, with a named facilitator.</li>
+      <li>Find out who in your organisation will own incident write-ups, and write their name under page 6 next to "lessons".</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">On the bench, what does rehearsing the plan (R5) change compared with the written plan (R4)?</p>
+      <button class="qopt" type="button">A · The headline falls below 5 consumers and 1 decision</button>
+      <button class="qopt" type="button">B · The times fall to 0h05 / 0h25 / 3h25 and leaked rows to 7,600, while the 5 + 1 headline stays</button>
+      <button class="qopt" type="button">C · Nothing, because R4 already met every deadline</button>
+      <p class="qwhy">R4 already reached the floor: the 5 + 1 were reached before the first signal. Rehearsal buys time and fewer rows exposed, not reach. Only earlier detection moves the headline.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">What are the three readiness numbers, and where are they measured from?</p>
+      <button class="qopt" type="button">A · Detection, resolution and downtime, measured from the bad write</button>
+      <button class="qopt" type="button">B · Declare, contain and correct, measured from the first complaint</button>
+      <button class="qopt" type="button">C · Time to declare, time to contain and time to correct, measured from the first signal</button>
+      <p class="qwhy">The first signal is the earliest moment a response plan could act, so starting there makes the numbers belong to the plan. Deadlines are a different clock: those run from the bad write.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Who owns the write-up after an incident closes?</p>
+      <button class="qopt" type="button">A · The craft belongs to the planned runbooks and postmortems course; the plan's job is to make sure the timeline and decisions were recorded at the time</button>
+      <button class="qopt" type="button">B · The incident commander, inside the readiness plan</button>
+      <button class="qopt" type="button">C · The board, as part of the quarterly readiness report</button>
+      <p class="qwhy">The leader half decides when, how bad, who and what is said. Writing the after-incident story well is its own craft, handed on by name; the evidence package belongs to reliability.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, April 2025 (read 2026-11-10)</span><span class="note">The CSF 2.0 model with Improvement (ID.IM) feeding lessons back at all times; lessons "shared as soon as they are identified"</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Barr Moses, "The rise of data downtime", Monte Carlo (read 2026-11-10)</span><span class="note">The data downtime definition and formula, taught as a vendor's claim with its basis</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Tabletop practice</span><span class="note">How to run one is stated as practice, not as a published method or a finding</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Bench numbers (R0, R4, R5 readiness times; 5 + 1; 8,400 and 7,600 rows)</span><span class="note">Computed in your browser by replaying a constructed event log under stated plan rules</span></div>
+      <div class="covered-row"><span class="status pill inkpill">·</span><span class="name">Postmortem writing</span><span class="note">Not covered here: the planned runbooks and postmortems course owns it; the incident package belongs to reliability</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 6 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>A tabletop</b><span>One real incident, the real roles, cards in order, every move said out loud and timed by a scribe.</span></div>
+      <div class="cheat-item"><b>Lessons do not wait</b><span>NIST ID.IM: share lessons as soon as they are identified, not after recovery.</span></div>
+      <div class="cheat-item"><b>Three readiness numbers</b><span>Time to declare, contain, correct. All from the first signal; deadlines run from the bad write.</span></div>
+      <div class="cheat-item"><b>Quarrybank on the bench</b><span>Plan: 0h15 / 0h50 / 6h50. Rehearsed: 0h05 / 0h25 / 3h25. Rows exposed 8,400 to 7,600.</span></div>
+      <div class="cheat-item"><b>Time, not reach</b><span>The 5 + 1 floor was reached before the first signal. Only earlier detection moves it.</span></div>
+      <div class="cheat-item"><b>One page, signed</b><span>Six lines, a next tabletop date, the head of data and the privacy partner. Write-ups are handed on.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p><strong>Responder track.</strong> The leader half is signed. To watch both halves of the plan run against the full ladder, the traps and your own hand-typed moves, go to <a href="b8-the-incident-clock.html">Responder session 8, The incident clock</a> for the full replay.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Leader session 6 of 6 · learn-data-incident-response-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a5-when-the-board-used-the-number.html">← Prev: When the board already used the number</a> &nbsp;·&nbsp; <a href="../index.html">Course home</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/ird-sample.js?v=1"></script>
+<script src="../assets/ird-live.js?v=2"></script>
+</body>
+</html>

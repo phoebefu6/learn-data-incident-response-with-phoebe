@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 1 of 6. Three kinds of data incident, a declare rule written before you need it, and what declaring at the first complaint instead of the first signal costs Quarrybank: 14 consumers and 7 decisions on bad data against 10 and 4.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Is this an incident yet? - learn incident response for data teams with phoebe">
+<meta property="og:description" content="Leader session 1 of 6. The declare rule, and the hours a team loses waiting for someone to complain.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/courses/a1-is-this-an-incident.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Is this an incident yet? - learn incident response for data teams with phoebe">
+<meta name="twitter:description" content="A bad load, a leaked table, a wrong number on the board deck. When does each one become an incident?">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 1 · Is this an incident yet? - learn incident response for data teams with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-data-incident-response-with-phoebe</a> / Leader session 1 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Incident Response for Data Teams with Phoebe · Leader session 1 of 6</div>
+    <h1>Is this an <span class="accent">incident</span> yet?</h1>
+    <p class="sub">Every data team has had the morning where the numbers were wrong for hours before anyone said the word "incident". Tonight is about that word: what it covers for a data team, why the moment you say it matters more than almost anything you do after, and a declare rule you write down before you need it. The running case is Quarrybank, a constructed building-supplies distributor with three incidents in one quarter, and the bench replays all three so you can see what waiting for a complaint costs.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Foundations</span>
+      <span class="chip audience">Heads of data and analytics managers</span>
+      <span class="chip audience">Privacy and compliance partners</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Three kinds, one rule</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: classify and declare</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>How the leader track works</h2>
+    </div>
+    <p class="lede">Six sessions, 45 minutes each, one constructed company. Quarrybank distributes building supplies from a cloud warehouse that feeds about 40 dashboards, a weekly extract to a supplier partner and a monthly board pack. In one quarter it has a bad load, a leaked table and a wrong number on the board deck. Tonight decides when each of those becomes an incident. Session 2 rates how bad each one is, session 3 staffs the room, session 4 writes the updates, session 5 handles the number the board already used, and session 6 rehearses the whole plan. The responder track runs alongside and does the hands-on work: the timeline, the trace, the containment and the notices.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A definition of a data incident that covers more than security, three types you can name in a meeting, and page 1 of Quarrybank's incident response plan: a declare rule that fires on the first signal instead of the first complaint. On the bench, that one rule moves Quarrybank's quarter from 14 consumers and 7 decisions using bad data to 10 and 4.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the word matters more than the fix<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A problem with no name is handled by whoever happens to notice it, in whatever channel they happen to be in, with nobody keeping time. An incident is a problem with a name, an owner and a clock. Saying the word is what turns on everything else: the severity, the roles, the updates, the notices. Nothing in the rest of the track works until somebody has said it.</p>
+        <p>The cost of not saying it is not the fix taking longer. Data spreads while nobody owns it. Every hour a bad table sits in the warehouse it is copied into another dashboard, emailed to another inbox, trained into another model or quoted in another decision, and each of those copies becomes a separate person you will eventually have to tell.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. On the night of the bad load a volume monitor fired 40 minutes after the duplicated partition landed. Nobody declared anything. At 7 hours 10 minutes a regional sales head emailed to ask why revenue had doubled, and that email is what started the response. In between, the bad numbers reached a sales email to 40 people, the partner extract and a forecast model.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The Quarrybank cast<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>The head of data</strong> owns the warehouse and its outputs and is the person who usually decides whether something is an incident. Tonight is mostly for this person.</li>
+          <li><strong>The privacy partner</strong> sits in legal and owns the breach-notice clocks. Session 4 gives this person a seat at the table from the first hour.</li>
+          <li><strong>The finance controller</strong> owns the board pack and the margin figure. Session 5 is the conversation this person dreads.</li>
+          <li><strong>The on-call analytics engineer</strong> sees the first signal and does the hands-on work. The responder track is written for this person.</li>
+          <li><strong>The consumers</strong>: regional managers on dashboards, 40 people on a daily sales email, a supplier partner, a forecast model, the board. They are the ones the incident is about.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the NIST definition and three data incident types</span>
+      <h2>Three ways data goes wrong that are worth a name</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">NIST's incident response guidance, revised in April 2025, defines an incident as an occurrence that jeopardises "the integrity, confidentiality, or availability of information". It is written for cybersecurity and says so. A data team can borrow the shape without the attacker: integrity is a bad load, confidentiality is a leaked table, and a third kind exists that security frameworks rarely name, where the data was only wrong for a while but somebody decided something on it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three panels, one per Quarrybank incident. Quality: a supplier feed lands a duplicated partition in the sales table and the bad rows flow inside to a dashboard, a sales email and the partner extract. Exposure: good customer rows leave the building through a public link and a vendor share to people outside. Decision: a wrong margin figure in the board pack flows into a pricing decision that has already changed prices.">
+        <defs>
+          <filter id="ia1aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia1aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ia1aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia1aH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia1aL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia1aS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia1aB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ia1aA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ia1aN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia1aH" x="20" y="24">QUALITY · BAD ROWS TRAVEL INSIDE</text>
+        <text class="ia1aH" x="310" y="24">EXPOSURE · GOOD ROWS TRAVEL OUT</text>
+        <text class="ia1aH" x="600" y="24">DECISION · A NUMBER BECOMES AN ACT</text>
+
+        <g filter="url(#ia1aSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="20" y="44" width="250" height="250" rx="12" transform="rotate(-0.4 145 169)" fill="#FAFCFA"/>
+          <rect x="310" y="44" width="260" height="250" rx="12" transform="rotate(0.3 440 169)" fill="#FAFCFA"/>
+          <rect x="600" y="44" width="260" height="250" rx="12" transform="rotate(-0.3 730 169)" fill="#FAFCFA"/>
+
+          <rect x="36" y="60" width="110" height="34" rx="8" fill="#FFFFFF"/>
+          <path d="M91 98 L91 118" marker-end="url(#ia1aAr)"/>
+          <rect x="36" y="124" width="140" height="44" rx="8" fill="url(#ia1aHc)" transform="rotate(-1 106 146)"/>
+          <path d="M178 140 C200 120 212 104 226 102" marker-end="url(#ia1aAr)"/>
+          <path d="M178 150 L226 152" marker-end="url(#ia1aAr)"/>
+          <path d="M178 160 C200 180 212 196 226 200" marker-end="url(#ia1aAr)"/>
+          <rect x="44" y="214" width="122" height="44" rx="8" fill="#FFFFFF"/>
+
+          <rect x="326" y="74" width="120" height="70" rx="8" fill="#ECF7F0"/>
+          <path d="M450 96 L500 82" marker-end="url(#ia1aAr)"/>
+          <path d="M450 124 L500 140" marker-end="url(#ia1aAr)"/>
+          <rect x="460" y="60" width="18" height="110" rx="3" fill="#F2A900"/>
+          <circle cx="528" cy="82" r="14" fill="#FFFFFF"/>
+          <circle cx="528" cy="140" r="14" fill="#FFFFFF"/>
+
+          <rect x="616" y="64" width="128" height="50" rx="8" fill="#FFFFFF"/>
+          <path d="M680 118 L680 150" marker-end="url(#ia1aAr)"/>
+          <rect x="616" y="156" width="150" height="44" rx="8" fill="#F2A900" transform="rotate(0.8 691 178)"/>
+          <path d="M770 178 L806 178" marker-end="url(#ia1aAr)"/>
+          <path d="M812 160 L846 160 L846 196 L812 196 Z" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ia1aL" x="48" y="82">supplier feed</text>
+        <text class="ia1aB" x="48" y="143">DUPLICATED</text>
+        <text class="ia1aB" x="48" y="158">partition</text>
+        <text class="ia1aS" x="196" y="96">dashboard</text>
+        <text class="ia1aS" x="196" y="170">sales email</text>
+        <text class="ia1aS" x="196" y="218">extract</text>
+        <text class="ia1aL" x="56" y="234">every reader of</text>
+        <text class="ia1aL" x="56" y="250">a copy is reached</text>
+        <text class="ia1aA" x="36" y="282">integrity: revenue doubled</text>
+
+        <text class="ia1aL" x="338" y="100">customer table</text>
+        <text class="ia1aS" x="338" y="118">18,400 rows</text>
+        <text class="ia1aS" x="338" y="134">contact, credit limit</text>
+        <text class="ia1aB" x="430" y="196">open doors:</text>
+        <text class="ia1aS" x="430" y="212">public link, vendor share</text>
+        <text class="ia1aS" x="326" y="246">the rows are correct,</text>
+        <text class="ia1aS" x="326" y="262">the readers are wrong</text>
+        <text class="ia1aA" x="326" y="282">confidentiality: personal data</text>
+
+        <text class="ia1aL" x="628" y="86">board pack</text>
+        <text class="ia1aS" x="628" y="102">margin line</text>
+        <text class="ia1aL" x="628" y="183">pricing decision</text>
+        <text class="ia1aS" x="616" y="226">fixing the table does not</text>
+        <text class="ia1aS" x="616" y="242">undo a price that changed</text>
+        <text class="ia1aA" x="616" y="282">a decision made on it</text>
+
+        <text class="ia1aN" x="20" y="320">Constructed Quarrybank example. The fix is different in each panel because what travels is different.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - name the incident by what travels: bad rows inward, good rows outward, or a wrong number into an act.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What NIST says an incident is, and the part a data team adds<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>NIST SP 800-61 Revision 3, published in April 2025 and now aligned to the Cybersecurity Framework 2.0, takes its definition from US federal law: an incident is "an occurrence that actually or imminently jeopardizes, without lawful authority, the integrity, confidentiality, or availability of information or an information system". It is explicit about scope: "This guide addresses only adverse cybersecurity events."</p>
+        <p>A data team needs the same three words and fewer assumptions about an attacker. A supplier feed that duplicates a partition has nobody acting without lawful authority, and the revenue figure is still unfit to read. So the working definition at Quarrybank keeps NIST's structure and drops the attacker: an incident is an event that has made data wrong, missing, or visible to the wrong people, and has reached, or could reach, someone who will use it before it is fixed.</p>
+        <div class="callout tip">
+          <p><strong>Borrow the security plumbing, not the security mindset.</strong> If your organisation already has a security incident process, run data incidents through the same declare, severity and roles machinery. Most of what follows is the same. The difference is who you tell and what counts as fixed.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Quality, exposure, decision: three types and what each one needs<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <thead><tr><th>Type</th><th>What travels</th><th>What fixed means</th><th>Quarrybank's case</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Quality</strong></td><td>Wrong rows, inward, into every copy</td><td>Every consumer reads corrected rows</td><td>Duplicated supplier partition, revenue doubled for two regions</td></tr>
+            <tr><td><strong>Exposure</strong></td><td>Correct rows, outward, to the wrong people</td><td>Every door closed, every copy accounted for</td><td>18,400 customer rows behind a public link</td></tr>
+            <tr><td><strong>Decision</strong></td><td>A wrong number, into an act</td><td>The people who acted are told, and the record is restated</td><td>Board pack margin that informed a pricing decision</td></tr>
+          </tbody>
+        </table>
+        <p>The types are not exclusive. Quarrybank's board incident is a quality incident that was found late enough to become a decision incident. Naming the type is still worth it, because it decides who joins the call: an exposure needs the privacy partner in the first hour, a decision incident needs the finance controller, and a quality incident needs whoever owns the copies.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers declaring on criteria, the SRE book's three questions, declare early</span>
+      <h2>A declare rule, written before you need it</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">NIST lists it as a single outcome: "Incidents are declared when adverse events meet the defined incident criteria." The word that matters is defined. A team without written criteria declares when somebody senior is annoyed enough, which in practice means when a consumer complains, which means after the data has already spread.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The bad load's first eight hours on one rail. The duplicated partition lands at 0h00. By 0h35 four copies have already been made: the revenue dashboard, the finance mart, the partner extract and the forecast model. The volume monitor fires at 0h40. The executive dashboard refreshes at 4h00 and the sales email goes to 40 people at 5h00. The first complaint arrives at 7h10. A declare rule fires at 0h55, fifteen minutes after the signal; without one, the response starts at the complaint, six and a half hours later.">
+        <defs>
+          <filter id="ia1bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="19" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia1bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ia1bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia1bH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia1bL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia1bS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia1bB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ia1bG { font: 800 11px Inter, sans-serif; fill: #053D1E; }
+          .ia1bN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia1bH" x="40" y="24">THE BAD LOAD'S FIRST EIGHT HOURS (CONSTRUCTED QUARRYBANK EXAMPLE)</text>
+
+        <g filter="url(#ia1bSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="70" y="128" width="659" height="20" rx="4" fill="url(#ia1bHc)"/>
+          <path d="M60 138 L840 138" marker-end="url(#ia1bAr)"/>
+          <path d="M70 120 L70 156"/>
+          <path d="M131 120 L131 156" stroke="#053D1E" stroke-width="3"/>
+          <path d="M154 156 L154 184" stroke="#053D1E" stroke-width="3"/>
+          <path d="M438 120 L438 156"/>
+          <path d="M530 120 L530 156"/>
+          <path d="M729 112 L729 164" stroke="#6B4700" stroke-width="3"/>
+        </g>
+
+        <text class="ia1bL" x="70" y="72">0h00 bad write</text>
+        <text class="ia1bS" x="70" y="88">0h15 to 0h35: four copies</text>
+        <text class="ia1bS" x="70" y="102">made before any alarm</text>
+        <text class="ia1bG" x="137" y="116">0h40 signal</text>
+        <text class="ia1bG" x="162" y="200">0h55 declare rule fires</text>
+        <text class="ia1bS" x="162" y="216">15 minutes after the signal</text>
+        <text class="ia1bL" x="444" y="116">4h00 exec dashboard</text>
+        <text class="ia1bL" x="536" y="176">5h00 sales email</text>
+        <text class="ia1bS" x="536" y="192">to 40 people</text>
+        <text class="ia1bB" x="621" y="96">7h10 first complaint</text>
+        <text class="ia1bS" x="640" y="232">no rule: the response</text>
+        <text class="ia1bS" x="640" y="248">starts here, 6h30 late</text>
+
+        <text class="ia1bN" x="40" y="284">Hatched: the bad partition is in the warehouse and nobody owns it. Scale: 1 hour = about 92 px.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - everything between the signal and the complaint is spread nobody was managing.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The SRE book's three questions, adapted for data<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Google's SRE book gives a test short enough to remember at 3am. If any of these is true, it is an incident: "Do you need to involve a second team in fixing the problem?", "Is the outage visible to customers?", "Is the issue unsolved even after an hour's concentrated analysis?"</p>
+        <p>For a data team the second question needs translating, because the customer of a table is whoever reads it. Quarrybank's adapted rule:</p>
+        <ol>
+          <li><strong>Has bad or exposed data reached a consumer</strong>, or could it reach one before you can fix it? A dashboard, an extract, an email, a model, a person outside.</li>
+          <li><strong>Does fixing it need a second team</strong>, such as the partner's integration team, legal, or finance?</li>
+          <li><strong>Is it unexplained after an hour</strong> of somebody looking at it properly?</li>
+        </ol>
+        <p>Any yes, declare. The first question does most of the work, and it turns on the word "could": the bad load had reached the partner extract 10 minutes before the monitor fired.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Declare early, close early<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Both Google sources say the same thing in different words. The SRE book: "It is better to declare an incident early and then find a simple fix and close out the incident." The SRE workbook lists "Declare incidents early and often" as a basic principle and reports that "managed incidents are resolved faster".</p>
+        <p>The reason is structural, not motivational. Declaring is what assigns an owner and starts a timeline. An incident declared at 0h55 and closed at 1h30 as a false alarm costs one person 35 minutes and one log entry. An incident declared at 7h10 costs every hour in between, spent by the data, spreading.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. With no declare rule the response to the three incidents starts at the first complaint: 6h30 after the first signal for the bad load, 45h00 for the leaked table and 120h00 for the board deck. A rule that declares 15 minutes after the first signal brings all three to 0h15.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the cost of declaring late against the cost of declaring often</span>
+      <h2>Late costs data, often costs attention</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The objection to a low threshold is real: a team that declares everything learns to ignore its own declarations. The answer is not a higher threshold. It is making a declaration cheap to make and cheap to close, and letting severity, next session, decide how much of the organisation wakes up.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two panels. Declaring late, on the left, costs data: on the bench, Quarrybank's quarter with no plan reaches 14 consumers and 7 decisions with bad data and leaves 11 consumers never told. Declaring often, on the right, costs attention: a false alarm is one owner, one log line and a close, and severity decides who else is woken.">
+        <defs>
+          <filter id="ia1cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="31" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <marker id="ia1cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia1cH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia1cL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia1cS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia1cR { font: 800 12px Inter, sans-serif; fill: #991B1B; }
+          .ia1cV { font: 800 18px Inter, sans-serif; fill: #053D1E; }
+          .ia1cN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ia1cSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="40" width="390" height="200" rx="12" transform="rotate(-0.4 235 140)" fill="#FEF2F2" stroke="#FCA5A5"/>
+          <rect x="450" y="40" width="390" height="200" rx="12" transform="rotate(0.4 645 140)" fill="#ECF7F0" stroke="#075A2C"/>
+          <rect x="474" y="104" width="96" height="36" rx="8" fill="#FFFFFF"/>
+          <path d="M574 122 L606 122" marker-end="url(#ia1cAr)"/>
+          <rect x="612" y="104" width="96" height="36" rx="8" fill="#FFFFFF"/>
+          <path d="M712 122 L744 122" marker-end="url(#ia1cAr)"/>
+          <rect x="750" y="104" width="70" height="36" rx="8" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ia1cR" x="58" y="74">✗ Declaring late costs data</text>
+        <text class="ia1cS" x="58" y="98">bench, no plan, all three incidents:</text>
+        <text class="ia1cV" x="58" y="132">14 + 7</text>
+        <text class="ia1cL" x="140" y="130">consumers + decisions on bad data</text>
+        <text class="ia1cV" x="58" y="168">11</text>
+        <text class="ia1cL" x="140" y="166">consumers never told</text>
+        <text class="ia1cS" x="58" y="200">every hour unowned is another copy</text>
+        <text class="ia1cS" x="58" y="216">you will have to chase later</text>
+
+        <text class="ia1cH" x="468" y="74">✓ Declaring often costs attention</text>
+        <text class="ia1cL" x="484" y="127">declare</text>
+        <text class="ia1cL" x="622" y="127">look</text>
+        <text class="ia1cL" x="760" y="127">close</text>
+        <text class="ia1cS" x="468" y="176">a false alarm: one owner, one log line</text>
+        <text class="ia1cS" x="468" y="194">severity decides who else is woken</text>
+        <text class="ia1cS" x="468" y="212">the rule gets tuned, not abandoned</text>
+
+        <text class="ia1cN" x="40" y="276">Late is paid by consumers you never meet. Often is paid by your own team, and it is the cheaper bill.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the two costs land on different people, which is why teams keep choosing the wrong one.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Making a declaration cheap<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Anyone can declare.</strong> The on-call engineer who sees the signal, not their manager. A rule that needs permission to fire is a rule that fires at the complaint.</li>
+          <li><strong>Declaring is one action.</strong> A channel, a record, an owner. Not a meeting.</li>
+          <li><strong>Closing a false alarm is praised.</strong> If the person who declared a non-incident hears about it in a performance review, the next one will not be declared.</li>
+          <li><strong>Severity carries the weight.</strong> A low-severity declaration wakes nobody else. Session 2 builds the matrix that makes this safe.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the declare rule does not decide<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A declaration is not a breach notification. Whether the leaked table must be reported to a regulator, and by when, is a legal question with its own clock and its own owner, the privacy partner. The GDPR and PDPA courses own that law (<a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/b7-breach-response.html">GDPR breach response ↗</a>, <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/b7-breach-response.html">PDPA breach response ↗</a>). What the declare rule does is make sure the privacy partner hears about it while there is still time on that clock.</p>
+        <p>A declaration is also not detection. How the volume monitor knew the row count had doubled is the observability course's subject (<a href="https://phoebefu6.github.io/learn-data-observability-with-phoebe/">Data Observability ↗</a>). Here the signal is an input, and the question is only what you do in the minutes after it.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Classify, then write the rule that would have fired</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">No code. Classify Quarrybank's three incidents, run the bench with and without a declare rule, and write page 1 of the incident response plan. Then do the same for one real event from your own last quarter.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Quarrybank's declare rule as a decision tree. First question: has bad or exposed data reached a consumer, or could it before the fix? Yes leads to declare. No leads to: does the fix need a second team? Yes leads to declare. No leads to: unexplained after an hour of looking? Yes leads to declare, no leads to log it and keep watching. Every declare box starts the clock and names one owner.">
+        <defs>
+          <filter id="ia1dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="43" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <marker id="ia1dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia1dL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia1dS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia1dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .ia1dA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ia1dN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ia1dSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="40" width="260" height="56" rx="10" fill="#FFFFFF" transform="rotate(-0.6 170 68)"/>
+          <rect x="40" y="140" width="260" height="56" rx="10" fill="#FFFFFF" transform="rotate(0.5 170 168)"/>
+          <rect x="40" y="240" width="260" height="56" rx="10" fill="#FFFFFF" transform="rotate(-0.4 170 268)"/>
+          <path d="M170 100 L170 134" marker-end="url(#ia1dAr)"/>
+          <path d="M170 200 L170 234" marker-end="url(#ia1dAr)"/>
+          <path d="M304 68 L560 68" marker-end="url(#ia1dAr)"/>
+          <path d="M304 168 C420 168 470 90 560 84" marker-end="url(#ia1dAr)"/>
+          <path d="M304 262 C430 262 480 110 560 98" marker-end="url(#ia1dAr)"/>
+          <path d="M304 278 L560 278" marker-end="url(#ia1dAr)"/>
+          <rect x="566" y="48" width="270" height="64" rx="10" fill="#075A2C"/>
+          <rect x="566" y="252" width="270" height="52" rx="10" fill="#ECF7F0"/>
+        </g>
+
+        <text class="ia1dL" x="54" y="64">Bad or exposed data reached a</text>
+        <text class="ia1dL" x="54" y="81">consumer, or could before the fix?</text>
+        <text class="ia1dL" x="54" y="165">Does the fix need a second team?</text>
+        <text class="ia1dS" x="54" y="182">partner, legal, finance</text>
+        <text class="ia1dL" x="54" y="265">Unexplained after an hour</text>
+        <text class="ia1dL" x="54" y="282">of somebody really looking?</text>
+        <text class="ia1dA" x="180" y="122">no</text>
+        <text class="ia1dA" x="180" y="222">no</text>
+        <text class="ia1dA" x="420" y="60">yes</text>
+        <text class="ia1dA" x="410" y="152">yes</text>
+        <text class="ia1dA" x="318" y="252">yes</text>
+        <text class="ia1dA" x="420" y="296">no</text>
+        <text class="ia1dW" x="584" y="76">DECLARE: start the clock,</text>
+        <text class="ia1dW" x="584" y="96">name one owner, open the record</text>
+        <text class="ia1dL" x="584" y="275">Log it, keep watching,</text>
+        <text class="ia1dS" x="584" y="292">ask the three again in an hour</text>
+
+        <text class="ia1dN" x="40" y="326">Any yes declares. Severity, next session, decides how many people the declaration wakes.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three questions, any yes declares, and the first one does most of the work.</figcaption>
+    </figure>
+
+    <div data-ird-bench="lite" data-presets="r0,r1" data-start="r0"></div>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Classify the three.</strong> For each Quarrybank incident write its type (quality, exposure, decision), what travels, and the first consumer it reaches. Use the three panels in Part 1. The board deck is a quality incident found late enough to be a decision incident: write both, and say which one decides who joins the call.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · classification, Quarrybank</span>incident        type        what travels             first reached
+bad load        quality     wrong rows, inward       revenue dashboard, 0h15
+leaked table    exposure    correct rows, outward    vendor analyst A, 0h30
+board deck      decision    wrong margin, into acts  emailed pack, 0h00
+                (quality)                            pricing decision at 24h00</div>
+      </div>
+      <div class="step">
+        <p><strong>Run the bench on R0, no plan.</strong> Read the headline: consumers and decisions that used bad data before it was corrected or they were told. Then read the table: how long after the first signal each incident was declared. Note the three declare times.</p>
+      </div>
+      <div class="step">
+        <p><strong>Switch to R1, declare rule.</strong> Same quarter, same events, one change: each incident is declared 15 minutes after its first signal. Watch the headline fall from 14 consumers and 7 decisions to 10 and 4, and the never-told count from 11 to 7. Notice what does not move: deadlines met stays at 0 of 4. Declaring early starts the clock; it does not staff the room. That is session 3.</p>
+      </div>
+      <div class="step">
+        <p><strong>Write the declare rule.</strong> Page 1 of Quarrybank's incident response plan. Keep it to what fits on a card by the on-call laptop.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · plan, leader page 1, declare rule</span>QUARRYBANK INCIDENT RESPONSE PLAN · leader page 1 · declare rule
+Anyone on call may declare. Declare within 15 minutes of a signal if ANY is yes:
+  1. Bad or exposed data has reached a consumer, or could before the fix
+     (dashboard, extract, scheduled email, model, anyone outside)
+  2. Fixing it needs a second team (partner, legal, finance)
+  3. It is still unexplained after one hour of someone looking
+Declaring = open the record, name one owner, post in #incident.
+A false alarm is closed with one line, and nobody is blamed for it.
+Type it: quality / exposure / decision. Exposure: page the privacy partner.</div>
+      </div>
+      <div class="step">
+        <p><strong>Test it on your own quarter.</strong> Pick one event from the last three months that was handled without being called an incident. Run it through the three questions. If any answer is yes, write down the time the rule would have fired and the time the response actually started.</p>
+      </div>
+    </div>
+
+    <div class="prompt-box bad"><span class="label">✕ The declare rule most teams actually have</span>We will declare an incident when the issue is significant and impacts the business.</div>
+
+    <div class="callout tip">
+      <p><strong>"Significant" is the word that waits for a complaint.</strong> Nobody can tell at 0h40 whether a doubled row count is significant. Everybody can tell whether it has reached a dashboard.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 2</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li>Finish your own declare rule. Read it to the person who is on call this week and change every word they stumble on.</li>
+      <li>For the event you tested in step 5, list every consumer it reached between the first signal and the moment someone owned it.</li>
+      <li>Find out who in your organisation owns breach notification. Write their name on the rule next to "exposure".</li>
+      <li>Count how many incidents your team formally declared last quarter, and how many problems it handled without declaring. Bring both numbers.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">A vendor was given a public link to a customer table. Every row in it is correct. What kind of incident is it?</p>
+      <button class="qopt" type="button">A · Not an incident, because the data is accurate</button>
+      <button class="qopt" type="button">B · An exposure incident: correct rows travelling to people who should not have them</button>
+      <button class="qopt" type="button">C · A quality incident, because the sharing setting is wrong</button>
+      <p class="qwhy">Confidentiality is one of the three properties in NIST's definition. Correct data in the wrong hands is an incident, and it is the type that needs the privacy partner in the first hour.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">On the bench, what does adding a declare rule (R1) change for Quarrybank's quarter, compared with no plan (R0)?</p>
+      <button class="qopt" type="button">A · Nothing, because the data was already bad before anyone could act</button>
+      <button class="qopt" type="button">B · Every notice deadline is now met</button>
+      <button class="qopt" type="button">C · Consumers and decisions on bad data fall from 14 and 7 to 10 and 4, while deadlines met stay at 0 of 4</button>
+      <p class="qwhy">Declaring 15 minutes after the first signal stops some of the spread. Meeting deadlines needs someone who owns them, which arrives with roles in session 3.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Why does the SRE book prefer declaring early even if it turns out to be minor?</p>
+      <button class="qopt" type="button">A · Because "it is better to declare an incident early and then find a simple fix and close out the incident"; a closed false alarm costs little, a late declaration costs every hour in between</button>
+      <button class="qopt" type="button">B · Because declared incidents are always high severity</button>
+      <button class="qopt" type="button">C · Because regulators require every incident to be declared within an hour</button>
+      <p class="qwhy">Declaring assigns an owner and starts the timeline. Severity is a separate decision, and legal deadlines belong to the privacy partner, not to the declare rule.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, April 2025 (read 2026-11-10)</span><span class="note">The incident definition and its cybersecurity scope; DE.AE-08, declare when events meet defined criteria</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Google SRE book, Managing Incidents (read 2026-11-10)</span><span class="note">The three declare questions and "better to declare an incident early"</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Google SRE workbook, Incident Response (read 2026-11-10)</span><span class="note">"Declare incidents early and often"</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Quality, exposure, decision</span><span class="note">A teaching taxonomy that extends NIST's three properties to data teams, not a published standard</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Bench numbers (14 + 7, 10 + 4, 11 and 7 never told, 0h15)</span><span class="note">Computed in your browser by replaying a constructed event log</span></div>
+      <div class="covered-row"><span class="status pill inkpill">·</span><span class="name">Detection and breach-notice law</span><span class="note">Not covered here: the observability, GDPR and PDPA courses own them</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 1 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>An incident has a name</b><span>An owner and a clock. Until somebody says the word, the data spreads unmanaged.</span></div>
+      <div class="cheat-item"><b>Three types</b><span>Quality: bad rows in. Exposure: good rows out. Decision: a wrong number into an act.</span></div>
+      <div class="cheat-item"><b>Declare on criteria</b><span>NIST DE.AE-08: declared when events meet the defined criteria. Write them down first.</span></div>
+      <div class="cheat-item"><b>Three questions</b><span>Reached a consumer, or could? Second team? Unexplained after an hour? Any yes.</span></div>
+      <div class="cheat-item"><b>Declare early</b><span>A closed false alarm is one log line. A late declaration is every hour in between.</span></div>
+      <div class="cheat-item"><b>Quarrybank on the bench</b><span>No plan: 14 + 7 on bad data, 11 never told. Declare rule: 10 + 4, 7 never told.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Declared is not the same as sized. Session 2 builds a severity matrix from reach, sensitivity and reversibility, rates all three Quarrybank incidents, and checks your rating against the reach the bench computes.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Leader session 1 of 6 · learn-data-incident-response-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="../index.html">← Course home</a> &nbsp;·&nbsp; <a href="a2-severity-you-can-defend.html">Next: Severity you can defend →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/ird-sample.js?v=1"></script>
+<script src="../assets/ird-live.js?v=2"></script>
+</body>
+</html>

@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 2 of 6. A severity matrix built from reach, sensitivity and reversibility, applied to Quarrybank's three incidents and checked against the reach the bench computes: severity and roles move deadlines met from 0 of 4 to 3 of 4.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Severity you can defend - learn incident response for data teams with phoebe">
+<meta property="og:description" content="Leader session 2 of 6. A severity matrix two leaders apply the same way, and who it wakes at each level.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/courses/a2-severity-you-can-defend.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Severity you can defend - learn incident response for data teams with phoebe">
+<meta name="twitter:description" content="Reach, sensitivity, reversibility. Rate a bad load, a leaked table and a wrong board number the same way twice.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 2 · Severity you can defend - learn incident response for data teams with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-data-incident-response-with-phoebe</a> / Leader session 2 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Incident Response for Data Teams with Phoebe · Leader session 2 of 6</div>
+    <h1>Severity you can <span class="accent">defend</span></h1>
+    <p class="sub">A declared incident still needs a size. Too low and the people who could stop the spread are asleep; too high and the whole organisation learns to ignore the pager. Tonight builds a severity matrix from three things you can check in minutes, reach, sensitivity and reversibility, rates Quarrybank's three incidents with it, and then holds your rating up against the reach the bench actually computes.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Building</span>
+      <span class="chip audience">Heads of data and analytics managers</span>
+      <span class="chip audience">Privacy and compliance partners</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-20 · Three axes, one rating</span>
+      <span class="a3" style="flex:5">20-42 · Build-along: rate, then check</span>
+      <span class="a4" style="flex:1">42-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Where severity sits in the response</h2>
+    </div>
+    <p class="lede">Session 1 wrote the declare rule: any yes to three questions, and somebody names the incident within 15 minutes of the signal. That rule is deliberately cheap to fire, which means it will fire on small things. Severity is what makes that safe. It is the second decision, taken minutes after the first, and it decides how many people the declaration wakes, how fast, and who has to be in the room before anyone touches the data.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A severity matrix that two leaders, rating the same incident separately, land on the same level with, plus a ladder of who is woken at each level. That is page 2 of Quarrybank's incident response plan. On the bench, severity and roles together move Quarrybank's quarter from 0 of 4 deadlines met to 3 of 4.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why "defend" and not "decide"<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every severity call gets questioned later: by the person who was woken at 2am for something that turned out small, by the executive who heard about a large one from a customer, by an auditor reading the timeline. A rating you can defend is one where you can point at the criteria and show which box the incident was in at the moment you rated it. A rating you merely decided is one where the only answer is "it felt serious".</p>
+        <p>The test is simple. Hand the same incident to two leaders who have not spoken to each other. If they come back with different levels, the matrix is the problem, not the leaders.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. When the leaked customer table was finally picked up, the head of data called it "a sharing mistake, low" because every row was correct. The privacy partner called it the worst of the quarter because 18,400 rows of contact details and credit limits had left the building. Both were describing the same facts. Neither had a matrix, so the argument took the first hour.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What severity is not<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Not a judgement on the person who caused it.</strong> A SEV-1 caused by a one-character typo is still a SEV-1. Tie the level to the data, never to the mistake.</li>
+          <li><strong>Not a legal classification.</strong> Whether the leaked table must be reported to a regulator is the privacy partner's question, with its own clock. Severity makes sure the privacy partner is in the room in time to answer it.</li>
+          <li><strong>Not fixed.</strong> Reach grows while an incident is open. Re-rate whenever a new consumer, a new outside party or a new copy turns up, and say so in the record.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers PagerDuty severity levels and NIST RS.MA prioritisation</span>
+      <h2>Three axes that push a rating up</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">Two published sources set the frame. PagerDuty's incident response documentation gives the levels and the habits around them. NIST SP 800-61 Revision 3 gives the reason to rate at all: incidents "should not be handled on a first-come, first-served basis". A data team then needs criteria it can check in minutes. Quarrybank uses three: how far the data has reached, how sensitive it is, and whether a correction can undo the reading.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 396" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Quarrybank's severity matrix as three axes, each with three levels from left to right. Reach: one team, consumers inside, any outside party. Sensitivity: internal number, a number people act on, personal data or a board or lender figure. Reversibility: refreshable, copies inside, a copy outside the walls. All three incidents sit at the top of reach and reversibility. On sensitivity the bad load sits in the middle, the leaked table and the board deck at the top. Result: bad load SEV-2, leaked table SEV-1, board deck SEV-1.">
+        <defs>
+          <filter id="ia2aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="11" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia2aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ia2aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia2aH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia2aL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia2aS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia2aA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ia2aW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .ia2aN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia2aH" x="20" y="24">THREE AXES, EACH PUSHES THE RATING UP (CONSTRUCTED QUARRYBANK MATRIX)</text>
+
+        <g filter="url(#ia2aSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M184 44 L856 44" marker-end="url(#ia2aAr)"/>
+
+          <rect x="180" y="58" width="216" height="70" rx="10" fill="#FFFFFF" transform="rotate(-0.4 288 93)"/>
+          <rect x="412" y="58" width="216" height="70" rx="10" fill="#FFFFFF" transform="rotate(0.3 520 93)"/>
+          <rect x="644" y="58" width="216" height="70" rx="10" fill="#FFF6DC" transform="rotate(-0.3 752 93)"/>
+          <rect x="656" y="100" width="54" height="20" rx="6" fill="url(#ia2aHc)"/>
+          <rect x="718" y="100" width="54" height="20" rx="6" fill="#ECF7F0"/>
+          <rect x="780" y="100" width="54" height="20" rx="6" fill="url(#ia2aHc)"/>
+
+          <rect x="180" y="142" width="216" height="70" rx="10" fill="#FFFFFF" transform="rotate(0.3 288 177)"/>
+          <rect x="412" y="142" width="216" height="70" rx="10" fill="#FFFFFF" transform="rotate(-0.4 520 177)"/>
+          <rect x="644" y="142" width="216" height="70" rx="10" fill="#FFF6DC" transform="rotate(0.3 752 177)"/>
+          <rect x="424" y="184" width="54" height="20" rx="6" fill="url(#ia2aHc)"/>
+          <rect x="718" y="184" width="54" height="20" rx="6" fill="#ECF7F0"/>
+          <rect x="780" y="184" width="54" height="20" rx="6" fill="url(#ia2aHc)"/>
+
+          <rect x="180" y="226" width="216" height="70" rx="10" fill="#FFFFFF" transform="rotate(-0.3 288 261)"/>
+          <rect x="412" y="226" width="216" height="70" rx="10" fill="#FFFFFF" transform="rotate(0.4 520 261)"/>
+          <rect x="644" y="226" width="216" height="70" rx="10" fill="#FFF6DC" transform="rotate(-0.4 752 261)"/>
+          <rect x="656" y="268" width="54" height="20" rx="6" fill="url(#ia2aHc)"/>
+          <rect x="718" y="268" width="54" height="20" rx="6" fill="#ECF7F0"/>
+          <rect x="780" y="268" width="54" height="20" rx="6" fill="url(#ia2aHc)"/>
+
+          <rect x="180" y="316" width="216" height="34" rx="8" fill="#1C7240" transform="rotate(-0.5 288 333)"/>
+          <rect x="412" y="316" width="216" height="34" rx="8" fill="#053D1E" transform="rotate(0.4 520 333)"/>
+          <rect x="644" y="316" width="216" height="34" rx="8" fill="#053D1E" transform="rotate(-0.3 752 333)"/>
+        </g>
+
+        <text class="ia2aH" x="20" y="84">REACH</text>
+        <text class="ia2aS" x="20" y="100">who has read it,</text>
+        <text class="ia2aS" x="20" y="114">and how far out</text>
+        <text class="ia2aL" x="194" y="78">one team</text>
+        <text class="ia2aS" x="194" y="93">nobody else has read it</text>
+        <text class="ia2aL" x="426" y="78">consumers inside</text>
+        <text class="ia2aS" x="426" y="93">dashboards, email, a model</text>
+        <text class="ia2aL" x="658" y="78">any outside party</text>
+        <text class="ia2aS" x="658" y="93">partner, vendor, investor</text>
+        <text class="ia2aS" x="664" y="114">load</text>
+        <text class="ia2aS" x="726" y="114">leak</text>
+        <text class="ia2aS" x="788" y="114">board</text>
+
+        <text class="ia2aH" x="20" y="168">SENSITIVITY</text>
+        <text class="ia2aS" x="20" y="184">what kind of data,</text>
+        <text class="ia2aS" x="20" y="198">and what rests on it</text>
+        <text class="ia2aL" x="194" y="162">internal number</text>
+        <text class="ia2aS" x="194" y="177">a working figure, no act yet</text>
+        <text class="ia2aL" x="426" y="162">a number people act on</text>
+        <text class="ia2aS" x="426" y="177">orders, budgets, rebates</text>
+        <text class="ia2aL" x="658" y="162">personal data</text>
+        <text class="ia2aS" x="658" y="177">or a board or lender figure</text>
+        <text class="ia2aS" x="432" y="198">load</text>
+        <text class="ia2aS" x="726" y="198">leak</text>
+        <text class="ia2aS" x="788" y="198">board</text>
+
+        <text class="ia2aH" x="20" y="252">REVERSIBILITY</text>
+        <text class="ia2aS" x="20" y="268">can a correction</text>
+        <text class="ia2aS" x="20" y="282">undo the reading?</text>
+        <text class="ia2aL" x="194" y="246">refreshable</text>
+        <text class="ia2aS" x="194" y="261">fixed when the table is</text>
+        <text class="ia2aL" x="426" y="246">copies inside</text>
+        <text class="ia2aS" x="426" y="261">email, model, a deck</text>
+        <text class="ia2aL" x="658" y="246">copy outside the walls</text>
+        <text class="ia2aS" x="658" y="261">clears only by telling</text>
+        <text class="ia2aS" x="664" y="282">load</text>
+        <text class="ia2aS" x="726" y="282">leak</text>
+        <text class="ia2aS" x="788" y="282">board</text>
+
+        <text class="ia2aH" x="20" y="338">RATING</text>
+        <text class="ia2aW" x="196" y="338">bad load · SEV-2</text>
+        <text class="ia2aW" x="428" y="338">leaked table · SEV-1</text>
+        <text class="ia2aW" x="660" y="338">board deck · SEV-1</text>
+
+        <text class="ia2aN" x="20" y="380">Placed by what each had reached when R0 declared it. Sensitivity is the axis that separates the bad load.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - reach and reversibility put all three incidents high; sensitivity decides which ones are SEV-1.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>PagerDuty's five levels, and two habits worth copying<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>PagerDuty publishes the severity scale its own responders use. Read it for its shape, not its wording, because it is written for a product with customers who log in:</p>
+        <table class="clean">
+          <thead><tr><th>Level</th><th>PagerDuty's definition</th><th>Data translation</th></tr></thead>
+          <tbody>
+            <tr><td><strong>SEV-1</strong></td><td>"Critical issue that warrants public notification and liaison with executive teams"</td><td>Someone outside will have to be told; an executive has to know first</td></tr>
+            <tr><td><strong>SEV-2</strong></td><td>"Critical system issue actively impacting many customers' ability to use the product"</td><td>Many consumers are reading or acting on bad data now</td></tr>
+            <tr><td><strong>SEV-3</strong></td><td>"Stability or minor customer-impacting issues that require immediate attention from service owners"</td><td>A few consumers inside; the owners of those copies act today</td></tr>
+            <tr><td><strong>SEV-4</strong></td><td>"Minor issues requiring action, but not affecting customer ability to use the product"</td><td>Caught before anyone outside the team read it</td></tr>
+            <tr><td><strong>SEV-5</strong></td><td>"Cosmetic issues or bugs"</td><td>Usually not an incident for a data team at all; a ticket</td></tr>
+          </tbody>
+        </table>
+        <p>Two habits sit next to the scale. First, if you are unsure between two levels, treat it as the higher one. Second: "During an incident is not the time to discuss or litigate severities". Pick, move, and argue about the level in the review afterwards, where the argument can improve the matrix instead of delaying the response.</p>
+        <div class="callout tip">
+          <p><strong>Four levels are enough for most data teams.</strong> Quarrybank drops SEV-5: a cosmetic issue in a dashboard label goes to the backlog, not the incident channel. Fewer levels means fewer borderline calls at 2am.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What NIST says to weigh, and why first-come is wrong<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>NIST SP 800-61 Revision 3 calls evaluating risk and prioritising incidents "perhaps the most critical decision points" in the response, and recommends that "incidents should not be handled on a first-come, first-served basis". The factors it lists include "asset criticality, functional impact of the incident, data impact of the incident ... and recoverability".</p>
+        <p>Quarrybank's three axes are a data team's reading of that list, said out loud as a teaching construction rather than a standard:</p>
+        <ul>
+          <li><strong>Reach</strong> stands in for functional impact: how many consumers, people and rows, and whether any of them sit outside the company.</li>
+          <li><strong>Sensitivity</strong> stands in for data impact and asset criticality: an internal working number, a number people act on, or personal data and a figure the board or a lender relied on.</li>
+          <li><strong>Reversibility</strong> stands in for recoverability: whether fixing the table fixes what people read, or whether a copy now lives somewhere a correction cannot reach.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. In the quarter the incidents arrived in order: bad load, leaked table, board deck. First-come would have put the board deck last. On the matrix it is SEV-1, level with the leak, because the figure had reached a board and, by the time anyone declared it, a lender.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers reach as a number the bench computes</span>
+      <h2>Reach is counted, not felt</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">Of the three axes, reach is the one leaders guess worst, because the people who read a bad number rarely say so. The bench does not guess. It replays each incident's constructed event log and lists every consumer, decision and reader that touched the bad data before it was corrected or its readers were told. On R0, no plan at all, those lists are the honest size of each incident.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 364" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three panels of what each incident reached on R0, measured on the bench. Bad load: 5 consumers and 3 decisions, the executive dashboard and finance mart refresh, the sales email, partner extract and forecast model are copies; 60 bad reads by 52 people. Leaked table: 4 outside parties, vendor analysts A and B, the person the link was forwarded to and an unknown address; 18,400 rows exposed. Board deck: 5 consumers and 4 decisions, the board portal refreshes, the emailed pack, pricing deck, investor update and lender certificate are copies; 35 bad reads by 17 people.">
+        <defs>
+          <filter id="ia2bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="23" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia2bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ia2bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia2bH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia2bL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia2bS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia2bV { font: 800 18px Inter, sans-serif; fill: #053D1E; }
+          .ia2bN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia2bH" x="20" y="24">WHAT EACH INCIDENT REACHED ON R0, NO PLAN (MEASURED ON THE BENCH)</text>
+
+        <g filter="url(#ia2bSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="20" y="40" width="270" height="260" rx="12" fill="#FAFCFA" transform="rotate(-0.4 155 170)"/>
+          <rect x="305" y="40" width="270" height="260" rx="12" fill="#FAFCFA" transform="rotate(0.3 440 170)"/>
+          <rect x="590" y="40" width="270" height="260" rx="12" fill="#FAFCFA" transform="rotate(-0.3 725 170)"/>
+
+          <rect x="36" y="107" width="14" height="14" rx="3" fill="#ECF7F0"/>
+          <rect x="36" y="133" width="14" height="14" rx="3" fill="#ECF7F0"/>
+          <rect x="36" y="159" width="14" height="14" rx="3" fill="url(#ia2bHc)"/>
+          <rect x="36" y="185" width="14" height="14" rx="3" fill="url(#ia2bHc)"/>
+          <rect x="36" y="211" width="14" height="14" rx="3" fill="url(#ia2bHc)"/>
+
+          <rect x="321" y="107" width="14" height="14" rx="3" fill="url(#ia2bHc)"/>
+          <rect x="321" y="133" width="14" height="14" rx="3" fill="url(#ia2bHc)"/>
+          <rect x="321" y="159" width="14" height="14" rx="3" fill="url(#ia2bHc)"/>
+          <rect x="321" y="185" width="14" height="14" rx="3" fill="url(#ia2bHc)"/>
+
+          <rect x="606" y="107" width="14" height="14" rx="3" fill="#ECF7F0"/>
+          <rect x="606" y="133" width="14" height="14" rx="3" fill="url(#ia2bHc)"/>
+          <rect x="606" y="159" width="14" height="14" rx="3" fill="url(#ia2bHc)"/>
+          <rect x="606" y="185" width="14" height="14" rx="3" fill="url(#ia2bHc)"/>
+          <rect x="606" y="211" width="14" height="14" rx="3" fill="url(#ia2bHc)"/>
+
+          <rect x="20" y="312" width="14" height="14" rx="3" fill="#ECF7F0"/>
+          <rect x="420" y="312" width="14" height="14" rx="3" fill="url(#ia2bHc)"/>
+        </g>
+
+        <text class="ia2bL" x="36" y="64">Bad load</text>
+        <text class="ia2bV" x="36" y="94">5 + 3</text>
+        <text class="ia2bS" x="96" y="92">consumers + decisions</text>
+        <text class="ia2bS" x="60" y="118">executive dashboard</text>
+        <text class="ia2bS" x="60" y="144">finance mart</text>
+        <text class="ia2bS" x="60" y="170">sales email (40 recipients)</text>
+        <text class="ia2bS" x="60" y="196">partner extract</text>
+        <text class="ia2bS" x="60" y="222">forecast model</text>
+        <text class="ia2bV" x="36" y="272">60</text>
+        <text class="ia2bS" x="70" y="270">bad reads, by 52 people</text>
+
+        <text class="ia2bL" x="321" y="64">Leaked table</text>
+        <text class="ia2bV" x="321" y="94">4</text>
+        <text class="ia2bS" x="340" y="92">outside parties</text>
+        <text class="ia2bS" x="345" y="118">vendor analyst A</text>
+        <text class="ia2bS" x="345" y="144">vendor analyst B</text>
+        <text class="ia2bS" x="345" y="170">person the link was forwarded to</text>
+        <text class="ia2bS" x="345" y="196">unknown address</text>
+        <text class="ia2bV" x="321" y="272">18,400</text>
+        <text class="ia2bS" x="400" y="270">rows exposed</text>
+
+        <text class="ia2bL" x="606" y="64">Board deck</text>
+        <text class="ia2bV" x="606" y="94">5 + 4</text>
+        <text class="ia2bS" x="666" y="92">consumers + decisions</text>
+        <text class="ia2bS" x="630" y="118">board portal copy</text>
+        <text class="ia2bS" x="630" y="144">emailed pack</text>
+        <text class="ia2bS" x="630" y="170">pricing committee deck</text>
+        <text class="ia2bS" x="630" y="196">investor update</text>
+        <text class="ia2bS" x="630" y="222">lender covenant certificate</text>
+        <text class="ia2bV" x="606" y="272">35</text>
+        <text class="ia2bS" x="640" y="270">bad reads, by 17 people</text>
+
+        <text class="ia2bS" x="42" y="323">refreshes at the correction (dashboard, table, portal)</text>
+        <text class="ia2bS" x="442" y="323">a copy: clears only when its users are told</text>
+
+        <text class="ia2bN" x="20" y="352">The board deck's two outside copies were made after its 48h00 signal: reach grew while nobody owned it.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the hatched rows are the ones a fix at source will never reach; somebody has to tell them.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Three incidents, three different kinds of big<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Read the panels across and the incidents stop looking comparable, which is the point of having three axes instead of one score.</p>
+        <ul>
+          <li><strong>The bad load</strong> has the most readers: 60 bad reads by 52 people, most of them on the daily sales email. Its decisions (a replenishment order, a promotion budget cut, the partner's rebate) are internal or commercial.</li>
+          <li><strong>The leaked table</strong> has no bad reads at all, because every row is correct. Its size is 4 outside parties and 18,400 rows of contact details and credit limits. The unknown address can never be told.</li>
+          <li><strong>The board deck</strong> has the fewest readers, 35 bad reads by 17 people, and the heaviest decisions: holding prices, an investor update, a covenant certificate, a bonus accrual.</li>
+        </ul>
+        <p>A single "impact score" would rank the bad load first because it has the most readers. The matrix ranks it last of the three, because readers inside the company can be told and dashboards refresh.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. With no plan the quarter reaches 14 consumers and 7 decisions with bad data, and 11 consumers are never told. Every one of those 11 was reachable through the lists above; nobody had been given the job of reading them.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Reversibility: why a copy outranks a dashboard<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>When the bad partition is corrected, the executive dashboard, the finance mart and the board portal pick up the corrected rows at their next refresh. Their readers saw a wrong number for a while; the next time they look, it is right.</p>
+        <p>Copies do not refresh. The daily sales email sits in 40 inboxes, the partner extract sits in the partner's systems, the forecast model has already scored with the doubled revenue, and the emailed pack, the pricing committee deck, the investor update and the lender certificate all say what they said on the day they were made. On the bench, a copy only clears when someone tells its users. That is why reversibility is an axis of its own: every copy outside the walls is a conversation somebody has to have, and nobody can have it on your behalf.</p>
+        <div class="callout tip">
+          <p><strong>The quick reversibility question at rating time:</strong> "If we fixed the table this minute, who would still be holding the wrong number?" Every name in the answer is a copy.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers who is woken at each level, and rating the same incident the same way</span>
+      <h2>Each level wakes someone new</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A severity level is only useful if it changes what happens next. At Quarrybank each level adds people and never removes any: SEV-4 is the on-call engineer and a log line, SEV-1 has the privacy partner and the finance controller in the first hour. The ladder is written before the incident so that nobody has to decide, at 2am, whether this one is worth waking the head of data for.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 384" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A staircase of four severity levels. SEV-4, business hours: the on-call engineer owns it, one log line, nobody paged. SEV-3, same day: adds the head of data and the owners of affected copies. SEV-2, page now: adds an incident commander, a scribe and a liaison to outside parties; the bad load lands here. SEV-1, any hour: adds the privacy partner in the first hour, the finance controller, an executive sponsor and a communications lead; the leaked table and the board deck land here.">
+        <defs>
+          <filter id="ia2cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="37" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia2cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#075A2C" stroke-width="1.4" opacity=".5"/></pattern>
+          <marker id="ia2cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia2cH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia2cS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia2cA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ia2cN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia2cH" x="20" y="24">WHO IS WOKEN AT EACH LEVEL (CONSTRUCTED QUARRYBANK POLICY)</text>
+        <text class="ia2cS" x="40" y="56">each level adds people; nobody is removed going up</text>
+
+        <g filter="url(#ia2cSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M40 72 L850 72" marker-end="url(#ia2cAr)"/>
+          <rect x="20" y="270" width="204" height="80" rx="10" fill="#FFFFFF" transform="rotate(-0.6 122 310)"/>
+          <rect x="232" y="230" width="204" height="120" rx="10" fill="#ECF7F0" transform="rotate(0.5 334 290)"/>
+          <rect x="444" y="180" width="204" height="170" rx="10" fill="#ECF7F0" transform="rotate(-0.4 546 265)"/>
+          <rect x="656" y="120" width="204" height="230" rx="10" fill="#FFF6DC" transform="rotate(0.4 758 235)"/>
+        </g>
+
+        <text class="ia2cH" x="32" y="292">SEV-4 · business hours</text>
+        <text class="ia2cS" x="32" y="310">on-call engineer owns it</text>
+        <text class="ia2cS" x="32" y="326">one log line, nobody paged</text>
+
+        <text class="ia2cH" x="244" y="252">SEV-3 · same day</text>
+        <text class="ia2cS" x="244" y="270">+ head of data told</text>
+        <text class="ia2cS" x="244" y="286">+ owners of affected copies</text>
+        <text class="ia2cS" x="244" y="302">on-call engineer still leads</text>
+
+        <text class="ia2cH" x="456" y="202">SEV-2 · page now</text>
+        <text class="ia2cS" x="456" y="220">+ an incident commander</text>
+        <text class="ia2cS" x="456" y="236">+ a scribe on the timeline</text>
+        <text class="ia2cS" x="456" y="252">+ liaison to outsiders</text>
+        <text class="ia2cA" x="456" y="168">bad load lands here</text>
+
+        <text class="ia2cH" x="668" y="142">SEV-1 · any hour</text>
+        <text class="ia2cS" x="668" y="160">+ privacy partner, hour one</text>
+        <text class="ia2cS" x="668" y="176">+ finance controller</text>
+        <text class="ia2cS" x="668" y="192">+ executive sponsor</text>
+        <text class="ia2cS" x="668" y="208">+ comms lead for outsiders</text>
+        <text class="ia2cA" x="668" y="108">leak and board deck land here</text>
+
+        <text class="ia2cN" x="20" y="374">Constructed policy. Session 3 decides who fills each role; this ladder only decides who is woken.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the level is a wake-up list written in advance, so nobody negotiates it in the middle of the night.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Rate by impact now, or by worst plausible impact?<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>This is the question two careful leaders most often split on, and there is no settled answer. Both positions are held by experienced teams.</p>
+        <ul>
+          <li><strong>Impact now.</strong> Rate what has happened: the consumers already reached, the copies already made. It is checkable, it gives two raters the same answer, and it avoids paging people for a scenario that never arrives. Re-rate as reach grows.</li>
+          <li><strong>Worst plausible impact.</strong> Rate what will happen if nobody acts: the copies on the calendar, the parties the data is about to reach. It wakes the right people before the spread, which is when they are most useful, at the cost of more high-severity pages that turn out smaller.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. When the finance reconciliation flagged the margin line at 48h00, the board deck had reached the board portal, the emailed pack and the pricing committee deck, all inside the company. By impact now it is SEV-2. But the investor update and the lender certificate were both still to be produced from the same pack, and by worst plausible impact it is SEV-1. On the bench, with no plan, both copies were made and both went outside.</p>
+        </div>
+        <p>Whichever you choose, write it on the plan page. A matrix that does not say which question it answers is the main reason two leaders rate the same incident differently.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Making two raters agree<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Criteria in nouns, not adjectives.</strong> "Any outside party" can be checked. "Significant external impact" cannot.</li>
+          <li><strong>One level per axis, highest wins.</strong> Read each axis separately, then take the rule that applies. Do not average.</li>
+          <li><strong>Say which question it answers.</strong> Impact now, or worst plausible. See the card above.</li>
+          <li><strong>Calibrate on old incidents.</strong> Give two leaders three closed incidents from last year and the matrix, separately. Every disagreement points at a criterion that needs a sharper noun.</li>
+          <li><strong>Re-rating is normal.</strong> Record the old level, the new level and the new fact that moved it. That line in the timeline is what makes the rating defensible afterwards.</li>
+        </ul>
+        <p>Who fills the incident commander, scribe and liaison roles, and how a handoff works, is session 3. The rota that decides who is on call at all belongs to reliability (<a href="https://phoebefu6.github.io/learn-data-reliability-with-phoebe/courses/a3-on-call-is-a-design.html">on-call is a design ↗</a>). For the leaked table, whether and when to notify a regulator stays with the privacy partner (<a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/b7-breach-response.html">GDPR breach response ↗</a>, <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/b7-breach-response.html">PDPA breach response ↗</a>). Severity only makes sure that person is woken in the first hour.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Rate all three, then let the bench check you</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">No code. Rate Quarrybank's three incidents on the matrix before you look at any numbers, open the bench's "what it reached" panel on R0 to check each rating against the computed reach, then switch to R2 and watch what severity and roles do to the deadlines. Finish with page 2 of the incident response plan.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 412" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Top: the leaked table's notice clock in hours after the bad write. Signal at 3h20. GDPR due at 75h20, PDPA due at 87h00. On R1, declare rule only, the formal notice lands at 123h35, after both. On R2, severity and roles, it lands well before both. Bottom: the four deadlines on R1 and R2. Partner contract notice for the bad load, due 24h40: missed on both. GDPR and PDPA for the leaked table: missed on R1, met on R2. Audit committee chair notice for the board deck: missed on R1, met on R2. R1 meets 0 of 4, R2 meets 3 of 4.">
+        <defs>
+          <filter id="ia2dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia2dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ia2dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia2dH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia2dL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia2dS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia2dB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ia2dR { font: 800 11px Inter, sans-serif; fill: #991B1B; }
+          .ia2dA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ia2dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .ia2dV { font: 800 16px Inter, sans-serif; fill: #053D1E; }
+          .ia2dN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia2dH" x="20" y="24">THE LEAKED TABLE'S NOTICE CLOCK, HOURS AFTER THE BAD WRITE (CONSTRUCTED)</text>
+
+        <g filter="url(#ia2dSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M60 84 L846 84" marker-end="url(#ia2dAr)"/>
+          <path d="M60 144 L846 144" marker-end="url(#ia2dAr)"/>
+          <path d="M80 76 L80 92" stroke="#053D1E" stroke-width="3"/>
+          <path d="M80 136 L80 152" stroke="#053D1E" stroke-width="3"/>
+          <path d="M512 58 L512 166" stroke="#6B4700" stroke-dasharray="5 5"/>
+          <path d="M582 58 L582 166" stroke="#6B4700" stroke-dasharray="5 5"/>
+          <circle cx="801" cy="84" r="8" fill="#FEF2F2" stroke="#991B1B"/>
+          <circle cx="228" cy="144" r="8" fill="#075A2C"/>
+
+          <rect x="520" y="222" width="140" height="24" rx="6" fill="#FEF2F2" stroke="#FCA5A5"/>
+          <rect x="690" y="222" width="140" height="24" rx="6" fill="#FEF2F2" stroke="#FCA5A5"/>
+          <rect x="520" y="254" width="140" height="24" rx="6" fill="#FEF2F2" stroke="#FCA5A5"/>
+          <rect x="690" y="254" width="140" height="24" rx="6" fill="#075A2C"/>
+          <rect x="520" y="286" width="140" height="24" rx="6" fill="#FEF2F2" stroke="#FCA5A5"/>
+          <rect x="690" y="286" width="140" height="24" rx="6" fill="#075A2C"/>
+          <rect x="520" y="318" width="140" height="24" rx="6" fill="#FEF2F2" stroke="#FCA5A5"/>
+          <rect x="690" y="318" width="140" height="24" rx="6" fill="#075A2C"/>
+        </g>
+
+        <text class="ia2dB" x="440" y="50">GDPR due 75h20</text>
+        <text class="ia2dB" x="590" y="50">PDPA due 87h00</text>
+        <text class="ia2dL" x="20" y="89">R1</text>
+        <text class="ia2dL" x="20" y="149">R2</text>
+        <text class="ia2dA" x="88" y="70">signal 3h20</text>
+        <text class="ia2dR" x="610" y="110">R1 formal notice 123h35: both missed</text>
+        <text class="ia2dA" x="150" y="172">R2 formal notice: before both due times</text>
+
+        <text class="ia2dH" x="20" y="208">FOUR DEADLINES, R1 AGAINST R2</text>
+        <text class="ia2dS" x="526" y="208">R1 declare rule</text>
+        <text class="ia2dS" x="696" y="208">R2 severity and roles</text>
+        <text class="ia2dL" x="20" y="239">Partner contract notice (bad load), due 24h40</text>
+        <text class="ia2dL" x="20" y="271">GDPR 72 hours (leaked table), due 75h20</text>
+        <text class="ia2dL" x="20" y="303">PDPA 3 calendar days (leaked table), due 87h00</text>
+        <text class="ia2dL" x="20" y="335">Audit committee chair notice (board deck)</text>
+        <text class="ia2dR" x="532" y="239">missed</text>
+        <text class="ia2dR" x="702" y="239">missed</text>
+        <text class="ia2dR" x="532" y="271">missed</text>
+        <text class="ia2dW" x="702" y="271">met</text>
+        <text class="ia2dR" x="532" y="303">missed</text>
+        <text class="ia2dW" x="702" y="303">met</text>
+        <text class="ia2dR" x="532" y="335">missed</text>
+        <text class="ia2dW" x="702" y="335">met</text>
+        <text class="ia2dV" x="526" y="370">0 of 4</text>
+        <text class="ia2dV" x="696" y="370">3 of 4</text>
+
+        <text class="ia2dN" x="20" y="400">Due and done times are measured from the bad write, as the bench's "what it reached" panel prints them.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - nothing about the leak got smaller between R1 and R2; somebody simply owned the clock.</figcaption>
+    </figure>
+
+    <div data-ird-bench="lite" data-presets="r0,r1,r2" data-start="r0"></div>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Rate before you look.</strong> Close the bench panels. Using only the incident descriptions from session 1 and the three axes in Part 1, write a level for each axis and an overall SEV for each Quarrybank incident. Write down which question you answered: impact now, or worst plausible.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · your rating, Quarrybank</span>incident        reach            sensitivity          reversibility     SEV
+bad load        ______________   __________________   _______________   ___
+leaked table    ______________   __________________   _______________   ___
+board deck      ______________   __________________   _______________   ___
+rated by:  impact now  /  worst plausible</div>
+      </div>
+      <div class="step">
+        <p><strong>Check your reach on R0.</strong> Start the bench on R0, no plan, and open each incident's "what it reached" panel. The bench computes: bad load 5 consumers, 3 decisions, 60 bad reads by 52 people; leaked table 4 outside parties, 18,400 rows; board deck 5 consumers, 4 decisions, 35 bad reads by 17 people. Where did your reach column land too low? Most raters miss the forecast model and the lender certificate, because nobody reads them like a dashboard.</p>
+      </div>
+      <div class="step">
+        <p><strong>Mark every copy.</strong> In each panel, list the consumers that will not refresh when the table is corrected. Those set your reversibility column. If any of them sits outside the company, reversibility is at the top, whatever the row count.</p>
+      </div>
+      <div class="step">
+        <p><strong>Switch to R1, then R2.</strong> R1 is the declare rule from session 1: 10 consumers and 4 decisions on bad data, 7 never told, deadlines met 0 of 4. R2 adds severity and roles: 7 + 3 on bad data, 4 never told, deadlines met 3 of 4. Open the leaked table's panel on both and compare the formal notice against the GDPR and PDPA due times. The bench models severity and roles as one plan page, an assessment within 20 minutes of declaring and a formal notice within a day of assessing, so it cannot tell you how much of the gain came from the rating and how much from the roles. Note too what R2 does not fix: the partner contract notice stays missed, because nobody yet tells the consumers that never complained. That is responder session 6.</p>
+      </div>
+      <div class="step">
+        <p><strong>Write the severity matrix.</strong> Page 2 of Quarrybank's incident response plan. It has to fit beside the declare rule on the same card.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · plan, leader page 2, severity matrix</span>QUARRYBANK INCIDENT RESPONSE PLAN · leader page 2 · severity matrix
+Rate within 20 minutes of declaring. Rated by: impact now, re-rated as reach grows.
+If unsure between two levels, take the higher one. Argue levels in the review, not the call.
+  REACH          one team | consumers inside | any outside party
+  SENSITIVITY    internal number | a number people act on | personal data, or a board or lender figure
+  REVERSIBILITY  refreshable | copies inside | any copy outside the walls
+SEV-1  personal data or a board or lender figure, AND any outside party or outside copy
+       Any hour. Wake: incident commander, scribe, head of data, privacy partner (first hour),
+       finance controller, executive sponsor, comms lead for outsiders.
+SEV-2  any outside party or outside copy, OR a number people act on
+       Page now. Wake: incident commander, scribe, head of data, liaison to outsiders.
+SEV-3  consumers inside, copies inside, internal number
+       Same day. Tell: head of data, owners of every affected copy.
+SEV-4  one team's table, refreshable, nobody else has read it
+       Business hours. On-call engineer owns it; one log line.
+Record every re-rating: old level, new level, the fact that moved it.</div>
+      </div>
+      <div class="step">
+        <p><strong>Swap with a neighbour.</strong> Give the person next to you your matrix and one incident from your own last quarter, without your rating. Compare levels. If they differ, find the criterion that let them differ and rewrite it as a noun.</p>
+      </div>
+    </div>
+
+    <div class="prompt-box bad"><span class="label">✕ The severity policy most teams actually have</span>SEV-1: major business impact. SEV-2: significant impact. SEV-3: moderate impact. SEV-4: minor impact.</div>
+
+    <div class="callout tip">
+      <p><strong>Four adjectives, four arguments.</strong> "Major" and "significant" are the same word to two tired people. "Any outside party" is not.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 3</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li>Run the calibration test. Give two colleagues the same three closed incidents and your matrix, separately, and compare their levels. Sharpen every criterion they disagreed on.</li>
+      <li>For your most-read dashboard, list every copy of its data that would not refresh if the source table were corrected tonight: scheduled emails, extracts, decks, models.</li>
+      <li>Write your team's wake-up ladder by name, not by role, for this week. Mark any level where the named person has never been woken before.</li>
+      <li>Decide, and write on your matrix, whether you rate by impact now or worst plausible impact. Bring one sentence on why.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Twenty minutes into an incident, two leaders disagree on whether it is SEV-2 or SEV-1. What does PagerDuty's guidance say to do?</p>
+      <button class="qopt" type="button">A · Pause the response until the head of data decides</button>
+      <button class="qopt" type="button">B · Take the lower level, so nobody is woken for nothing</button>
+      <button class="qopt" type="button">C · Take the higher level and move on; "During an incident is not the time to discuss or litigate severities"</button>
+      <p class="qwhy">If unsure, treat it as the higher one. The argument about the level is worth having in the review, where it can sharpen the matrix, not on the call, where it delays everything else.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Which of Quarrybank's three incidents is hardest to reverse, and why?</p>
+      <button class="qopt" type="button">A · The leaked table: its rows are already copied outside the walls, no correction can recall them, and the unknown address can never be told</button>
+      <button class="qopt" type="button">B · The bad load, because it has the most bad reads, 60 by 52 people</button>
+      <button class="qopt" type="button">C · The board deck, because the board portal has to be refreshed by hand</button>
+      <p class="qwhy">Reversibility asks who still holds the data after the fix. Dashboards and the board portal refresh at the correction. A copy outside the walls only clears when someone tells its holder, and for the unknown address nobody can.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">On the bench, what happens to deadlines met when Quarrybank adds severity and roles (R2) to the declare rule (R1)?</p>
+      <button class="qopt" type="button">A · Nothing changes, because declaring is what starts every clock</button>
+      <button class="qopt" type="button">B · They rise from 0 of 4 to 3 of 4; the partner contract notice is still missed</button>
+      <button class="qopt" type="button">C · All four deadlines are met</button>
+      <p class="qwhy">With someone owning the clock, the formal notices land within a day of assessing instead of days after declaring. The partner notice needs every reached consumer told, which arrives with lineage-driven notice later in the plan.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">PagerDuty Incident Response documentation, severity levels (read 2026-11-10)</span><span class="note">SEV-1 to SEV-5 definitions, if unsure take the higher one, "not the time to discuss or litigate severities"</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, RS.MA (read 2026-11-10)</span><span class="note">R1 not first-come, first-served; N2 risk factors: asset criticality, functional impact, data impact, recoverability</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Reach, sensitivity, reversibility matrix</span><span class="note">A practice construction that reads NIST's risk factors for data teams, not a published standard</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Bench reach (5 + 3, 4 parties and 18,400 rows, 5 + 4; R1 0 of 4, R2 3 of 4)</span><span class="note">Computed in your browser by replaying a constructed event log</span></div>
+      <div class="covered-row"><span class="status pill inkpill">·</span><span class="name">Breach-notice law</span><span class="note">Not covered here: GDPR and PDPA deadlines are fixed inputs owned by the privacy partner and the GDPR and PDPA courses</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 2 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Defend, not decide</b><span>Two leaders, rating separately, land on the same level. If not, fix the matrix.</span></div>
+      <div class="cheat-item"><b>Three axes</b><span>Reach: how far out. Sensitivity: what kind of data. Reversibility: who still holds it after the fix.</span></div>
+      <div class="cheat-item"><b>If unsure, higher</b><span>PagerDuty: pick the higher level; do not litigate severity during the incident.</span></div>
+      <div class="cheat-item"><b>Not first-come</b><span>NIST RS.MA: prioritise by impact and recoverability, not by arrival order.</span></div>
+      <div class="cheat-item"><b>Copies do not refresh</b><span>Emails, extracts, decks, models and anything outside clear only when their users are told.</span></div>
+      <div class="cheat-item"><b>Quarrybank on the bench</b><span>Declare rule: 0 of 4 deadlines. Severity and roles: 3 of 4, 7 + 3 on bad data, 4 never told.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>A SEV-1 wakes an incident commander, a scribe and two liaisons. Session 3 decides who those people are, why the commander never fixes anything, and how command passes from one person to the next without dropping the clock.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Leader session 2 of 6 · learn-data-incident-response-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a1-is-this-an-incident.html">← Prev: Is this an incident yet?</a> &nbsp;·&nbsp; <a href="a3-who-runs-the-room.html">Next: Who runs the room →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/ird-sample.js?v=1"></script>
+<script src="../assets/ird-live.js?v=2"></script>
+</body>
+</html>

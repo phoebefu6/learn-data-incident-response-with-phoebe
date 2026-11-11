@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 4 of 6. Who is told what and when, a holding statement, an executive update and a partner note, and why Quarrybank's leaked-table notice lands at 27h55 after the bad write once the privacy partner is in the room, instead of 123h35.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Telling people before they ask - learn incident response for data teams with phoebe">
+<meta property="og:description" content="Leader session 4 of 6. Comms templates for a data incident, and the regulator's clock as a fixed input.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/courses/a4-telling-people-before-they-ask.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Telling people before they ask - learn incident response for data teams with phoebe">
+<meta name="twitter:description" content="A holding statement, an executive update and a partner note, written before the incident that needs them.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 4 · Telling people before they ask - learn incident response for data teams with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-data-incident-response-with-phoebe</a> / Leader session 4 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Incident Response for Data Teams with Phoebe · Leader session 4 of 6</div>
+    <h1>Telling people <span class="accent">before</span> they ask</h1>
+    <p class="sub">The first person to describe an incident sets the story everyone else repeats. If that person is a regional manager asking why revenue doubled, or a vendor asking why their access vanished, you spend the rest of the incident correcting someone else's version. Tonight is about getting there first: one source of truth, a cadence each audience can rely on, three messages drafted before you need them, and a regulator's clock that belongs to the privacy partner, not to the data team.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Hands-on</span>
+      <span class="chip audience">Heads of data and analytics managers</span>
+      <span class="chip audience">Privacy and compliance partners</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:5">3-18 · Who, what, when</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: three updates</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The comms lead's job, from the first hour</h2>
+    </div>
+    <p class="lede">Session 3 gave the communication role an owner. Tonight that owner gets a job description. The comms lead does not fix anything and does not decide severity. They keep everyone who needs to know on a predictable clock, they say only what the incident record says, and they make sure the one clock the data team cannot move, the regulator's, is in the hands of the person who owns it from the first hour.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Page 4 of Quarrybank's incident response plan: comms templates with blanks, a holding statement, an executive update and a partner note, plus a cadence by severity that says who hears what and when. On the bench, you will also see what putting the privacy partner in the room does to the leaked table's notice: it lands at 27h55 after the bad write instead of 123h35.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Silence is also an update<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>When people who depend on the data hear nothing, they do not assume all is well. They assume nobody knows, or that somebody knows and is not saying. Both guesses generate messages: a manager pings an analyst directly, a finance lead re-runs a report and gets a third number, an executive asks in a group chat and gets four answers. Every one of those side conversations is a version of the incident you did not write.</p>
+        <p>The fix is not more messages. It is fewer, from one person, on a clock the reader can predict. A reader who knows the next update arrives at a stated time stops asking in between.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. On the bad load, the first message anyone outside the data team received was a regional sales head's email asking why revenue had doubled, 7 hours 10 minutes after the bad write. By then the sales email had already gone to 40 people. The data team's first message was a reply to a complaint, which meant it was written defensively, in a hurry, to one person.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What the comms lead does not do<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Diagnose.</strong> The comms lead reports what operations have confirmed. A theory heard on the call is not news until the incident commander records it.</li>
+          <li><strong>Negotiate deadlines.</strong> Regulator notice belongs to the privacy partner, contract notice to whoever owns the contract. The comms lead makes sure each owner has the facts in time.</li>
+          <li><strong>Write the after-action report.</strong> The write-up belongs to the planned runbooks and postmortems course (<a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe hub ↗</a>). The comms lead's messages are an input to it, timestamped in the record.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers update cadence by severity and NIST RS.CO-02</span>
+      <h2>Who hears what, and on whose clock</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">NIST's revised incident guidance asks for procedures that "include what must be reported to whom and at what times (e.g., initial notification, regular status updates)". Three nouns hide in that sentence: what, whom, when. Most teams write down the first and improvise the other two during the incident, which is the worst moment to decide who counts as an audience.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="One status block in the incident record, holding severity, what is known, what is not known yet, what is being done and the time of the next update, feeds four audiences on different clocks: the incident channel every 30 minutes at SEV-1, executives every 2 hours at SEV-1 and on any severity change, the supplier partner when reach is confirmed and then daily, and the privacy partner within the first hour of any exposure, who owns the regulator clock.">
+        <defs>
+          <filter id="ia4aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="401" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia4aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#075A2C" stroke-width="1.4" opacity=".5"/></pattern>
+          <marker id="ia4aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia4aH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia4aL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia4aS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia4aW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .ia4aA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ia4aN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia4aH" x="40" y="24">ONE SOURCE OF TRUTH, FOUR AUDIENCES, FOUR CLOCKS (QUARRYBANK POLICY)</text>
+
+        <g filter="url(#ia4aSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="60" width="270" height="230" rx="12" fill="#ECF7F0" transform="rotate(-0.4 175 175)"/>
+          <rect x="40" y="60" width="270" height="34" rx="10" fill="#075A2C" transform="rotate(-0.4 175 77)"/>
+          <rect x="52" y="246" width="246" height="32" rx="6" fill="url(#ia4aHc)"/>
+          <path d="M314 160 C400 150 440 80 516 76" marker-end="url(#ia4aAr)"/>
+          <path d="M314 170 C410 168 450 146 516 146" marker-end="url(#ia4aAr)"/>
+          <path d="M314 182 C410 186 450 214 516 216" marker-end="url(#ia4aAr)"/>
+          <path d="M314 194 C400 204 440 284 516 286" marker-end="url(#ia4aAr)"/>
+          <rect x="520" y="50" width="330" height="52" rx="10" fill="#FFFFFF" transform="rotate(0.5 685 76)"/>
+          <rect x="520" y="120" width="330" height="52" rx="10" fill="#FFFFFF" transform="rotate(-0.6 685 146)"/>
+          <rect x="520" y="190" width="330" height="52" rx="10" fill="#FFFFFF" transform="rotate(0.4 685 216)"/>
+          <rect x="520" y="260" width="330" height="52" rx="10" fill="#FFFFFF" transform="rotate(-0.4 685 286)"/>
+          <rect x="736" y="266" width="104" height="40" rx="6" fill="#F2A900" transform="rotate(1.5 788 286)"/>
+        </g>
+
+        <text class="ia4aW" x="54" y="82">STATUS BLOCK · THE RECORD</text>
+        <text class="ia4aL" x="56" y="118">severity and type</text>
+        <text class="ia4aL" x="56" y="144">what we know</text>
+        <text class="ia4aL" x="56" y="170">what we do not know yet</text>
+        <text class="ia4aL" x="56" y="196">what is being done, by whom</text>
+        <text class="ia4aL" x="56" y="222">next update at [time] UTC</text>
+        <text class="ia4aA" x="62" y="266">every message quotes this block</text>
+
+        <text class="ia4aL" x="536" y="72">Incident channel · responders</text>
+        <text class="ia4aS" x="536" y="90">every 30 min at SEV-1, and on any change</text>
+        <text class="ia4aL" x="536" y="142">Executives · leadership team</text>
+        <text class="ia4aS" x="536" y="160">every 2 hours at SEV-1, and on severity change</text>
+        <text class="ia4aL" x="536" y="212">Supplier partner · outside</text>
+        <text class="ia4aS" x="536" y="230">when reach is confirmed, then daily</text>
+        <text class="ia4aL" x="536" y="282">Privacy partner · legal</text>
+        <text class="ia4aS" x="536" y="300">first hour of any exposure</text>
+        <text class="ia4aL" x="748" y="283">owns the</text>
+        <text class="ia4aL" x="748" y="299">regulator clock</text>
+
+        <text class="ia4aN" x="40" y="330">Everyone reads the same block. Only the clock differs, so nobody hears two versions of the truth.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - messages differ by audience and clock, never by facts: every one quotes the same status block.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What NIST and the SRE book ask of the communicator<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>NIST SP 800-61 Revision 3 files communication under RS.CO-02, and its recommendation is procedural rather than stylistic: the plan says "what must be reported to whom and at what times (e.g., initial notification, regular status updates)". Two kinds of message are named there. The initial notification tells people an incident exists. Regular status updates keep telling them, on a schedule, whether or not anything changed.</p>
+        <p>Google's SRE book gives the role its identity. Communication is "the public face of the incident response task force", one of four roles alongside command, operations and planning. The word that matters is face, singular. If three engineers each post their own update, the organisation has three faces and the readers pick whichever one frightens them least.</p>
+        <div class="callout tip">
+          <p><strong>Write the status block first, then the message.</strong> The comms lead copies from the record, not from the call. If the record does not say it, the message does not say it, and the fix for a thin message is a better record.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>A cadence by severity, written as policy<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Quarrybank's cadence below is a constructed policy choice, not a published standard. The principle behind it is practice: the higher the severity, the shorter the gap between updates, and every update states when the next one comes, even if the next one will say "no change".</p>
+        <table class="clean">
+          <thead><tr><th>Severity</th><th>Incident channel</th><th>Executives</th><th>Outside parties</th></tr></thead>
+          <tbody>
+            <tr><td><strong>SEV-1</strong></td><td>Every 30 minutes, and on any change</td><td>Every 2 hours, and on severity change</td><td>When reach is confirmed, then daily</td></tr>
+            <tr><td><strong>SEV-2</strong></td><td>Every hour</td><td>At declare and at close, and on severity change</td><td>When reach is confirmed</td></tr>
+            <tr><td><strong>SEV-3</strong></td><td>At declare, on change, at close</td><td>Weekly summary only</td><td>Only if a delivered output was affected</td></tr>
+          </tbody>
+        </table>
+        <p>One row overrides the table: any exposure of personal data pages the privacy partner within the first hour, whatever severity it was given. Session 2's matrix should already rate that case high; the override exists for the night it does not.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. The board deck incident has the slowest clock of the three: the finance reconciliation flagged it 48 hours after the margin figure went into the board pack. Quarrybank's policy says the audit committee chair is told within 48 hours of anyone becoming aware of a misstated board figure. That is an executive audience with a clock set by internal policy, and the comms lead has to know it exists before the incident, not discover it in week two.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the holding statement, the executive update and the partner note</span>
+      <h2>Three messages, drafted while nothing is on fire</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Every data incident needs some version of the same three messages: one that says an incident exists, one that tells leadership what it means for them, and one that asks somebody outside to do something. All three are hard to write well at 3am and easy to write well on a Tuesday afternoon. Draft them now, with blanks, and the incident fills in the blanks.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 334" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two executive updates for the same hour of Quarrybank's bad load. Before: a chatty note that names no severity, guesses at a cause nobody has confirmed, describes effort instead of state, gives no time for the next update and asks nothing of the reader. After: five lines naming severity and incident, what is known, what is not yet known, what is being done and by whom, and the next update time plus the one decision leadership is asked to make.">
+        <defs>
+          <filter id="ia4bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="413" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <marker id="ia4bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia4bH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia4bL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia4bR { font: 700 11px Inter, sans-serif; fill: #991B1B; }
+          .ia4bA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ia4bN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia4bH" x="30" y="24">BEFORE · THE UPDATE EXECUTIVES USUALLY GET</text>
+        <text class="ia4bH" x="450" y="24">AFTER · FIVE LINES FROM THE STATUS BLOCK</text>
+
+        <g filter="url(#ia4bSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="40" width="400" height="252" rx="12" fill="#FEF2F2" stroke="#FCA5A5" transform="rotate(-0.4 230 166)"/>
+          <rect x="450" y="40" width="400" height="252" rx="12" fill="#ECF7F0" stroke="#075A2C" transform="rotate(0.4 650 166)"/>
+        </g>
+
+        <text class="ia4bL" x="50" y="72">Hi all, quick update on the data issue.</text>
+        <text class="ia4bR" x="50" y="88">which data, how bad? no severity, no scope</text>
+        <text class="ia4bL" x="50" y="118">Looks like the supplier feed caused it.</text>
+        <text class="ia4bR" x="50" y="134">a cause nobody has confirmed yet</text>
+        <text class="ia4bL" x="50" y="164">The team is working hard on a fix.</text>
+        <text class="ia4bR" x="50" y="180">effort, not state: is anything contained?</text>
+        <text class="ia4bL" x="50" y="210">Should be sorted soon, will update.</text>
+        <text class="ia4bR" x="50" y="226">no time for the next update</text>
+        <text class="ia4bL" x="50" y="256">Shout if you have any questions.</text>
+        <text class="ia4bR" x="50" y="272">no decision asked of the reader</text>
+
+        <text class="ia4bL" x="470" y="72">SEV-1 · bad load · executive update 2</text>
+        <text class="ia4bA" x="470" y="88">severity and which incident, first line</text>
+        <text class="ia4bL" x="470" y="118">Known: revenue doubled for two regions</text>
+        <text class="ia4bA" x="470" y="134">what we know, in the reader's words</text>
+        <text class="ia4bL" x="470" y="164">Not yet known: did the forecast model read it?</text>
+        <text class="ia4bA" x="470" y="180">what we do not know, said out loud</text>
+        <text class="ia4bL" x="470" y="210">Doing: partner extract paused, owner named</text>
+        <text class="ia4bA" x="470" y="226">state, and who holds each action</text>
+        <text class="ia4bL" x="470" y="256">Next: [time] UTC. Please hold the promo cut.</text>
+        <text class="ia4bA" x="470" y="272">the next time, and the one decision</text>
+
+        <text class="ia4bN" x="30" y="318">Same incident, same hour. Only the right-hand version can be forwarded to the board unchanged.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - an executive update states severity, known, unknown, doing and next, and asks for the one decision that cannot wait.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The holding statement: known, not known, next<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A holding statement is the first message after declaring, and it has one job: to occupy the silence honestly before anyone fills it with a guess. It says three things and nothing else.</p>
+        <ol>
+          <li><strong>What you know</strong>, stated as observation: which data, since when, which outputs are affected so far.</li>
+          <li><strong>What you do not know yet</strong>, said plainly. "We do not yet know whether the forecast model read the bad rows" is more reassuring than silence, because it shows somebody is looking.</li>
+          <li><strong>When the next update comes</strong>, as a time, not as "soon".</li>
+        </ol>
+        <p>It must never contain a cause you have not confirmed. The first cause anyone writes down is the one everybody remembers, and in data incidents the first theory is often a symptom: the supplier feed duplicated a partition, but the reason the duplicate was loaded at all may sit in your own pipeline. A guessed cause in writing also lands in the record, where it reads as a finding to a regulator, an auditor or a partner's lawyer.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The executive update and the partner note<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The <strong>executive update</strong> is the holding statement plus consequence. Leaders do not need the mechanism; they need to know which of their decisions, numbers or relationships are touched, and whether anything is being asked of them. PagerDuty's role list names both an Internal Liaison and a Customer Liaison, and the split is a useful habit: the people inside and the people outside need different messages built from the same facts.</p>
+        <p>The <strong>partner note</strong> goes outside, so it carries an ask, not just news. For a quality incident the ask is usually "stop using the extract you received on [date], we will resend it corrected". For an exposure it is "stop using, delete every copy, confirm in writing who accessed it". A partner note is reviewed by the privacy partner before it leaves whenever personal data is involved, because what you write to an outside party can become evidence.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. The partner contract says the supplier partner is told within 24 hours of Quarrybank becoming aware of an error in a delivered extract; on the bad load that is due 24h40 after the bad write. With a declare rule only, and even with roles, the partner is never told and the contract notice is missed: the team does not know the extract read the bad rows. Only lineage-driven notice, the responder track's session 6, gets the partner told 2h00 after the bad write. A template is necessary; it is not sufficient if you do not know who to send it to.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers regulator notice as a deadline owned by the privacy partner</span>
+      <h2>The regulator's clock is an input, not a debate</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">The leaked table carries personal data, so two clocks start that the data team does not set and cannot negotiate. What triggers them, what the notice must contain and whether it is needed at all are legal questions, owned by the privacy partner and taught in the GDPR and PDPA courses. The data team's job is narrower and more urgent: make sure the person who owns those clocks hears about the incident while there is still time on them.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 314" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The leaked table's notice clock as one rail, measured from the bad write at 0h00. The access-log signal fires at 3h20. With roles and the privacy partner in the room, R2, the formal notice lands at 27h55. GDPR's notice is due at 75h20 and PDPA's at 87h00. With a declare rule only, R1, the formal notice lands at 123h35, after both deadlines.">
+        <defs>
+          <filter id="ia4cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="427" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia4cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ia4cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia4cH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia4cL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia4cS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia4cB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ia4cG { font: 800 12px Inter, sans-serif; fill: #053D1E; }
+          .ia4cN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia4cH" x="40" y="24">THE LEAKED TABLE'S NOTICE CLOCK, MEASURED FROM THE BAD WRITE (BENCH)</text>
+
+        <g filter="url(#ia4cSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="501" y="160" width="282" height="20" rx="4" fill="url(#ia4cHc)"/>
+          <path d="M50 170 L852 170" marker-end="url(#ia4cAr)"/>
+          <path d="M60 150 L60 190"/>
+          <path d="M80 170 L80 200" stroke="#053D1E" stroke-width="3"/>
+          <path d="M223 170 L223 216" stroke="#075A2C" stroke-width="3"/>
+          <circle cx="223" cy="170" r="6" fill="#075A2C"/>
+          <path d="M501 116 L501 190" stroke-dasharray="5 4"/>
+          <path d="M569 180 L569 236" stroke-dasharray="5 4"/>
+          <path d="M783 96 L783 160" stroke="#6B4700" stroke-width="3"/>
+          <circle cx="783" cy="170" r="6" fill="#F2A900"/>
+        </g>
+
+        <text class="ia4cL" x="40" y="140">0h00 bad write</text>
+        <text class="ia4cG" x="88" y="204">3h20 signal</text>
+        <text class="ia4cS" x="88" y="220">access-log alert</text>
+        <text class="ia4cG" x="231" y="214">27h55 R2 notice</text>
+        <text class="ia4cS" x="231" y="230">privacy partner in the room</text>
+        <text class="ia4cS" x="231" y="246">both deadlines met</text>
+        <text class="ia4cL" x="509" y="124">75h20 GDPR due</text>
+        <text class="ia4cS" x="509" y="140">72 hours after becoming aware</text>
+        <text class="ia4cB" x="775" y="104" text-anchor="end">123h35 R1 notice</text>
+        <text class="ia4cS" x="775" y="120" text-anchor="end">declare rule only</text>
+        <text class="ia4cL" x="577" y="222">87h00 PDPA due</text>
+        <text class="ia4cS" x="577" y="238">3 calendar days after assessing</text>
+        <text class="ia4cB" x="640" y="198">R1: both missed</text>
+
+        <text class="ia4cN" x="40" y="276">Hatched: the clocks have run out and R1's notice has not left. Deadlines are fixed inputs, not set here.</text>
+        <text class="ia4cN" x="40" y="296">Scale: 10 hours = about 58 px. Due and done times as the bench's "what it reached" panel prints them.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the deadlines did not move between R1 and R2; the notice did, because the person who owns it was in the room.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Two clocks you do not set<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Under GDPR Article 33 a controller notifies the supervisory authority "without undue delay and, where feasible, not later than 72 hours after having become aware of it". Under Singapore's PDPA, as reported, the organisation notifies the PDPC no later than 3 calendar days after determining that the breach is notifiable. Both are fixed inputs to Quarrybank's plan. What counts as becoming aware, what counts as notifiable and what the notice must say belong to the courses that own the law: <a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/b7-breach-response.html">GDPR breach response ↗</a> and <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/b7-breach-response.html">PDPA breach response ↗</a>.</p>
+        <p>The data team's contribution is time. Every hour between the signal and the privacy partner hearing about it is an hour taken off a clock the privacy partner then has to work inside. That is why the comms lead's first call on an exposure goes to legal, not to leadership.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What changed between R1 and R2<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The bench models plan times by stated rules, and the rule that moves here is the formal notice. With a declare rule but no roles, nobody owns the regulator notice, so it waits on the slowest path: the bench models it as landing 120 hours after the declaration. With roles, the privacy partner is in the room from assessment, and the notice follows assessment by 24 hours. Measured from the bad write, that is 123h35 against 27h55.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. On R1 the leaked table's "what it reached" panel reads: GDPR due 75h20 after the bad write, done 123h35, missed; PDPA due 87h00, done 123h35, missed. On R2 the due times are identical and the done time is 27h55 for both, met. The law did not get kinder and the team did not type faster. The person who owns the clock was told in the first hour.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>SEC Form 8-K Item 1.05, the board-level analogue<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>US-listed companies have a disclosure clock of their own. Form 8-K Item 1.05, adopted in 2023, is due "four business days after a registrant determines that a cybersecurity incident is material", and describes the "material aspects of the incident's nature, scope, and timing" and its material impact. It applies to US registrants and to cybersecurity incidents only. Quarrybank is not a registrant, and a margin error is not a cybersecurity incident, so it does not apply here.</p>
+        <p>It is worth knowing as a shape. The clock starts at a determination, not at the event, which puts a premium on how fast the determination is made, and the determination is made by leadership with the board watching. That is the same shape as Quarrybank's internal 48-hour chair notice, and the subject of session 5.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Write the leaked table's first three updates</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">No code. Read the leaked table's deadline lines on the bench with and without roles, then write the three messages Quarrybank should have sent in the first hours: a holding statement for the incident channel, an executive update, and a note asking the outside vendor to stop using and delete its copy. Finish by turning all three into templates with blanks.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The leaked customer table, 18,400 rows, feeds the status block in the incident record. From that block come three messages: a holding statement to the incident channel, an executive update to the leadership team, and a vendor note, reviewed by the privacy partner first, sent to the vendor workspace where a copy of the table is still open, asking the vendor to stop using it, delete it and confirm who accessed it.">
+        <defs>
+          <filter id="ia4dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="439" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia4dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".6"/></pattern>
+          <marker id="ia4dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia4dH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia4dL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia4dS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia4dB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ia4dW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .ia4dN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia4dH" x="30" y="24">THREE MESSAGES FROM ONE RECORD (CONSTRUCTED QUARRYBANK EXAMPLE)</text>
+
+        <g filter="url(#ia4dSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="130" width="150" height="74" rx="10" fill="#FFFFFF" transform="rotate(-1.2 105 167)"/>
+          <path d="M184 167 L218 167" marker-end="url(#ia4dAr)"/>
+          <rect x="224" y="110" width="176" height="114" rx="10" fill="#ECF7F0" transform="rotate(0.6 312 167)"/>
+          <path d="M404 150 C430 120 432 72 450 70" marker-end="url(#ia4dAr)"/>
+          <path d="M404 167 L450 168" marker-end="url(#ia4dAr)"/>
+          <path d="M404 184 C430 214 432 264 450 266" marker-end="url(#ia4dAr)"/>
+          <rect x="456" y="42" width="210" height="56" rx="10" fill="#FFFFFF" transform="rotate(-0.8 561 70)"/>
+          <rect x="456" y="140" width="210" height="56" rx="10" fill="#FFFFFF" transform="rotate(0.7 561 168)"/>
+          <rect x="456" y="238" width="210" height="56" rx="10" fill="#075A2C" transform="rotate(-0.6 561 266)"/>
+          <path d="M670 70 L706 70" marker-end="url(#ia4dAr)"/>
+          <path d="M670 168 L706 168" marker-end="url(#ia4dAr)"/>
+          <path d="M670 266 L706 266" marker-end="url(#ia4dAr)"/>
+          <rect x="712" y="46" width="140" height="48" rx="8" fill="#FFFFFF" transform="rotate(1 782 70)"/>
+          <rect x="712" y="144" width="140" height="48" rx="8" fill="#FFFFFF" transform="rotate(-1 782 168)"/>
+          <rect x="712" y="234" width="140" height="64" rx="8" fill="url(#ia4dHc)" transform="rotate(1.4 782 266)"/>
+        </g>
+
+        <text class="ia4dL" x="44" y="160">customer table</text>
+        <text class="ia4dS" x="44" y="176">18,400 rows</text>
+        <text class="ia4dS" x="44" y="192">personal data</text>
+        <text class="ia4dH" x="238" y="136">status block</text>
+        <text class="ia4dS" x="238" y="156">known, not known,</text>
+        <text class="ia4dS" x="238" y="172">doing, next update</text>
+        <text class="ia4dS" x="238" y="196">copied, never retold</text>
+
+        <text class="ia4dL" x="470" y="66">1 · Holding statement</text>
+        <text class="ia4dS" x="470" y="84">within 30 min of declaring</text>
+        <text class="ia4dL" x="470" y="164">2 · Executive update</text>
+        <text class="ia4dS" x="470" y="182">consequence and one ask</text>
+        <text class="ia4dW" x="470" y="262">3 · Vendor note</text>
+        <text class="ia4dW" x="470" y="280">privacy partner first</text>
+
+        <text class="ia4dL" x="724" y="74">#incident</text>
+        <text class="ia4dL" x="724" y="172">leadership team</text>
+        <text class="ia4dL" x="724" y="258">vendor's copy</text>
+        <text class="ia4dB" x="724" y="274">still open</text>
+        <text class="ia4dS" x="724" y="290">stop and delete</text>
+
+        <text class="ia4dN" x="30" y="326">The vendor note is the only one of the three that closes a door. The other two stop rumours.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - three messages, one record: the vendor note is the one that asks an outside party to act on an open copy.</figcaption>
+    </figure>
+
+    <div data-ird-bench="lite" data-presets="r1,r2" data-start="r1"></div>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Read the leaked table's deadlines on R1.</strong> Open "Leaked table: what it reached" on the bench. Find the two deadline lines. Due and done times there are measured from the bad write, not from the signal. You should read GDPR due 75h20 and PDPA due 87h00, both done at 123h35, both missed.</p>
+      </div>
+      <div class="step">
+        <p><strong>Switch to R2 and read them again.</strong> The due times do not move. The done time does: 27h55 after the bad write, both met. Then open the bad load's panel on R2 and notice the partner contract line is still missed. Roles bring the privacy partner into the room; they do not tell you which outside party read the bad extract.</p>
+      </div>
+      <div class="step">
+        <p><strong>Write the holding statement.</strong> For the incident channel, posted within 30 minutes of declaring. Known, not known, next. No cause.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · holding statement, leaked table</span>SEV-1 · EXPOSURE · customer table · declared 12:35 UTC
+Known: the customer table (contact and credit-limit columns,
+  18,400 rows) was reachable through a public link and a vendor
+  workspace share. The access log shows a read from an address
+  we do not recognise.
+Not known yet: who else opened the link, and what was copied.
+Doing: closing both doors (ops lead). Privacy partner is on the call.
+Next update: 13:05 UTC, here, even if nothing has changed.</div>
+      </div>
+      <div class="step">
+        <p><strong>Write the executive update.</strong> Same facts, plus what it means for leadership and the one thing you need from them.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · executive update, leaked table</span>SEV-1 · leaked customer table · executive update 1
+Known: customer contact and credit-limit data was exposed through
+  a public link and a share with an outside vendor.
+Not known yet: whether anyone beyond the vendor kept a copy.
+Doing: both doors being closed now; the privacy partner owns any
+  regulator notice and is assessing it with us.
+Ask: approve the note asking the vendor to stop using and delete
+  their copy. Next update: [time] UTC.</div>
+      </div>
+      <div class="step">
+        <p><strong>Write the vendor note.</strong> The outside party gets an ask, not an explanation. The privacy partner reads it before it is sent.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · vendor note, leaked table</span>Subject: Please stop using the Quarrybank customer extract
+We shared a customer table with your workspace that should not
+have been shared. Please, today:
+  1. Stop using it and any file or model made from it.
+  2. Delete every copy, including downloads and forwards.
+  3. Confirm in writing who on your side accessed it, and when,
+     and that the copies are deleted.
+Contact: [comms lead], [privacy partner]. We will follow up by [time].</div>
+      </div>
+      <div class="step">
+        <p><strong>Turn all three into templates.</strong> Page 4 of Quarrybank's incident response plan. Strip the leaked table out and leave the blanks. A template earns its place if the on-call engineer can fill it in without asking anyone what goes where.</p>
+        <div class="prompt-box good"><span class="label">★ Step 6 · plan, leader page 4, comms templates</span>QUARRYBANK INCIDENT RESPONSE PLAN · leader page 4 · comms templates
+Owner: the comms lead. Source: the status block in the record only.
+CADENCE  SEV-1: channel every 30 min, execs every 2 h, outside when
+         reach is confirmed. Any personal data: privacy partner, 1st hour.
+A. HOLDING STATEMENT (channel, within 30 min of declaring)
+   SEV-[ ] · [type] · [what data] · declared [time] UTC
+   Known: [ ]   Not known yet: [ ]   Doing: [ ] ([owner])
+   Next update: [time] UTC.   NEVER: a cause not yet confirmed.
+B. EXECUTIVE UPDATE (leadership, on cadence and on severity change)
+   SEV-[ ] · [incident] · update [n]
+   Known / Not known yet / Doing / Ask: [one decision] / Next: [time]
+C. PARTNER NOTE (outside party, reviewed by privacy partner if
+   personal data)  Please stop using [what] received [when].
+   [Delete every copy | we will resend it corrected by (time)].
+   Confirm in writing [what]. Contact: [names].</div>
+      </div>
+    </div>
+
+    <div class="prompt-box bad"><span class="label">✕ The first message most teams actually send</span>Heads up, we had a misconfigured share on the customer table, the vendor caused it, all fixed now, no real impact.</div>
+
+    <div class="callout tip">
+      <p><strong>Four claims, none confirmed.</strong> A cause, a culprit, a fix and an impact assessment, all in one line, all before anyone has read the access log. Each one is now in writing, and each one has to be walked back in front of the people who read it.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 5</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li>Fill in the cadence table for your own organisation. For each severity, write who hears, how often, and who sends it. Show it to one executive and ask whether the gap between updates is one they would tolerate.</li>
+      <li>Find the last message your team sent during a data problem. Mark every sentence as known, not known, doing or next. Anything that fits none of them, especially a cause, comes out of your template.</li>
+      <li>Ask your privacy partner how they would like to be told about a possible exposure at 3am: channel, phone, email, deputy. Write it on page 4 next to "privacy partner, 1st hour".</li>
+      <li>List every outside party that receives data from your team on a schedule: partners, vendors, regulators, auditors. For each one, find who owns the contract and whether it has a notice clause.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">What must a holding statement never contain?</p>
+      <button class="qopt" type="button">A · The time of the next update</button>
+      <button class="qopt" type="button">B · What you do not know yet</button>
+      <button class="qopt" type="button">C · A cause you have not confirmed</button>
+      <p class="qwhy">A holding statement says what you know, what you do not, and when the next update comes. The first cause in writing is the one people remember and the one that lands in the record, so it waits until operations have confirmed it.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Who owns the regulator's notice clock for Quarrybank's leaked table?</p>
+      <button class="qopt" type="button">A · The privacy partner, who decides whether and when to notify; the data team makes sure they hear in the first hour</button>
+      <button class="qopt" type="button">B · The comms lead, because they send every message</button>
+      <button class="qopt" type="button">C · The incident commander, because they hold the high-level state</button>
+      <p class="qwhy">GDPR's 72 hours and PDPA's 3 calendar days are fixed inputs owned by the privacy partner. The comms lead and the commander affect how much of that clock is left when the privacy partner is told.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">On the bench, what changed for the leaked table's deadlines between R1 and R2?</p>
+      <button class="qopt" type="button">A · The deadlines moved later because roles slowed the response</button>
+      <button class="qopt" type="button">B · The due times stayed at 75h20 and 87h00 after the bad write; the formal notice moved from 123h35 to 27h55, so both were met</button>
+      <button class="qopt" type="button">C · Nothing changed, because both rungs declare 15 minutes after the signal</button>
+      <p class="qwhy">Both rungs declare at 0h15 after the signal. R2 adds roles, so the privacy partner is in the room from assessment and the notice follows 24 hours later instead of waiting 120 hours on nobody.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, April 2025 (read 2026-11-10)</span><span class="note">RS.CO-02: what must be reported to whom and at what times, initial notification and regular status updates</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Google SRE book, Managing Incidents (read 2026-11-10)</span><span class="note">The Communication role, "the public face of the incident response task force"</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">GDPR Art. 33 (read 2026-11-10)</span><span class="note">Linked input only: "not later than 72 hours after having become aware"; the GDPR course owns the law</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">PDPA notice within 3 calendar days (reported)</span><span class="note">Linked input only, after assessing the breach as notifiable; the PDPA course owns the law</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">SEC Form 8-K Item 1.05 (read 2026-11-10)</span><span class="note">Board angle only: four business days after a materiality determination, US registrants and cybersecurity incidents</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Cadence and comms templates</span><span class="note">Practice, written as constructed Quarrybank policy, not a published standard</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Bench deadlines (75h20, 87h00, 123h35, 27h55)</span><span class="note">Computed in your browser by replaying a constructed event log, measured from the bad write</span></div>
+      <div class="covered-row"><span class="status pill inkpill">·</span><span class="name">Breach-notice law</span><span class="note">Not covered here: the GDPR and PDPA courses own when and how to notify</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 4 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Whom, what, when</b><span>NIST RS.CO-02: the plan says what is reported to whom and at what times.</span></div>
+      <div class="cheat-item"><b>One face</b><span>The comms lead is "the public face". One sender, copying from the status block.</span></div>
+      <div class="cheat-item"><b>Cadence by severity</b><span>SEV-1: channel every 30 minutes, executives every 2 hours. Every update names the next.</span></div>
+      <div class="cheat-item"><b>Holding statement</b><span>Known, not known, next. Never a cause you have not confirmed.</span></div>
+      <div class="cheat-item"><b>Partner note</b><span>An ask, not news: stop, delete or wait for the resend, confirm in writing.</span></div>
+      <div class="cheat-item"><b>Regulator clock</b><span>Owned by the privacy partner. On the bench, roles move the leak's notice from 123h35 to 27h55 after the bad write.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Some incidents are found after the number has already been used. Session 5 takes Quarrybank's board deck, where a pricing decision was made on the bad margin before anyone could know, and works through restating, footnoting or correcting next period, a disagreement taught as one.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Leader session 4 of 6 · learn-data-incident-response-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a3-who-runs-the-room.html">← Prev: Who runs the room</a> &nbsp;·&nbsp; <a href="a5-when-the-board-used-the-number.html">Next: When the board already used the number →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/ird-sample.js?v=1"></script>
+<script src="../assets/ird-live.js?v=2"></script>
+</body>
+</html>

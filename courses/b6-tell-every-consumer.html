@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Responder session 6 of 8. Build the notice list from the consumer trace, not from whoever complained, give each kind of consumer the one action it needs, and treat contract and legal deadlines as fixed inputs, measured on the incident clock.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Tell every consumer who read it - learn incident response for data teams with phoebe">
+<meta property="og:description" content="Responder session 6 of 8. The notice list comes from the trace. Complaints only find the loud copies.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/courses/b6-tell-every-consumer.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tell every consumer who read it - learn incident response for data teams with phoebe">
+<meta name="twitter:description" content="The people who complain are the ones who could see the problem. The copies that matter are the ones that look fine.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Responder session 6 · Tell every consumer who read it - learn incident response for data teams with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-data-incident-response-with-phoebe</a> / Responder session 6 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Incident Response for Data Teams with Phoebe · Responder session 6 of 8</div>
+    <h1>Tell every consumer <span class="accent">who read it</span></h1>
+    <p class="sub">The correction has landed and the dashboards are right again. The partner's file is not, the forecast model is not, and the board pack sitting in forty inboxes is not, because none of them refresh and none of their owners have complained. Tonight you build the notice list from the trace you made in session 2 instead of from the complaints queue, write one notice per kind of consumer with the one thing each must do, and see on the bench what the complainers' list leaves behind.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Hands-on</span>
+      <span class="chip audience">Data and analytics engineers on call</span>
+      <span class="chip audience">Report and model owners</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · List, kinds, deadlines</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: write the notice</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The notice list was written in session 2</h2>
+    </div>
+    <p class="lede">You already have the list. Session 2 traced every table, dashboard, extract, email and model that read the bad data since the bad write. Session 5 corrected the source and proved the warehouse copies refreshed. What is left is every copy that cannot refresh itself, and the only way to fix those is to tell the person holding them.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A consumer notice template with five fields, a notice list generated from the trace with a sent time and an acknowledged column, one action per kind of consumer, and page 6 of the responder half of Quarrybank's plan. Plus the bench comparison that shows what telling only the complainers costs.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why complaints are the wrong source<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A complaint tells you who could see the problem. A dashboard with revenue doubled for two regions is visible; someone frowns and messages the data team. A file already sitting on a partner's server, or a model that quietly retrained overnight, shows nothing wrong to the person using it. Their copies look normal, so they never complain, so a list built from complaints never includes them.</p>
+        <p>NIST asks that response procedures "include what must be reported to whom and at what times". The "whom" is not a judgement you make at 03:00 from memory. It is the output of the trace.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. The bad load's first complaint arrived 7h10 after the bad write, from someone reading a dashboard. By then the partner extract had left at 0h30 and the forecast model had retrained at 0h35. Neither owner had anything to complain about: both copies looked exactly like a normal week.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where this session sits in the response<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Leader session 4</strong> wrote the holding statement, the executive update and the partner note: what the organisation says, and how often.</li>
+          <li><strong>Tonight</strong> is the responder's side: who exactly gets a consumer notice, what it asks them to do, and proof they read it.</li>
+          <li><strong>Session 7</strong> closes the incident, and an unacknowledged notice is one of the things that keeps it open.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the notice list generated from the trace</span>
+      <h2>Complaints find the loud copies, lineage finds all of them</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">The bench models two ways to build the list, by stated rules. With lineage-driven notice, every consumer the trace reached is told 30 minutes after containment, 15 when the plan is rehearsed. Without it, only the people who complained are told, 60 minutes after the incident is declared. The difference is not speed. It is who is on the list at all.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The consumer trace from responder session 2 feeds two notice lists. Top, the complainers' path: only the person who complained gets a notice, so 4 consumers are never told and 4 copies stay wrong, which is plan T3 on the bench. The four it misses are the partner extract and the forecast model from the bad load, and the emailed pack and the pricing deck from the board deck. Bottom, the lineage path: every consumer on the trace gets a notice 30 minutes after containment, 15 when rehearsed, so none is left untold, plans R4 and R5.">
+        <defs>
+          <filter id="ib6aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="61" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib6aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#075A2C" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ib6aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib6aH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib6aR { font: 800 12px Inter, sans-serif; fill: #991B1B; }
+          .ib6aL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib6aS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib6aK { font: 400 11px Inter, sans-serif; fill: #0D1F14; }
+          .ib6aA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ib6aG { font: 800 12px Inter, sans-serif; fill: #053D1E; }
+          .ib6aN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib6aH" x="40" y="24">ONE TRACE, TWO WAYS TO BUILD THE NOTICE LIST</text>
+
+        <g filter="url(#ib6aSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="130" width="160" height="80" rx="8" fill="url(#ib6aHc)" transform="rotate(-1 120 170)"/>
+          <rect x="240" y="40" width="600" height="110" rx="12" fill="#FEF2F2" stroke="#FCA5A5" transform="rotate(-0.3 540 95)"/>
+          <rect x="240" y="170" width="600" height="210" rx="12" fill="#ECF7F0" stroke="#075A2C" transform="rotate(0.3 540 275)"/>
+          <path d="M204 142 C226 130 236 104 252 102" marker-end="url(#ib6aAr)"/>
+          <rect x="258" y="82" width="160" height="40" rx="6" fill="#FFFFFF" transform="rotate(1.5 338 102)"/>
+          <path d="M422 102 L470 102" marker-end="url(#ib6aAr)"/>
+          <rect x="476" y="82" width="150" height="40" rx="6" fill="#FFFFFF" transform="rotate(-1.2 551 102)"/>
+          <path d="M204 204 C260 198 300 202 327 226" marker-end="url(#ib6aAr)"/>
+          <path d="M204 204 C300 192 420 194 472 226" marker-end="url(#ib6aAr)"/>
+          <path d="M204 204 C350 186 560 188 617 226" marker-end="url(#ib6aAr)"/>
+          <path d="M204 204 C400 180 700 184 762 226" marker-end="url(#ib6aAr)"/>
+          <rect x="262" y="230" width="130" height="52" rx="6" fill="#F2A900" transform="rotate(-2 327 256)"/>
+          <rect x="407" y="230" width="130" height="52" rx="6" fill="#FFFFFF" transform="rotate(1.5 472 256)"/>
+          <rect x="552" y="230" width="130" height="52" rx="6" fill="#FFFFFF" transform="rotate(-1 617 256)"/>
+          <rect x="697" y="230" width="130" height="52" rx="6" fill="#FFFFFF" transform="rotate(2 762 256)"/>
+        </g>
+
+        <text class="ib6aL" x="54" y="158">the trace</text>
+        <text class="ib6aA" x="54" y="178">responder page 2</text>
+        <text class="ib6aA" x="54" y="196">since the bad write</text>
+
+        <text class="ib6aR" x="258" y="66">✗ Complainers' path: tell whoever raised it</text>
+        <text class="ib6aL" x="272" y="107">who complained</text>
+        <text class="ib6aL" x="490" y="107">1 notice sent</text>
+        <text class="ib6aR" x="646" y="98">never told: 4</text>
+        <text class="ib6aS" x="646" y="116">copies still wrong: 4</text>
+        <text class="ib6aS" x="258" y="140">misses partner extract, forecast model, emailed pack, pricing deck</text>
+
+        <text class="ib6aL" x="274" y="254">partner extract</text>
+        <text class="ib6aK" x="274" y="272">bad load</text>
+        <text class="ib6aL" x="419" y="254">forecast model</text>
+        <text class="ib6aS" x="419" y="272">bad load</text>
+        <text class="ib6aL" x="564" y="254">emailed pack</text>
+        <text class="ib6aS" x="564" y="272">board deck</text>
+        <text class="ib6aL" x="709" y="254">pricing deck</text>
+        <text class="ib6aS" x="709" y="272">board deck</text>
+
+        <text class="ib6aG" x="258" y="314">✓ Lineage path: every consumer on the trace gets a notice</text>
+        <text class="ib6aS" x="258" y="334">told contain + 30 min (+15 rehearsed) · never told 0 · copies still wrong 0</text>
+        <text class="ib6aS" x="258" y="354">the partner extract carries a contract deadline (Part 3)</text>
+
+        <text class="ib6aN" x="40" y="404">Constructed Quarrybank example. Bench plans: T3 on top, R4 and R5 below. Only the notice rule differs.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the complainers' list stops at the person who could see the problem; the trace reaches the four copies that looked fine.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Turn every trace row into a notice row<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Every row on the trace marked "must be told" in session 2 becomes one row on the notice list. Add three columns and nothing else.</p>
+        <table class="clean">
+          <thead><tr><th>Column</th><th>Example</th><th>Why it is there</th></tr></thead>
+          <tbody>
+            <tr><td>Owner to notify</td><td>partner's data contact</td><td>A notice goes to a person, never to a team alias nobody reads at night</td></tr>
+            <tr><td>Sent, UTC</td><td>03:20Z</td><td>The contract and the privacy partner both ask when, not whether</td></tr>
+            <tr><td>Acknowledged</td><td>yes / no, with time</td><td>A sent notice that nobody read has not changed anything yet</td></tr>
+          </tbody>
+        </table>
+        <p>The lineage query that produces the trace is observability's craft: see <a href="https://phoebefu6.github.io/learn-data-observability-with-phoebe/courses/b7-lineage-blast-radius.html">lineage and blast radius ↗</a>. Tonight starts from its output.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The board deck's quiet copies<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. The wrong margin figure on the board deck was signalled by the finance reconciliation 48h00 after it was written, and the first complaint came from the external auditor at 168h00. Nobody who received the emailed pack complained, and nobody who built the pricing deck from it did either. On every plan from R1 to R5 the bench shows those two and the portal as the consumers reached; only a list built from the trace names the emailed pack and the pricing deck.</p>
+        </div>
+        <div class="callout tip">
+          <p><strong>Ask upward as well as down the lineage.</strong> A pricing deck is not in any warehouse lineage graph. It shows up because someone asked "was anything built or decided on this figure?" and wrote the answer on the trace.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers what each kind of consumer needs from the notice</span>
+      <h2>Four kinds of reader, four different asks</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">"The data was wrong, sorry" is not a notice. Each consumer holds a different kind of copy, and each kind has one thing its owner must do to stop the wrong figure being used again. Lead with that action, then give the facts.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four kinds of consumer, each with one action. Extract recipient, the partner: stop using this file, a replacement is coming. Scheduled email recipients, 40 of them: the numbers were wrong, here is the corrected figure. Report owner, for a dashboard or the pricing deck: rerun after the correction lands, then confirm. Model owner, the forecast model, retrained on bad rows 0h35 after the bad write: flag it for retrain and check the replenishment order it fed.">
+        <defs>
+          <filter id="ib6bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="67" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib6bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".6"/></pattern>
+          <marker id="ib6bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib6bH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib6bL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib6bS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib6bK { font: 400 11px Inter, sans-serif; fill: #0D1F14; }
+          .ib6bN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib6bH" x="40" y="28">ONE NOTICE PER KIND OF CONSUMER, EACH LEADING WITH ITS ACTION</text>
+
+        <g filter="url(#ib6bSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="48" width="200" height="56" rx="8" fill="url(#ib6bHc)" transform="rotate(-1 140 76)"/>
+          <rect x="40" y="120" width="200" height="56" rx="8" fill="url(#ib6bHc)" transform="rotate(0.8 140 148)"/>
+          <rect x="40" y="192" width="200" height="56" rx="8" fill="url(#ib6bHc)" transform="rotate(-0.6 140 220)"/>
+          <rect x="40" y="264" width="200" height="56" rx="8" fill="#F2A900" transform="rotate(1 140 292)"/>
+          <path d="M246 76 L292 76" marker-end="url(#ib6bAr)"/>
+          <path d="M246 148 L292 148" marker-end="url(#ib6bAr)"/>
+          <path d="M246 220 L292 220" marker-end="url(#ib6bAr)"/>
+          <path d="M246 292 L292 292" marker-end="url(#ib6bAr)"/>
+          <rect x="300" y="48" width="540" height="56" rx="8" fill="#FFFFFF" transform="rotate(0.3 570 76)"/>
+          <rect x="300" y="120" width="540" height="56" rx="8" fill="#FFFFFF" transform="rotate(-0.3 570 148)"/>
+          <rect x="300" y="192" width="540" height="56" rx="8" fill="#FFFFFF" transform="rotate(0.2 570 220)"/>
+          <rect x="300" y="264" width="540" height="56" rx="8" fill="#ECF7F0" transform="rotate(-0.2 570 292)"/>
+        </g>
+
+        <text class="ib6bL" x="56" y="72">extract recipient</text>
+        <text class="ib6bS" x="56" y="90">the partner</text>
+        <text class="ib6bL" x="56" y="144">scheduled email</text>
+        <text class="ib6bS" x="56" y="162">40 recipients</text>
+        <text class="ib6bL" x="56" y="216">report owner</text>
+        <text class="ib6bS" x="56" y="234">dashboard, pricing deck</text>
+        <text class="ib6bL" x="56" y="288">model owner</text>
+        <text class="ib6bK" x="56" y="306">forecast model</text>
+
+        <text class="ib6bL" x="316" y="72">Stop using this file; a replacement file is coming</text>
+        <text class="ib6bS" x="316" y="90">partner extract, left 0h30 after the bad write, before any alarm</text>
+        <text class="ib6bL" x="316" y="144">The numbers were wrong; here is the corrected figure</text>
+        <text class="ib6bS" x="316" y="162">reply on the same thread, so the wrong figure and its fix travel together</text>
+        <text class="ib6bL" x="316" y="216">Rerun after the correction lands, then confirm it</text>
+        <text class="ib6bS" x="316" y="234">a figure pasted into a deck does not refresh itself</text>
+        <text class="ib6bL" x="316" y="288">Flag for retrain, and check the order it fed</text>
+        <text class="ib6bS" x="316" y="306">retrained on bad rows 0h35 after the bad write; fed the replenishment order</text>
+
+        <text class="ib6bN" x="40" y="350">Constructed Quarrybank example. The model row is the one that already reached a decision.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - four copies, four different jobs; the model is the one whose output already became a purchase.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Extracts and scheduled emails<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Extract recipients</strong> hold a file you cannot reach. Tell them to stop using it, name the file exactly (file name and the run that produced it), and say when a replacement will arrive. If they loaded it into their own systems, ask them to say so; that is a copy your trace cannot see.</li>
+          <li><strong>Scheduled email recipients</strong> hold a number in their inbox. Reply on the original thread with the wrong figure, the corrected figure, and the period it covers. A fresh email with only the right number leaves the wrong one sitting above it.</li>
+        </ul>
+        <div class="callout tip">
+          <p><strong>Lead with the action.</strong> The first line of every notice is what the reader must do. The explanation is for the people who read on.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Reports and models<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Report reruns</strong>: a dashboard on the warehouse refreshes when the correction lands (session 5 proved that). An exported report, a slide or a spreadsheet does not. Its owner reruns it and confirms, and the confirmation goes in the acknowledged column.</li>
+          <li><strong>Model retrain flags</strong>: a model trained on bad rows keeps producing slightly wrong output after the source is fixed. The notice asks the owner to flag it for retrain and to check anything it already fed. Rebuilding the partition it trained on is <a href="https://phoebefu6.github.io/learn-data-reliability-with-phoebe/courses/b5-backfills.html">backfill mechanics ↗</a>.</li>
+        </ul>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. The forecast model retrained on the bad rows 0h35 after the bad write, five minutes before the volume monitor fired. Its forecast fed a replenishment order for the two affected regions. The model's notice asks for two things: retrain it, and have the buyer check that order before it ships.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What a consumer notice leaves out<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Practice, not a finding: a consumer notice states what was wrong and what to do. It does not speculate about cause, assign blame, or promise a root-cause date. Those belong in the incident record and later in the write-up, which is the craft of the planned runbooks and postmortems course on the <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe hub ↗</a>. If the notice concerns personal data, the privacy partner reads it before it goes, because a consumer notice can become a disclosure.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers contract and legal deadlines as fixed inputs</span>
+      <h2>Deadlines arrive as inputs, not as arguments</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Some notices have a clock attached. You do not set those clocks and you do not debate them at 03:00. Contract deadlines come from the contract owner and legal deadlines come from the privacy partner; your job is to know which consumers carry one, and to get their notice out well inside it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 310" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The partner contract clock for the bad load, measured from the bad write. Bad write at 0h00, signal at 0h40. Under R5 the partner is told at 1h20, under R4 at 2h00, both well before the due time of 24h40. Under R3 and T3 the notice goes only to complainers and the partner is never told, so the deadline is missed. Not to scale.">
+        <defs>
+          <filter id="ib6cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="73" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib6cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#075A2C" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ib6cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib6cH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib6cR { font: 800 12px Inter, sans-serif; fill: #991B1B; }
+          .ib6cL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib6cM { font: 700 11px ui-monospace, Menlo, monospace; fill: #053D1E; }
+          .ib6cS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib6cG { font: 800 12px Inter, sans-serif; fill: #053D1E; }
+          .ib6cN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib6cH" x="40" y="28">THE PARTNER CONTRACT CLOCK FOR THE BAD LOAD, FROM THE BAD WRITE</text>
+
+        <g filter="url(#ib6cSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M50 140 L460 140"/>
+          <path d="M466 128 L476 152"/>
+          <path d="M480 128 L490 152"/>
+          <path d="M496 140 L690 140"/>
+          <path d="M712 140 L850 140" stroke="#991B1B" stroke-dasharray="6 5"/>
+          <circle cx="70" cy="140" r="7" fill="#FFFFFF"/>
+          <circle cx="160" cy="140" r="7" fill="#FFFFFF"/>
+          <circle cx="260" cy="140" r="8" fill="#075A2C"/>
+          <circle cx="360" cy="140" r="8" fill="#075A2C"/>
+          <rect x="690" y="120" width="20" height="40" rx="4" fill="#F2A900" transform="rotate(-2 700 140)"/>
+          <rect x="40" y="214" width="300" height="50" rx="10" fill="url(#ib6cHc)" transform="rotate(-0.5 190 239)"/>
+          <rect x="540" y="214" width="300" height="50" rx="10" fill="#FEF2F2" stroke="#FCA5A5" transform="rotate(0.5 690 239)"/>
+        </g>
+
+        <text class="ib6cM" x="70" y="108" text-anchor="middle">0h00</text>
+        <text class="ib6cM" x="160" y="108" text-anchor="middle">0h40</text>
+        <text class="ib6cM" x="260" y="108" text-anchor="middle">1h20</text>
+        <text class="ib6cM" x="360" y="108" text-anchor="middle">2h00</text>
+        <text class="ib6cM" x="700" y="108" text-anchor="middle">24h40</text>
+        <text class="ib6cL" x="70" y="180" text-anchor="middle">bad write</text>
+        <text class="ib6cL" x="160" y="180" text-anchor="middle">signal</text>
+        <text class="ib6cL" x="260" y="180" text-anchor="middle">R5 tells</text>
+        <text class="ib6cL" x="360" y="180" text-anchor="middle">R4 tells</text>
+        <text class="ib6cL" x="700" y="180" text-anchor="middle">due</text>
+        <text class="ib6cS" x="70" y="198" text-anchor="middle">02:00Z</text>
+        <text class="ib6cS" x="160" y="198" text-anchor="middle">monitor fires</text>
+        <text class="ib6cS" x="700" y="198" text-anchor="middle">24 h from aware</text>
+
+        <text class="ib6cG" x="56" y="236">✓ R4 and R5: deadline met</text>
+        <text class="ib6cS" x="56" y="254">lineage notice reached the partner first</text>
+        <text class="ib6cR" x="556" y="236">✗ R3 and T3: never told, missed</text>
+        <text class="ib6cS" x="556" y="254">notice went only to the complainers</text>
+
+        <text class="ib6cN" x="40" y="292">Constructed partner contract. Times from the bad write, as the bench prints them. Not to scale.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the deadline is generous; it is missed only by a list that never contains the partner.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Who owns which clock<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <thead><tr><th>Clock</th><th>Owned by</th><th>What you bring to it</th></tr></thead>
+          <tbody>
+            <tr><td>Partner contract (constructed)</td><td>Contract owner</td><td>The UTC time the error was known and the time the partner was told</td></tr>
+            <tr><td>GDPR Art. 33, 72 hours</td><td>Privacy partner, see <a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/b7-breach-response.html">GDPR breach response ↗</a></td><td>Every candidate "aware" moment from the record, with proof</td></tr>
+            <tr><td>PDPA, 3 calendar days (reported)</td><td>Privacy partner, see <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/b7-breach-response.html">PDPA breach response ↗</a></td><td>The trace of who received the rows, and when</td></tr>
+          </tbody>
+        </table>
+        <p>The law is not taught on this page. The responder's part is mechanical and essential: put each deadline on the notice list as a fixed input next to the consumer it applies to, and make sure the record can show the sent time.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The partner clause, measured on the bench<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. Quarrybank's constructed partner contract says the partner must be told within 24 hours of Quarrybank becoming aware of an error in a delivered extract. Measured from the bad write, that is due at 24h40. Under R4 the partner is told at 2h00 and under R5 at 1h20, both met. Under R3 and T3, which tell only the complainers, the partner is never told and the deadline is missed. Twenty-four hours is plenty of time; the miss comes entirely from the list.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>"Aware" is not yours to decide<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Whether a clock starts at the bad write, the first signal or the declaration is a contract or legal judgement. Session 1 made sure the record holds every candidate moment in UTC with its proof; tonight you add the sent and acknowledged times for each notice. With both, the person who owns the clock can answer without guessing. The leader's side of the same clocks is leader session 4.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Write Quarrybank's consumer notice</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">You are the responder for the bad load. The partition has been quarantined and the correction is under way. Compare two plans on the bench that differ only in who gets told, then write the notice and the notice list that become page 6 of the responder half of the plan.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bench comparison. R5, rehearsed with lineage notice: 5 consumers plus 1 decision on bad data, 0 never told, 0 copies still wrong, 4 of 4 deadlines met; the partner is told 1h20 after the bad write, due 24h40. T3, the same plan but telling only who complained: 7 plus 3, 4 never told, 4 copies still wrong, 3 of 4 deadlines; the bad load reaches the partner extract and the forecast model and two decisions, the replenishment order for two regions and the partner's volume rebate calculation.">
+        <defs>
+          <filter id="ib6dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="79" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib6dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ib6dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib6dH { font: 800 12px Inter, sans-serif; fill: #053D1E; }
+          .ib6dR { font: 800 12px Inter, sans-serif; fill: #991B1B; }
+          .ib6dL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib6dS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib6dV { font: 800 18px Inter, sans-serif; fill: #053D1E; }
+          .ib6dX { font: 800 18px Inter, sans-serif; fill: #991B1B; }
+          .ib6dB { font: 800 11px Inter, sans-serif; fill: #0D1F14; }
+          .ib6dN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ib6dSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="40" width="390" height="280" rx="12" fill="#ECF7F0" stroke="#075A2C" transform="rotate(-0.4 235 180)"/>
+          <rect x="450" y="40" width="390" height="280" rx="12" fill="#FEF2F2" stroke="#FCA5A5" transform="rotate(0.4 645 180)"/>
+          <rect x="466" y="232" width="358" height="28" rx="6" fill="#F2A900" transform="rotate(-0.6 645 246)"/>
+        </g>
+
+        <text class="ib6dH" x="58" y="68">✓ R5 · rehearsed, lineage notice</text>
+        <text class="ib6dV" x="58" y="110">5 + 1</text>
+        <text class="ib6dL" x="140" y="108">consumers + decisions on bad data</text>
+        <text class="ib6dV" x="58" y="146">0</text>
+        <text class="ib6dL" x="140" y="144">never told</text>
+        <text class="ib6dV" x="58" y="182">0</text>
+        <text class="ib6dL" x="140" y="180">copies still wrong</text>
+        <text class="ib6dV" x="58" y="218">4 of 4</text>
+        <text class="ib6dL" x="140" y="216">deadlines met</text>
+        <text class="ib6dS" x="58" y="256">partner told 1h20 after the bad write, due 24h40</text>
+        <text class="ib6dS" x="58" y="276">extract and model both flagged, nothing left on bad data</text>
+
+        <text class="ib6dR" x="468" y="68">✗ T3 · same plan, tell only who complained</text>
+        <text class="ib6dX" x="468" y="110">7 + 3</text>
+        <text class="ib6dL" x="550" y="108">consumers + decisions on bad data</text>
+        <text class="ib6dX" x="468" y="146">4</text>
+        <text class="ib6dL" x="550" y="144">never told</text>
+        <text class="ib6dX" x="468" y="182">4</text>
+        <text class="ib6dL" x="550" y="180">copies still wrong</text>
+        <text class="ib6dX" x="468" y="218">3 of 4</text>
+        <text class="ib6dL" x="550" y="216">deadlines met</text>
+        <text class="ib6dB" x="478" y="250">bad load still reaches 2 copies and 2 decisions</text>
+        <text class="ib6dS" x="468" y="282">partner extract, forecast model</text>
+        <text class="ib6dS" x="468" y="300">replenishment order (2 regions), partner's volume rebate</text>
+
+        <text class="ib6dN" x="40" y="344">Bench headline across all three incidents. Constructed Quarrybank example.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the same response, the same speed, and four consumers left holding a wrong copy because of who was on the list.</figcaption>
+    </figure>
+
+    <div data-ird-bench="lite" data-presets="r3,r4,r5,t3" data-start="r3"></div>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Start on R3, then switch to R4.</strong> R3 has the containment playbook but tells only the complainers. The headline reads 7 + 3 with 4 never told. R4 adds one thing, lineage-driven notice, and the headline drops to 5 + 1 with 0 never told. Containment is 0h50 after the signal on both; the bench models plan times by stated rules, so the only change is who is on the list.</p>
+      </div>
+      <div class="step">
+        <p><strong>Compare R5 with T3.</strong> T3 is the trap: the same plan, but tell only who complained. Copy the four numbers into your record side by side.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · R5 against T3</span>                          R5 (lineage)   T3 (complainers only)
+consumers + decisions     5 + 1          7 + 3
+never told                0              4
+copies still wrong        0              4
+deadlines met             4 of 4         3 of 4</div>
+      </div>
+      <div class="step">
+        <p><strong>Open "Bad load: what it reached" under T3.</strong> The panel shows 2 consumers, the partner extract and the forecast model, and 2 decisions: the replenishment order for two regions and the partner's volume rebate calculation. The partner notice is missed. Switch to R5: the partner is told at 1h20 after the bad write against a due time of 24h40, and the panel ends with nothing left on bad data.</p>
+      </div>
+      <div class="step">
+        <p><strong>Write the notice to the partner.</strong> Five fields, action first. Under R5 the window runs from the bad write to containment, 0h25 after the 02:40Z signal.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · notice to the partner, bad load</span>TO: partner data contact          FROM: Quarrybank incident responder
+WHAT TO DO: stop using the weekly extract sent 02:30Z on 2026-02-10.
+  A replacement file will follow the correction.
+WHAT WAS WRONG: a supplier feed loaded one partition twice; revenue for
+  regions North and East is doubled in that file.
+WINDOW (UTC): 2026-02-10 02:00Z to 03:05Z
+CORRECTED FIGURE: replacement file, time confirmed in the next update
+WHO TO ASK: incident responder, reply on this thread
+Please confirm you have received this and whether the file was loaded
+  into any of your own systems (rebate calculations included).</div>
+      </div>
+      <div class="step">
+        <p><strong>Generate the notice list from the trace, and save the template.</strong> One row per "must be told" consumer from responder page 2, with sent time and acknowledged. Strip Quarrybank's specifics and keep the shape: that is page 6.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · plan, responder page 6, consumer notice</span>QUARRYBANK INCIDENT RESPONSE PLAN · responder page 6 · consumer notice
+Source of the list: the consumer trace (responder page 2), never the complaints queue.
+Send to every "must be told" consumer within 30 min of containment (15 when rehearsed).
+NOTICE TEMPLATE (action first):
+  what you should do | what was wrong | the window, in UTC with Z
+  | corrected figure, or when it will arrive | who to ask
+ACTION BY KIND:
+  extract recipient  -&gt; stop using the file, replacement coming
+  scheduled email    -&gt; reply on thread: wrong figure, corrected figure
+  report owner       -&gt; rerun after correction, confirm
+  model owner        -&gt; flag for retrain, check what it fed
+NOTICE LIST: consumer | owner | deadline input (owner of the clock)
+  | sent, UTC | acknowledged yes/no, UTC
+Deadlines are inputs from the contract owner and privacy partner. Do not set them.
+An unacknowledged notice keeps the incident open.</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Chase the acknowledgement, not the send.</strong> A notice in an unread inbox has changed nothing. Give every "no" in the acknowledged column an owner and a time to follow up, and write the follow-up in the record.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 7</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li>Take the consumer trace template from session 2 and add the three notice columns: owner to notify, sent in UTC, acknowledged.</li>
+      <li>List every extract and scheduled email your team sends outside the warehouse, with a named owner on the receiving side. Mark the ones where you do not know who that person is.</li>
+      <li>Ask your contract owner which data-sharing agreements carry a notice deadline, and write each one down as a fixed input next to the extract it covers.</li>
+      <li>Draft the four notices from Part 2 for your own systems and keep them where anyone on call can find them at 3am.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Why does a notice list built from complaints miss the copies that matter most?</p>
+      <button class="qopt" type="button">A · Because complaints arrive too late to send a notice</button>
+      <button class="qopt" type="button">B · Because people only complain about what they can see is wrong, and a sent extract or a retrained model looks normal</button>
+      <button class="qopt" type="button">C · Because complainers do not own any consumers</button>
+      <p class="qwhy">The partner extract and the forecast model showed nothing wrong to their users, so their owners never complained. Only the trace puts them on the list.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">On the bench, R5 tells every consumer on the trace and T3 tells only who complained. What does T3 leave behind?</p>
+      <button class="qopt" type="button">A · Nothing; the headline is 5 + 1 on both</button>
+      <button class="qopt" type="button">B · Slower containment, but the same people are told</button>
+      <button class="qopt" type="button">C · 7 + 3 instead of 5 + 1, 4 never told, 4 copies still wrong, and 3 of 4 deadlines instead of 4 of 4</button>
+      <p class="qwhy">The response is otherwise the same plan. The four extra consumers and two extra decisions come entirely from who is on the notice list.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Who sets the GDPR 72-hour and PDPA notice deadlines for an incident involving personal data?</p>
+      <button class="qopt" type="button">A · The privacy partner owns them; the responder treats them as fixed inputs and supplies the times from the record</button>
+      <button class="qopt" type="button">B · The on-call responder, based on how serious it looks</button>
+      <button class="qopt" type="button">C · Whoever sends the first consumer notice</button>
+      <p class="qwhy">Legal and contract clocks are inputs from their owners. The responder's job is to make sure the record holds the aware candidates, the sent times and the acknowledgements.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, RS.CO-02 (read 2026-11-10)</span><span class="note">Procedures "include what must be reported to whom and at what times"</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">GDPR Art. 33 (read 2026-11-10)</span><span class="note">The 72-hour clock, as a linked input only; owned by the GDPR course</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">PDPA, 3 calendar days (reported)</span><span class="note">As a linked input only; owned by the PDPA course</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Notice templates, action by consumer kind, notice list columns</span><span class="note">Practitioner conventions built on the sources above</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Bench numbers (R3, R4, R5, T3; partner due 24h40, told 2h00 and 1h20)</span><span class="note">Computed in your browser by replaying a constructed event log</span></div>
+      <div class="covered-row"><span class="status pill inkpill">·</span><span class="name">Notice law itself</span><span class="note">Not covered here: owned by the GDPR and PDPA courses</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Responder session 6 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>List from the trace</b><span>Every "must be told" row from responder page 2. Never the complaints queue.</span></div>
+      <div class="cheat-item"><b>Quiet copies</b><span>Extracts, models, emailed packs and decks look fine to their users. Nobody complains.</span></div>
+      <div class="cheat-item"><b>Action first</b><span>What to do, what was wrong, the UTC window, corrected figure or when, who to ask.</span></div>
+      <div class="cheat-item"><b>One ask per kind</b><span>Stop using the file · here is the right figure · rerun and confirm · flag for retrain.</span></div>
+      <div class="cheat-item"><b>Clocks are inputs</b><span>Contract owner and privacy partner set them. Partner due 24h40 from the bad write.</span></div>
+      <div class="cheat-item"><b>On the bench</b><span>R5 5 + 1, never told 0. T3 7 + 3, never told 4, 3 of 4 deadlines.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Every consumer is told and every acknowledgement is in. Session 7 decides when the incident is actually over: the exit criteria, the evidence that proves each one, and the follow-ups with named owners that outlive the incident.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Responder session 6 of 8 · learn-data-incident-response-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b5-correct-then-prove-it-landed.html">← Prev: Correct, then prove it landed</a> &nbsp;·&nbsp; <a href="b7-close-with-evidence.html">Next: Close with evidence →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/ird-sample.js?v=1"></script>
+<script src="../assets/ird-live.js?v=2"></script>
+</body>
+</html>

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Responder session 5 of 8. Fix forward or roll back, why a rerun clears dashboards but never the copies already sent, and a correction check that proves every consumer on the trace now reads corrected rows.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Correct, then prove it landed - learn incident response for data teams with phoebe">
+<meta property="og:description" content="Responder session 5 of 8. A correction is done when every consumer reads corrected rows, not when the table is fixed.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/courses/b5-correct-then-prove-it-landed.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Correct, then prove it landed - learn incident response for data teams with phoebe">
+<meta name="twitter:description" content="The table is fixed. Is the sales email? One row of proof per consumer, or it did not land.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Responder session 5 · Correct, then prove it landed - learn incident response for data teams with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-data-incident-response-with-phoebe</a> / Responder session 5 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Incident Response for Data Teams with Phoebe · Responder session 5 of 8</div>
+    <h1>Correct, then prove it <span class="accent">landed</span></h1>
+    <p class="sub">The bad partition is quarantined, the valves are shut, and someone asks the question everyone has been waiting to ask: is it fixed yet? The honest answer is never "the table is fixed". A correction is done when every consumer on the trace reads corrected rows, and some of those consumers are an email in forty inboxes and a file sitting at a partner. Tonight you choose between fixing forward and rolling back, sort what a rerun clears from what it never reaches, and write a correction check that carries one row of proof per consumer.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Hands-on</span>
+      <span class="chip audience">Data and analytics engineers on call</span>
+      <span class="chip audience">Owners of downstream reports</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Choose, sort, prove</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: the correction check</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Fixed is a property of the readers</h2>
+    </div>
+    <p class="lede">Sessions 1 to 4 kept the evidence, traced who read the bad data and stopped it travelling. Tonight is the part people usually mean by "the fix", and the part teams most often declare done too early. The rows in the warehouse are the easy half. The hard half is every place those rows were read, copied, sent or used since 02:00Z on 10 February, and showing, consumer by consumer, that each one now reads the corrected version.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A correction check: one row for every consumer on the trace, each with the query or look that proves it now reads corrected rows, its UTC time and its proof in the record. It becomes page 5 of the responder half of Quarrybank's plan. Plus the bench's correction times for four plans, and why the one that dropped the bad table corrects last.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why "the table is fixed" is the wrong finish line<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A fixed table is a claim about one object. The incident was never about one object: session 2's trace lists dashboards, a mart, a model, an email and a partner file, and each of them read the bad rows on its own schedule. Some will pick up the correction the next time they refresh. Some never will, because the copy has already left the warehouse and nothing you rerun can reach it.</p>
+        <p>So the finish line is written per consumer. The leader asking "is it fixed?" deserves an answer like "four of six consumers proven on corrected rows, the partner extract waiting on their reload, the sales email recipients told at the time in the record". That sentence is only possible if the check exists before anyone asks.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. The rerun finished, the revenue dashboard looked right, and the on-call engineer posted "fixed" in the incident channel. Two days later the forecast model's owner asked why the replenishment numbers still assumed doubled revenue in two regions. The model had run on the bad partition before anyone was awake, and nobody had rerun it or told its owner.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where tonight sits in the response<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Session 2</strong> produced the consumer trace. Tonight's check has exactly one row per line of it.</li>
+          <li><strong>Session 3</strong> stopped new copies. It could not touch the copies made before the valves closed, and those are tonight's hardest rows.</li>
+          <li><strong>Session 6</strong> writes the notice for every consumer whose copy cannot be refreshed. Tonight's check tells you which ones those are.</li>
+          <li><strong>Session 7</strong> closes the incident against criteria, and a complete correction check is one of them.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers fix forward vs roll back</span>
+      <h2>Fix forward or roll back, and keep the bad version either way</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">There are two ways from a quarantined bad partition to a corrected state. Fix forward: write the corrected rows as a new version and let everything downstream rerun from it. Roll back: restore the last good version, through warehouse time travel or a versioned table, and reload the bad day cleanly afterwards. Neither is always right. The choice is a judgement about what else has changed since the bad write and how far the bad load has spread.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The quarantined bad partition of 10 February on the left, kept as evidence, with two paths out. Fix forward: version 1 good, version 2 bad, a new version 3 with corrected rows becomes current and downstream reruns from it. Roll back: version 1, the last good one, becomes current again, version 2 stays in quarantine, and the 10 February data is reloaded afterwards. Version 2 is never deleted on either path.">
+        <defs>
+          <filter id="ib5aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="83" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib5aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".65"/></pattern>
+          <marker id="ib5aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib5aH { font: 800 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ib5aL { font: 600 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ib5aS { font: 400 11px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #4A5F52; }
+          .ib5aB { font: 800 11px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B4700; }
+          .ib5aW { font: 800 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #FFFFFF; }
+          .ib5aA { font: 700 11px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #053D1E; }
+          .ib5aN { font: 400 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib5aH" x="40" y="24">TWO WAYS FROM THE QUARANTINED PARTITION TO A CORRECTED STATE</text>
+
+        <g filter="url(#ib5aSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="150" width="160" height="70" rx="8" fill="url(#ib5aHc)" transform="rotate(-2 120 185)"/>
+          <path d="M204 170 C230 160 240 120 262 108" marker-end="url(#ib5aAr)"/>
+          <path d="M204 200 C230 210 240 240 262 250" marker-end="url(#ib5aAr)"/>
+
+          <rect x="266" y="44" width="580" height="120" rx="10" fill="#ECF7F0" transform="rotate(0.3 556 104)"/>
+          <rect x="282" y="84" width="120" height="44" rx="6" fill="#FFFFFF" transform="rotate(-1 342 106)"/>
+          <rect x="432" y="84" width="130" height="44" rx="6" fill="url(#ib5aHc)" transform="rotate(1.2 497 106)"/>
+          <rect x="592" y="84" width="130" height="44" rx="6" fill="#075A2C" transform="rotate(-0.8 657 106)"/>
+          <path d="M404 106 L428 106" marker-end="url(#ib5aAr)"/>
+          <path d="M564 106 L588 106" marker-end="url(#ib5aAr)"/>
+
+          <rect x="266" y="190" width="580" height="120" rx="10" fill="#FFFFFF" transform="rotate(-0.3 556 250)"/>
+          <rect x="282" y="230" width="120" height="44" rx="6" fill="#075A2C" transform="rotate(1 342 252)"/>
+          <rect x="432" y="230" width="130" height="44" rx="6" fill="url(#ib5aHc)" transform="rotate(-1.2 497 252)"/>
+          <rect x="592" y="230" width="130" height="44" rx="6" fill="#FFFFFF" stroke-dasharray="5 4" transform="rotate(0.8 657 252)"/>
+          <path d="M430 252 L406 252" marker-end="url(#ib5aAr)"/>
+          <path d="M564 252 L588 252" marker-end="url(#ib5aAr)"/>
+        </g>
+
+        <text class="ib5aL" x="40" y="140">bad partition 02-10</text>
+        <text class="ib5aS" x="40" y="242">quarantined, kept as</text>
+        <text class="ib5aS" x="40" y="258">evidence (session 1)</text>
+
+        <text class="ib5aH" x="282" y="70">FIX FORWARD</text>
+        <text class="ib5aL" x="294" y="111">v1 · 02-09</text>
+        <text class="ib5aB" x="446" y="111">v2 · bad, kept</text>
+        <text class="ib5aW" x="604" y="111">v3 · corrected</text>
+        <text class="ib5aA" x="740" y="100">current = v3</text>
+        <text class="ib5aS" x="740" y="118">rerun from v3</text>
+        <text class="ib5aS" x="282" y="152">best when good rows have landed since the bad load, and must survive</text>
+
+        <text class="ib5aH" x="282" y="216">ROLL BACK</text>
+        <text class="ib5aW" x="294" y="257">v1 · last good</text>
+        <text class="ib5aB" x="446" y="257">v2 · bad, kept</text>
+        <text class="ib5aL" x="604" y="257">reload 02-10</text>
+        <text class="ib5aA" x="740" y="246">current = v1</text>
+        <text class="ib5aS" x="740" y="264">then reload</text>
+        <text class="ib5aS" x="282" y="298">best when little has changed since; needs time travel or a versioned table</text>
+
+        <text class="ib5aN" x="40" y="340">Constructed Quarrybank example. Both paths keep v2 in quarantine. The choice is a judgement, not a formula.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - two routes to a corrected state, and on both of them the bad version is kept, not deleted.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The trade-off, in four questions<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <thead><tr><th>Ask</th><th>Leans fix forward</th><th>Leans roll back</th></tr></thead>
+          <tbody>
+            <tr><td>What else has changed in the table since the bad write?</td><td>Good loads landed after it and must survive</td><td>Nothing, or nothing anyone needs yet</td></tr>
+            <tr><td>Can you restore a known good version?</td><td>No versioning, or the retention window has passed</td><td>Time travel or a versioned table holds the last good state</td></tr>
+            <tr><td>How far did the bad load spread?</td><td>Many consumers, so one clean new version to rerun from is simpler</td><td>Few consumers, and they all read the restored table</td></tr>
+            <tr><td>How sure are you of the corrected rows?</td><td>You know exactly what was wrong and can rebuild it</td><td>You do not yet, and the last good state is safer than a guess</td></tr>
+          </tbody>
+        </table>
+        <p>There is no score that settles it. Write the answer to each question in the record next to the decision and who made it, so the choice can be checked later rather than remembered.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The bad version stays, whichever way you go<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>NIST notes that collected incident data "is still considered evidence" even without formal chain of custody (RS.AN-07). The quarantined v2 is how you will later show which rows were wrong and what each consumer read. A roll back that overwrites it, or a fix forward that "cleans up" the quarantine schema, deletes the evidence on the way to the correction. Keep v2 until the incident is closed, with a delete-by date agreed in the record.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. The bad load doubled revenue for two regions, and a good load for 11 February landed on top of it before anyone noticed. Rolling back to 9 February would have thrown that good day away, so the team fixed forward: corrected rows for 10 February written as a new version, the quarantined partition left untouched, and downstream rerun from the new version.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What belongs to reliability, and what to cyber<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>How to rebuild a partition and rerun what depends on it so that a second run does not double the rows again is backfill and idempotent rerun mechanics. It belongs to reliability, and is not retaught here: <a href="https://phoebefu6.github.io/learn-data-reliability-with-phoebe/courses/b5-backfills.html">Learn Data Reliability, backfills ↗</a>. Restoring after a destructive event, where an attacker deleted or encrypted the data, is a security restore with its own concerns: <a href="https://phoebefu6.github.io/learn-cyber-security-with-phoebe/courses/b6-destructive-events.html">Learn Cyber Security, destructive events ↗</a>. Tonight is the decision and the proof around both.</p>
+        <p>Warehouse time travel and versioned table formats are vendor features with their own retention rules. Treat any vendor claim about how far back you can restore as a claim to check against your own settings before you rely on it at 3am.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers why refreshable outputs and copies behave differently</span>
+      <h2>A rerun refreshes tables, never inboxes</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Every consumer on the trace falls into one of two kinds. Dashboards and tables read the warehouse when they refresh, so the correction reaches them the next time they do. Copies were made once and live somewhere else: an email, an extract, a model's output, a deck. A copy only clears when someone tells the people holding it. The bench applies exactly this rule.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 404" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The correction on the left with two arrows. One reaches the three refreshable consumers of the bad load: revenue dashboard, executive dashboard and finance mart, which read version 3 on their next refresh and clear. The other, dashed, stops short of the three copies: sales email in inboxes, partner extract at the partner, forecast model outputs already used. Those stay wrong until their users are told. Bench totals of copies still wrong at the end of the quarter: no plan 7, containment playbook 4, lineage-driven notice 0.">
+        <defs>
+          <filter id="ib5bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="89" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib5bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".6"/></pattern>
+          <marker id="ib5bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib5bH { font: 800 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ib5bL { font: 600 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ib5bS { font: 400 11px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #4A5F52; }
+          .ib5bB { font: 800 11px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B4700; }
+          .ib5bW { font: 800 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #FFFFFF; }
+          .ib5bN { font: 400 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ib5bSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="170" width="150" height="60" rx="8" fill="#075A2C" transform="rotate(-1.5 115 200)"/>
+          <path d="M194 186 C226 170 236 130 262 116" marker-end="url(#ib5bAr)"/>
+          <path d="M194 222 C222 240 236 270 258 286" stroke-dasharray="6 5"/>
+
+          <rect x="250" y="40" width="590" height="150" rx="10" fill="#ECF7F0" transform="rotate(0.3 545 115)"/>
+          <rect x="266" y="84" width="170" height="56" rx="7" fill="#FFFFFF" transform="rotate(-1.4 351 112)"/>
+          <rect x="452" y="84" width="170" height="56" rx="7" fill="#FFFFFF" transform="rotate(1.1 537 112)"/>
+          <rect x="638" y="84" width="180" height="56" rx="7" fill="#FFFFFF" transform="rotate(-0.9 728 112)"/>
+
+          <rect x="250" y="214" width="590" height="150" rx="10" fill="#FFF6DC" transform="rotate(-0.3 545 289)"/>
+          <rect x="266" y="258" width="170" height="56" rx="7" fill="url(#ib5bHc)" transform="rotate(1.3 351 286)"/>
+          <rect x="452" y="258" width="170" height="56" rx="7" fill="#F2A900" transform="rotate(-1.2 537 286)"/>
+          <rect x="638" y="258" width="180" height="56" rx="7" fill="url(#ib5bHc)" transform="rotate(0.9 728 286)"/>
+        </g>
+
+        <text class="ib5bW" x="56" y="196">CORRECTION</text>
+        <text class="ib5bW" x="56" y="214">v3 is current</text>
+        <text class="ib5bS" x="40" y="300">the rerun does</text>
+        <text class="ib5bS" x="40" y="316">not reach these</text>
+
+        <text class="ib5bH" x="266" y="64">REFRESH AT THE CORRECTION · corrected by the rerun</text>
+        <text class="ib5bL" x="280" y="108">revenue dashboard</text>
+        <text class="ib5bS" x="280" y="126">reads v3 on refresh</text>
+        <text class="ib5bL" x="466" y="108">executive dashboard</text>
+        <text class="ib5bS" x="466" y="126">reads v3 on refresh</text>
+        <text class="ib5bL" x="652" y="108">finance mart</text>
+        <text class="ib5bS" x="652" y="126">rerun from v3</text>
+        <text class="ib5bS" x="266" y="172">you control the refresh, so you can make them clear</text>
+
+        <text class="ib5bB" x="266" y="238">COPIES · still wrong until someone tells their users</text>
+        <text class="ib5bL" x="280" y="282">sales email</text>
+        <text class="ib5bS" x="280" y="300">already in inboxes</text>
+        <text class="ib5bL" x="466" y="282">partner extract</text>
+        <text class="ib5bL" x="466" y="300">at the partner</text>
+        <text class="ib5bL" x="652" y="282">forecast model</text>
+        <text class="ib5bS" x="652" y="300">outputs already used</text>
+        <text class="ib5bS" x="266" y="346">cleared only by a notice to the people holding them (session 6)</text>
+
+        <text class="ib5bN" x="40" y="392">Bench, copies still wrong at the end of the quarter: R0 7, R3 4, R4 0. Constructed Quarrybank example.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the bad load's six consumers: the rerun clears the top row, and only a notice clears the bottom one.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The sorting rule, across all three incidents<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <thead><tr><th>Refreshes at the correction</th><th>Only clears when its users are told</th></tr></thead>
+          <tbody>
+            <tr><td>Revenue dashboard</td><td>Sales email</td></tr>
+            <tr><td>Executive dashboard</td><td>Partner extract</td></tr>
+            <tr><td>Finance mart</td><td>Forecast model</td></tr>
+            <tr><td>Board portal copy</td><td>Emailed board pack, pricing deck, investor update, lender certificate</td></tr>
+          </tbody>
+        </table>
+        <p>The test is simple: does the consumer read the warehouse again on its own, or was it made once and handed to someone? A forecast model sits on the copy side even though it lives in your stack, because its last run has already fed numbers to people who acted on them. Rerunning the model makes a new correct output; it does not change the order that was placed from the old one.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What the bench says about copies<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Measured on the bench, across the quarter's three incidents, the copies still wrong at the end are 7 with no plan, 4 under the containment playbook (R3) and 0 under the lineage-driven consumer notice (R4). R3 and R4 correct at the same time, 6h50 after the first signal. The difference is not a faster fix. It is that R4 tells the holder of every copy on the trace, including the partner extract and the forecast model from the bad load, which R3 leaves never told.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. Under R3 the warehouse was correct by 09:30Z on 10 February, and the partner was still working from a weekly extract with revenue doubled for two regions. The partner contract notice was missed. Under R4 the same correction, at the same time, ended with no copy still wrong, because the partner was told 2h00 after the bad write, measured from the bad write against a due time of 24h40.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Recall is a notice with extra steps<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Some email tools offer to recall a message, and some partners will replace a file if asked. Both still depend on a person on the other side acting. Record them as a notice with an expected action, not as a correction you performed, and keep the copy row open until someone confirms the replacement. Writing the notice itself is session 6.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers proving it landed, NIST RC.RP-05</span>
+      <h2>Proof per consumer, or it did not land</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">NIST's recovery guidance asks you to "Verify the correctness and adequacy of the restoration actions taken before putting a restored system online." For a data incident the restored system is not one table. It is every consumer on the trace. The correction check is that verification written down: for each consumer, a query or a look that shows it now reads corrected rows, with its UTC time and its proof in the record.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The correction check for the bad load as a table with one row per consumer on the trace. Revenue dashboard, refreshes, sum by region matches v3, proof a query id, ticked. Executive dashboard, refreshes, tile matches the query, proof a screenshot, ticked. Finance mart, refreshes, duplicate key count is zero, proof a query id, ticked. Sales email, copy, recipients told, proof the notice id, ticked. Partner extract, copy, partner confirms the reload, no proof yet, open. Forecast model, copy, rerun on v3 and owner told, proof a run id, ticked. A tick only with proof.">
+        <defs>
+          <filter id="ib5cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="97" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib5cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#075A2C" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ib5cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib5cH { font: 800 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ib5cL { font: 600 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ib5cS { font: 400 11px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #4A5F52; }
+          .ib5cB { font: 800 11px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #6B4700; }
+          .ib5cA { font: 700 11px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #053D1E; }
+          .ib5cW { font: 800 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #FFFFFF; }
+          .ib5cK { font: 800 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ib5cN { font: 400 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib5cH" x="40" y="26">CORRECTION CHECK · BAD LOAD · one row per consumer on the trace</text>
+
+        <g filter="url(#ib5cSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="40" width="820" height="212" rx="10" fill="#FFFFFF" transform="rotate(0.2 440 146)"/>
+          <rect x="34" y="44" width="812" height="28" rx="6" fill="url(#ib5cHc)"/>
+          <path d="M34 102 L846 102"/>
+          <path d="M34 132 L846 132"/>
+          <path d="M34 162 L846 162"/>
+          <path d="M34 192 L846 192"/>
+          <path d="M34 222 L846 222"/>
+          <circle cx="810" cy="88" r="10" fill="#075A2C"/>
+          <circle cx="810" cy="117" r="10" fill="#075A2C"/>
+          <circle cx="810" cy="147" r="10" fill="#075A2C"/>
+          <circle cx="810" cy="177" r="10" fill="#075A2C"/>
+          <circle cx="810" cy="207" r="10" fill="#F2A900"/>
+          <circle cx="810" cy="237" r="10" fill="#075A2C"/>
+        </g>
+
+        <text class="ib5cA" x="46" y="63">consumer</text>
+        <text class="ib5cA" x="216" y="63">kind</text>
+        <text class="ib5cA" x="316" y="63">check used</text>
+        <text class="ib5cA" x="566" y="63">proof in the record</text>
+        <text class="ib5cA" x="716" y="63">UTC</text>
+        <text class="ib5cA" x="790" y="63">done</text>
+
+        <text class="ib5cL" x="46" y="92">revenue dashboard</text>
+        <text class="ib5cS" x="216" y="92">refreshes</text>
+        <text class="ib5cS" x="316" y="92">sum by region matches v3</text>
+        <text class="ib5cS" x="566" y="92">query id</text>
+        <text class="ib5cS" x="716" y="92">stamped</text>
+        <text class="ib5cW" x="805" y="92">✓</text>
+
+        <text class="ib5cL" x="46" y="121">executive dashboard</text>
+        <text class="ib5cS" x="216" y="121">refreshes</text>
+        <text class="ib5cS" x="316" y="121">tile matches the same query</text>
+        <text class="ib5cS" x="566" y="121">screenshot</text>
+        <text class="ib5cS" x="716" y="121">stamped</text>
+        <text class="ib5cW" x="805" y="121">✓</text>
+
+        <text class="ib5cL" x="46" y="151">finance mart</text>
+        <text class="ib5cS" x="216" y="151">refreshes</text>
+        <text class="ib5cS" x="316" y="151">duplicate key count is 0</text>
+        <text class="ib5cS" x="566" y="151">query id</text>
+        <text class="ib5cS" x="716" y="151">stamped</text>
+        <text class="ib5cW" x="805" y="151">✓</text>
+
+        <text class="ib5cL" x="46" y="181">sales email</text>
+        <text class="ib5cS" x="216" y="181">copy</text>
+        <text class="ib5cS" x="316" y="181">recipients told, corrected figure sent</text>
+        <text class="ib5cS" x="566" y="181">notice id</text>
+        <text class="ib5cS" x="716" y="181">stamped</text>
+        <text class="ib5cW" x="805" y="181">✓</text>
+
+        <text class="ib5cL" x="46" y="211">partner extract</text>
+        <text class="ib5cS" x="216" y="211">copy</text>
+        <text class="ib5cS" x="316" y="211">partner confirms the reload</text>
+        <text class="ib5cB" x="566" y="211">none yet</text>
+        <text class="ib5cB" x="716" y="211">open</text>
+        <text class="ib5cK" x="806" y="215">?</text>
+
+        <text class="ib5cL" x="46" y="241">forecast model</text>
+        <text class="ib5cS" x="216" y="241">copy</text>
+        <text class="ib5cS" x="316" y="241">rerun on v3, owner told</text>
+        <text class="ib5cS" x="566" y="241">run id, notice id</text>
+        <text class="ib5cS" x="716" y="241">stamped</text>
+        <text class="ib5cW" x="805" y="241">✓</text>
+
+        <text class="ib5cN" x="40" y="282">A tick only with proof in the record. No proof, no tick, however sure you are.</text>
+        <text class="ib5cN" x="40" y="304">Constructed Quarrybank example. The open row keeps the correction open.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - five of six proven, and the one without proof is the one that keeps the incident open.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What counts as proof<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>For a table or mart</strong>: a query that would have failed on the bad rows and passes now, such as a duplicate key count of zero or a regional total that matches the corrected source. Record the query id, not "looked fine".</li>
+          <li><strong>For a dashboard</strong>: the tile's value next to the query that should produce it, with a screenshot stamped in UTC. Dashboards cache; a value checked before the cache refreshed proves nothing.</li>
+          <li><strong>For a copy</strong>: the notice that went to its holders, and where possible their confirmation that the old copy was replaced. Until then the row stays open.</li>
+          <li><strong>For a model</strong>: the run id of the rerun on corrected rows, plus the notice to the owner about the outputs already used.</li>
+        </ul>
+        <div class="callout tip">
+          <p><strong>Check from the consumer's side.</strong> A query against the corrected table proves the table. Only a check that goes through the consumer, the dashboard's own tile, the mart's own output, proves the consumer reads it.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Correction times on the bench<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Measured on the bench, from the first signal: R3 and R4 correct at 6h50, the rehearsed plan R5 at 3h25, and T2, the plan that dropped the bad table, at 10h50. T2 is the same plan as R4 with one bad habit, and the bench's rules charge 240 extra minutes when the table was dropped, because the data has to be reloaded before it can be corrected. The bench models these times by stated rules; they show the order of the plans, not a promise about your warehouse.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. The trap switch on the rehearsed plan tells the same story: R5 corrects at 3h25, and the same plan with the bad table dropped corrects at 7h25. Practice buys hours; deleting the evidence gives four of them back.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Who signs the check<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>As practice, the person who ran the correction should not be the only one who ticks the rows. A second responder, or the owner of each consumer, runs the check from their side. The incident commander does not tick rows either: PagerDuty's guide is explicit that "the Incident Commander is NOT a resolver". The commander reads the finished check and decides whether the correction is done, which feeds the exit criteria in session 7.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Write the correction check for the bad load</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">You are the responder who ran the correction for Quarrybank's bad load. Read on the bench how long each plan takes to correct and how many copies it leaves wrong, then write the check that proves your correction landed on every consumer, and save its shape as page 5 of the responder half of the plan.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 280" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Time to correct, measured from the first signal, for four plans on the bench. R3 containment playbook 6h50, R4 lineage notice 6h50, R5 rehearsed 3h25, T2 drop the bad table 10h50 because the data must be reloaded first. Copies still wrong at the end of the quarter: R3 4, R4 0, R5 0, T2 0.">
+        <defs>
+          <filter id="ib5dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="101" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib5dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#075A2C" stroke-width="1" opacity=".55"/></pattern>
+          <marker id="ib5dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib5dH { font: 800 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ib5dL { font: 600 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #0D1F14; }
+          .ib5dS { font: 400 11px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #4A5F52; }
+          .ib5dV { font: 800 16px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #053D1E; }
+          .ib5dN { font: 400 12px Inter, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib5dH" x="180" y="40">time to correct, from the first signal</text>
+        <text class="ib5dH" x="740" y="40">copies still wrong</text>
+
+        <g filter="url(#ib5dSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M176 54 L176 232"/>
+          <rect x="176" y="64" width="328" height="28" rx="5" fill="url(#ib5dHc)" transform="rotate(0.3 340 78)"/>
+          <rect x="176" y="108" width="328" height="28" rx="5" fill="#BFE3CC" transform="rotate(-0.3 340 122)"/>
+          <rect x="176" y="152" width="164" height="28" rx="5" fill="#075A2C" transform="rotate(0.4 258 166)"/>
+          <rect x="176" y="196" width="520" height="28" rx="5" fill="#F2A900" transform="rotate(-0.2 436 210)"/>
+        </g>
+
+        <text class="ib5dL" x="40" y="83">R3 playbook</text>
+        <text class="ib5dL" x="40" y="127">R4 lineage</text>
+        <text class="ib5dL" x="40" y="171">R5 rehearsed</text>
+        <text class="ib5dL" x="40" y="215">T2 drop table</text>
+        <text class="ib5dV" x="516" y="84">6h50</text>
+        <text class="ib5dV" x="516" y="128">6h50</text>
+        <text class="ib5dV" x="352" y="172">3h25</text>
+        <text class="ib5dV" x="708" y="216">10h50</text>
+        <text class="ib5dS" x="580" y="84">same fix, copies never told</text>
+        <text class="ib5dS" x="580" y="128">same fix, every holder told</text>
+        <text class="ib5dS" x="416" y="172">rehearsed, so every step is faster</text>
+        <text class="ib5dS" x="176" y="246">T2: the bad table was dropped, so the data is reloaded before it can be corrected</text>
+
+        <text class="ib5dV" x="790" y="84">4</text>
+        <text class="ib5dV" x="790" y="128">0</text>
+        <text class="ib5dV" x="790" y="172">0</text>
+        <text class="ib5dV" x="790" y="216">0</text>
+
+        <text class="ib5dN" x="40" y="270">Bench, constructed. Times from the first signal; copies are totals across all three incidents.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - R3 and R4 fix at the same time; only R4 leaves no copy wrong, and dropping the table costs four hours.</figcaption>
+    </figure>
+
+    <div data-ird-bench="lite" data-presets="r3,r4,r5,t2" data-start="r3"></div>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Read R3 and R4 side by side.</strong> On the bench, find the correct column: both read 6h50 from the first signal. Then find copies still wrong: R3 4, R4 0. Write one line in your record explaining the difference in your own words. If your line mentions a faster fix, read Part 2 again.</p>
+      </div>
+      <div class="step">
+        <p><strong>Switch to R5, then T2.</strong> R5 corrects at 3h25; T2 at 10h50, both from the first signal. Note that T2 still leaves 0 copies wrong: dropping the table did not make the notice worse, it made the correction later and the exposure assumed rather than measured, as session 4 showed.</p>
+      </div>
+      <div class="step">
+        <p><strong>Copy one row per consumer from your session 2 trace.</strong> For the bad load that is the revenue dashboard, executive dashboard, finance mart, sales email, partner extract and forecast model. Mark each one "refreshes" or "copy" using the test from Part 2.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · rows from the trace</span>consumer             kind       check used
+revenue dashboard    refreshes  regional sum = corrected source, via the tile
+executive dashboard  refreshes  tile value = same query, after cache refresh
+finance mart         refreshes  duplicate key count on 2026-02-10 = 0
+sales email          copy       recipients told, corrected figure sent
+partner extract      copy       partner confirms the replaced file
+forecast model       copy       rerun on corrected rows + owner told</div>
+      </div>
+      <div class="step">
+        <p><strong>Run each check from the consumer's side and fill result, UTC time and proof.</strong> A row with no proof stays open, however sure you are. Leave the partner extract open until the partner replies; the told column says yes, the result says pending.</p>
+      </div>
+      <div class="step">
+        <p><strong>Save the shape.</strong> Strip Quarrybank's specifics and keep the columns. That is page 5 of the responder half of the plan.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · plan, responder page 5, correction check</span>QUARRYBANK INCIDENT RESPONSE PLAN · responder page 5 · correction check
+One row per consumer on the trace (responder page 2). No row left out.
+consumer | refreshes or copy | check used | result | UTC time | proof | told yes/no
+Choose fix forward or roll back; record the reasons and who decided.
+Never delete the quarantined bad version before close-out.
+Refreshes: rerun, then check through the consumer itself, not the table.
+Copies: cleared only when holders are told (responder page 6) and confirm.
+Tick a row only with proof in the record. Any open row = correction not done.</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Say the numbers out loud.</strong> When the commander asks "is it fixed?", answer from the check: how many rows proven, which are open, and who is waiting on whom. "Fixed" without a count is a feeling.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 6</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li>Find out whether your warehouse can restore a table to a point in time, and for how long. Write the retention you actually have, not the one in the vendor's brochure.</li>
+      <li>Take one important pipeline and sort every consumer of it into "refreshes" or "copy". Count the copies.</li>
+      <li>For each refreshable consumer, write the one query that would prove it reads corrected rows, checked through the consumer itself.</li>
+      <li>For the last data problem you fixed, try to fill the correction check after the fact. Note every row where you have no proof that it landed.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">The finance mart has been rerun on corrected rows. Why is the sales email still wrong?</p>
+      <button class="qopt" type="button">A · The rerun has not finished propagating to the mail server yet</button>
+      <button class="qopt" type="button">B · It is a copy already in inboxes; nothing you rerun reaches it, only telling its recipients clears it</button>
+      <button class="qopt" type="button">C · The email reads the executive dashboard, which has not refreshed</button>
+      <p class="qwhy">Refreshable outputs read the warehouse again; copies were made once and handed to people. On the bench, copies still wrong at the end are R3 4 and R4 0 with the same correction time: the difference is telling the holders.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">What does NIST RC.RP-05 ask for before a restored system goes back online?</p>
+      <button class="qopt" type="button">A · An after-action report signed by the incident lead</button>
+      <button class="qopt" type="button">B · Notification of every affected party</button>
+      <button class="qopt" type="button">C · Verification of the correctness and adequacy of the restoration actions taken</button>
+      <p class="qwhy">"Verify the correctness and adequacy of the restoration actions taken before putting a restored system online." For data, the correction check is that verification, one consumer at a time.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Why does T2 correct at 10h50 after the first signal, when R4 corrects at 6h50?</p>
+      <button class="qopt" type="button">A · The bad table was dropped, so the data has to be reloaded before it can be corrected</button>
+      <button class="qopt" type="button">B · T2 has no containment playbook, so the bad load spreads further</button>
+      <button class="qopt" type="button">C · T2 tells only the consumers who complained</button>
+      <p class="qwhy">T2 is the R4 plan with the bad table dropped. The bench charges 240 extra minutes for the reload, and the evidence of which rows were wrong is gone too.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, RC.RP-05 (read 2026-11-10)</span><span class="note">"Verify the correctness and adequacy of the restoration actions taken before putting a restored system online"</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, RS.AN-07 (read 2026-11-10)</span><span class="note">Collected incident data "is still considered evidence": the quarantined bad version is kept</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Fix forward vs roll back, refreshes vs copies, the correction check</span><span class="note">Practitioner conventions built on the sources above, taught as practice</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Bench numbers (6h50, 3h25, 10h50, 7h25; copies still wrong 7, 4, 0)</span><span class="note">Computed in your browser by replaying a constructed event log</span></div>
+      <div class="covered-row"><span class="status pill inkpill">·</span><span class="name">Backfill and idempotent rerun mechanics</span><span class="note">Not covered here: owned by <a href="https://phoebefu6.github.io/learn-data-reliability-with-phoebe/courses/b5-backfills.html">Learn Data Reliability, backfills ↗</a></span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Responder session 5 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Done means read</b><span>A correction is done when every consumer reads corrected rows, not when the table is fixed.</span></div>
+      <div class="cheat-item"><b>Forward or back</b><span>Fix forward if good rows landed since; roll back if a clean last version exists and little changed.</span></div>
+      <div class="cheat-item"><b>Keep the bad version</b><span>Either path leaves it in quarantine. It is evidence (RS.AN-07).</span></div>
+      <div class="cheat-item"><b>Refreshes vs copies</b><span>Dashboards and tables clear at the rerun. Emails, extracts, models and decks clear only when told.</span></div>
+      <div class="cheat-item"><b>Proof per row</b><span>Check through the consumer, stamp it in UTC, put the proof in the record. No proof, no tick.</span></div>
+      <div class="cheat-item"><b>Bench</b><span>Correct from the first signal: R3 and R4 6h50, R5 3h25, T2 10h50. Copies still wrong: R0 7, R3 4, R4 0.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Tonight's check has rows that only a message can close: the sales email, the partner extract, the forecast model's owner. Session 6 writes that message, sends it to every consumer on the trace rather than only the ones who complained, and shows on the bench why that choice is the difference between 4 consumers never told and 0.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Responder session 5 of 8 · learn-data-incident-response-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b4-close-a-leaked-tables-doors.html">← Prev: Close a leaked table's doors</a> &nbsp;·&nbsp; <a href="b6-tell-every-consumer.html">Next: Tell every consumer who read it →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/ird-sample.js?v=1"></script>
+<script src="../assets/ird-live.js?v=2"></script>
+</body>
+</html>

@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 3 of 6. Who runs the room in a data incident: a commander who fixes nothing, one pair of hands on the system, a scribe and an owner for every notice. On the bench, roles take Quarrybank from 0 of 4 deadlines met to 3 of 4.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Who runs the room - learn incident response for data teams with phoebe">
+<meta property="og:description" content="Leader session 3 of 6. Incident roles, why rank does not decide command, and a handover that is acknowledged out loud.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/courses/a3-who-runs-the-room.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Who runs the room - learn incident response for data teams with phoebe">
+<meta name="twitter:description" content="The most senior person on the call should usually not be running it. Here is who should, and what that changes.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 3 · Who runs the room - learn incident response for data teams with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-data-incident-response-with-phoebe</a> / Leader session 3 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Incident Response for Data Teams with Phoebe · Leader session 3 of 6</div>
+    <h1>Who runs the <span class="accent">room</span></h1>
+    <p class="sub">You have declared it and you have sized it. Now twelve people join a call, four of them start typing into the warehouse, the most senior person starts asking for updates, and nobody is writing anything down. Tonight is about the handful of roles that turn that call into a response: one person who holds the picture and fixes nothing, one pair of hands on the system, one person telling the outside world, one person writing it all down. Quarrybank's bench shows what those roles are worth in deadlines.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Building</span>
+      <span class="chip audience">Heads of data and analytics managers</span>
+      <span class="chip audience">Anyone who has been on a chaotic incident call</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Roles, rank, handover</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: the roles card</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Roles inside the incident, not the rota</h2>
+    </div>
+    <p class="lede">Two different questions hide behind "who is responsible". The first is who gets paged at 3am this week, which is a rota, and the reliability course designs it (<a href="https://phoebefu6.github.io/learn-data-reliability-with-phoebe/courses/a3-on-call-is-a-design.html">On-call is a design ↗</a>). The second is what each person does once the incident is declared and the call has started. That second question is tonight. A good rota gets the right person awake; only roles decide whether the next six hours are a response or a crowd.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A roles card for Quarrybank, page 3 of its incident response plan: who commands, who touches the system, who tells whom, who writes it down, what each of them never does, and how command changes hands. On the bench, adding severity and roles moves Quarrybank's quarter from 0 of 4 notice deadlines met to 3 of 4.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The call nobody was running<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Most chaotic incident calls are not short of skill. They are short of structure. Everyone on the call is competent and everyone is doing something useful in isolation: one person is querying the bad partition, another is rerunning a job, a third is drafting a message to the partner, a fourth is asking the first three for a status. The work collides because nobody is deciding which of those things happens first, and nobody is keeping the record that would let anyone check later.</p>
+        <p>Roles fix that by narrowing each person's job. The narrowing is the point: a commander who also debugs loses the picture, and an engineer who also writes the executive update loses an hour of fixing.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. When the customer table was found behind a public link, the head of data declared within 15 minutes of the access-log alert. With a declare rule but no roles, the next four hours went on everyone looking at the access logs together. Nobody had been told that assessing the exposure was their job, and the privacy partner heard about it only when legal was copied into a thread days later.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where this session sits<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Session 1</strong> gave Quarrybank a declare rule, so the clock starts at the first signal.</li>
+          <li><strong>Session 2</strong> gave it a severity matrix, so the declaration wakes the right number of people.</li>
+          <li><strong>Tonight</strong> decides what those people do once they are awake.</li>
+          <li><strong>Session 4</strong> writes what the communication role actually sends, and when.</li>
+          <li><strong>The responder track</strong> covers the operations role's hands-on work: the timeline, the trace, containment and correction.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the SRE book's incident command roles and PagerDuty's roles</span>
+      <h2>Four jobs, one hub</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">Google's SRE book splits an incident into four jobs and gives each a one-line definition worth memorising. Incident Command "holds the high-level state about the incident". Operational Work is "the only group modifying the system during an incident". Communication is "the public face of the incident response task force". Planning "supports Ops by dealing with longer-term issues". Everything else on tonight's page is a variation on those four sentences.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 390" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Quarrybank's incident room as a hub. The incident commander, the head of data, sits in the middle and holds the state. On the left, operations, the on-call engineer, is the only person whose arrow reaches the warehouse with the bad data. On the right, communication, the privacy partner, is the only arrow out to the partner and regulator. At the top the scribe, a data analyst, records every decision into the living incident document at the bottom. The finance controller is a liaison for the board and longer-term issues. Every line runs through the commander.">
+        <defs>
+          <filter id="ia3aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="11" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia3aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ia3aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia3aH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia3aL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia3aS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia3aB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ia3aW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .ia3aA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ia3aN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ia3aSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="330" y="36" width="220" height="58" rx="10" fill="#FFFFFF" transform="rotate(-0.6 440 65)"/>
+          <rect x="640" y="36" width="210" height="58" rx="10" fill="#FFFFFF" transform="rotate(0.5 745 65)"/>
+          <rect x="30" y="150" width="210" height="72" rx="10" fill="#FFFFFF" transform="rotate(0.4 135 186)"/>
+          <rect x="330" y="150" width="220" height="72" rx="10" fill="#075A2C"/>
+          <rect x="640" y="150" width="210" height="72" rx="10" fill="#FFFFFF" transform="rotate(-0.4 745 186)"/>
+          <rect x="30" y="282" width="210" height="50" rx="8" fill="url(#ia3aHc)"/>
+          <rect x="330" y="282" width="220" height="50" rx="8" fill="#ECF7F0"/>
+          <rect x="640" y="282" width="210" height="50" rx="8" fill="#FFFFFF" stroke-dasharray="6 5"/>
+
+          <path d="M326 186 L246 186" marker-end="url(#ia3aAr)"/>
+          <path d="M554 186 L634 186" marker-end="url(#ia3aAr)"/>
+          <path d="M440 146 L440 100" marker-end="url(#ia3aAr)"/>
+          <path d="M554 160 L640 98" marker-end="url(#ia3aAr)"/>
+          <path d="M135 226 L135 276" marker-end="url(#ia3aAr)"/>
+          <path d="M745 226 L745 276" marker-end="url(#ia3aAr)"/>
+          <path d="M554 66 C640 66 640 306 556 306" marker-end="url(#ia3aAr)"/>
+        </g>
+
+        <text class="ia3aL" x="344" y="60">SCRIBE · data analyst</text>
+        <text class="ia3aS" x="344" y="78">writes every decision, in UTC</text>
+        <text class="ia3aL" x="654" y="60">LIAISON · controller</text>
+        <text class="ia3aS" x="654" y="78">finance, board, longer term</text>
+
+        <text class="ia3aL" x="44" y="176">OPERATIONS</text>
+        <text class="ia3aS" x="44" y="194">on-call engineer</text>
+        <text class="ia3aA" x="44" y="210">only hands on the system</text>
+        <text class="ia3aW" x="344" y="176">INCIDENT COMMANDER</text>
+        <text class="ia3aW" x="344" y="194">head of data</text>
+        <text class="ia3aW" x="344" y="212">holds the state</text>
+        <text class="ia3aL" x="654" y="176">COMMUNICATION</text>
+        <text class="ia3aS" x="654" y="194">privacy partner</text>
+        <text class="ia3aA" x="654" y="210">the only voice facing out</text>
+
+        <text class="ia3aS" x="258" y="176">repair asks</text>
+        <text class="ia3aS" x="566" y="204">notice</text>
+
+        <text class="ia3aB" x="44" y="302">WAREHOUSE</text>
+        <text class="ia3aL" x="44" y="320">bad partition, open link</text>
+        <text class="ia3aL" x="344" y="302">living incident document</text>
+        <text class="ia3aS" x="344" y="320">one record, one version</text>
+        <text class="ia3aL" x="654" y="302">outside the building</text>
+        <text class="ia3aS" x="654" y="320">partner, regulator, vendor</text>
+
+        <text class="ia3aN" x="30" y="366">Constructed Quarrybank example. Every line runs through the commander; one line touches the warehouse.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the commander is the hub, operations is the only hand on the system, communication is the only voice out.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The SRE book's four roles, mapped to Quarrybank<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <thead><tr><th>Role</th><th>SRE book, in its words</th><th>Quarrybank</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Incident Command</strong></td><td>"holds the high-level state about the incident"</td><td>The head of data, by default, unless the rota says otherwise</td></tr>
+            <tr><td><strong>Operational Work</strong></td><td>"the only group modifying the system during an incident"</td><td>The on-call analytics engineer, plus anyone the commander adds to that group by name</td></tr>
+            <tr><td><strong>Communication</strong></td><td>"the public face of the incident response task force"</td><td>The privacy partner for anything leaving the building; the commander's own updates inside it</td></tr>
+            <tr><td><strong>Planning</strong></td><td>"supports Ops by dealing with longer-term issues"</td><td>The finance controller on a decision incident; otherwise a second engineer filing follow-ups</td></tr>
+          </tbody>
+        </table>
+        <p>The word "only" in the operations line carries the most weight. A data incident has a special way of getting worse: two people fixing the same table. One reruns the load while the other deletes the duplicated partition, and the evidence of what was wrong disappears between them.</p>
+        <p>The SRE workbook adds the rule that makes this work on a small team: "By default, the IC assumes all roles that have not been delegated yet." On a quiet night that means one person holds everything. The commander's job is then to give roles away as soon as a second person arrives, starting with operations, so their own hands come off the keyboard.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>PagerDuty's roles, and what NIST asks for<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>PagerDuty's public incident response documentation names a slightly longer list: Incident Commander, Deputy, Scribe, Subject Matter Expert, Customer Liaison and Internal Liaison. The Scribe "documents the timeline of an incident as it progresses". The Deputy backs up the commander and takes over if needed. The Subject Matter Experts are the people who actually fix things. The two liaisons split the SRE book's communication role into an outward face and an inward one.</p>
+        <p>For a data team, the split is useful. Quarrybank's outward voice on the leaked table must be the privacy partner, because what is said to a regulator or a vendor has legal weight. The inward voice, to regional managers and the 40 people on the sales email, can be the commander or a delegate.</p>
+        <p>NIST's guidance asks for less, and it asks it quietly. RS.MA-01 C1: "Consider designating an incident lead for each incident." One named lead is the floor. Everything above is how you scale that lead when one person cannot hold it.</p>
+        <div class="callout tip">
+          <p><strong>Name roles, not titles.</strong> The roles card says "commander", not "head of data". The head of data is the default holder, and the card says how command passes when they are asleep, on leave, or the cause of the incident.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers why the most senior person should not run it</span>
+      <h2>Rank is not command</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">PagerDuty's incident commander training says it bluntly: the commander becomes "the highest ranking individual on any major incident call, regardless of their day-to-day rank." It goes further: the commander may remove anyone disruptive from the call "(even if it's the CEO)". The instinct on most data teams runs the other way. The most senior person joins, starts asking questions, and the call reorganises itself around answering them.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 350" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two panels. Before, in red: the call is run by the most senior person. The CEO, the head of data and the engineer all have arrows into the warehouse; nobody is writing and nobody is telling anyone outside. After, in green: a commander who fixes nothing sits at the top with three arrows down, to operations, the only arrow into the warehouse, to the scribe, who writes the living document, and to communication, who tells the consumers.">
+        <defs>
+          <filter id="ia3bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="23" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia3bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ia3bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia3bH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia3bL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia3bS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia3bB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ia3bR { font: 800 12px Inter, sans-serif; fill: #991B1B; }
+          .ia3bW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .ia3bN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia3bR" x="40" y="26">BEFORE · run by the most senior person</text>
+        <text class="ia3bH" x="460" y="26">AFTER · run by a commander who fixes nothing</text>
+
+        <g filter="url(#ia3bSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="40" width="400" height="260" rx="12" transform="rotate(-0.4 230 170)" fill="#FEF2F2" stroke="#FCA5A5"/>
+          <rect x="450" y="40" width="400" height="260" rx="12" transform="rotate(0.4 650 170)" fill="#ECF7F0" stroke="#075A2C"/>
+
+          <rect x="50" y="64" width="110" height="40" rx="8" fill="#FFFFFF" transform="rotate(-2 105 84)"/>
+          <rect x="176" y="64" width="110" height="40" rx="8" fill="#FFFFFF" transform="rotate(1.5 231 84)"/>
+          <rect x="302" y="64" width="110" height="40" rx="8" fill="#FFFFFF" transform="rotate(-1 357 84)"/>
+          <path d="M105 108 L194 172" marker-end="url(#ia3bAr)"/>
+          <path d="M231 108 L231 172" marker-end="url(#ia3bAr)"/>
+          <path d="M357 108 L268 172" marker-end="url(#ia3bAr)"/>
+          <rect x="150" y="178" width="162" height="44" rx="8" fill="url(#ia3bHc)"/>
+
+          <rect x="585" y="60" width="130" height="44" rx="8" fill="#075A2C"/>
+          <path d="M616 108 L530 146" marker-end="url(#ia3bAr)"/>
+          <path d="M650 108 L650 146" marker-end="url(#ia3bAr)"/>
+          <path d="M684 108 L772 146" marker-end="url(#ia3bAr)"/>
+          <rect x="468" y="150" width="116" height="40" rx="8" fill="#FFFFFF" transform="rotate(-1.5 526 170)"/>
+          <rect x="596" y="150" width="110" height="40" rx="8" fill="#FFFFFF" transform="rotate(1 651 170)"/>
+          <rect x="718" y="150" width="116" height="40" rx="8" fill="#FFFFFF" transform="rotate(-1 776 170)"/>
+          <path d="M526 194 L526 222" marker-end="url(#ia3bAr)"/>
+          <path d="M651 194 L651 222" marker-end="url(#ia3bAr)"/>
+          <path d="M776 194 L776 222" marker-end="url(#ia3bAr)"/>
+          <rect x="468" y="228" width="116" height="36" rx="8" fill="url(#ia3bHc)"/>
+          <rect x="596" y="228" width="110" height="36" rx="8" fill="#FFFFFF"/>
+          <rect x="718" y="228" width="116" height="36" rx="8" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ia3bL" x="64" y="89">CEO</text>
+        <text class="ia3bL" x="190" y="89">head of data</text>
+        <text class="ia3bL" x="316" y="89">engineer</text>
+        <text class="ia3bB" x="164" y="198">WAREHOUSE</text>
+        <text class="ia3bL" x="164" y="214">three people editing</text>
+        <text class="ia3bR" x="50" y="252">nobody writing, nobody telling</text>
+        <text class="ia3bS" x="50" y="272">everyone fixing, so no one holds the picture</text>
+
+        <text class="ia3bW" x="600" y="87">COMMANDER</text>
+        <text class="ia3bL" x="480" y="175">operations</text>
+        <text class="ia3bL" x="610" y="175">scribe</text>
+        <text class="ia3bL" x="732" y="175">comms</text>
+        <text class="ia3bB" x="480" y="251">WAREHOUSE</text>
+        <text class="ia3bL" x="610" y="251">living doc</text>
+        <text class="ia3bL" x="732" y="251">consumers</text>
+        <text class="ia3bS" x="468" y="286">one hand on the system, one pen, one voice out</text>
+
+        <text class="ia3bN" x="30" y="332">The senior person is not the problem. Running the call while also fixing and asking is the problem.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - before, three arrows hit the warehouse and none leave the room; after, one does each.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What the commander does with repair work<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>PagerDuty's roles page has the shortest rule on the subject: "Delegate all repair actions, the Incident Commander is NOT a resolver." The capital letters are theirs, and they are there because the temptation is constant. The commander usually knows the system well, often better than the engineer at the keyboard. The moment they open a query window, though, the picture they were holding stops being updated, and the call has no centre.</p>
+        <p>The training also says what the commander does instead: decide. "Making the "wrong" decision is better than making no decision." On a data call the decisions are concrete: pause the partner extract or not, revoke the public link now or after a snapshot, tell the 40 sales-email recipients tonight or in the morning. A commander who decides and logs the reason can be corrected later. A call that never decides keeps spreading the data while it debates.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. On the bad load, the CEO joined the call within the hour, as most leaders would. In the version without roles, the call became a series of answers to the CEO's questions while three people queried the same partition. In the version with roles, the head of data, as commander, gave the CEO a two-line status, named the on-call engineer as the only person touching the warehouse, and asked the CEO to hold questions for the next scheduled update.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The honest disagreement: rank versus skill<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>None of this means command never moves to someone more senior. PagerDuty's training is careful: "the arrival of a more qualified person does NOT necessarily mean a change in incident command." Not necessarily is not never. And the SRE workbook's own case study shows command passing to a more experienced SRE during the incident, deliberately, because their experience was what the incident needed.</p>
+        <p>So the two sources are not saying the same thing, and it is worth being exact about where they differ. PagerDuty's rule is about rank: a title does not take command. The workbook shows that experience can be a good reason to hand command over. The workbook does not set a rule about seniority either way. Read together, the working norm is: command can move for skill, through an explicit handover, and never because someone important has joined the call.</p>
+        <div class="callout tip">
+          <p><strong>Give your CEO a seat, not the chair.</strong> Before the next incident, tell senior leaders what they will get: a status at a set cadence and a named commander. Most senior people interrupt a call because they do not know when the next update is coming.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers one owner and an explicit handover</span>
+      <h2>One commander at a time, handed over out loud</h2>
+      <span class="tag concept">4 min live</span>
+    </div>
+    <p class="lede">An incident that runs past a working shift will change commanders, and the handover is where the picture is most often lost. The SRE book's rule is simple: the outgoing commander stays in command until the incoming one acknowledges, out loud, with a sentence like "You're now the incident commander, okay?" Until that answer comes back, the old commander is still the commander.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A handover on a timeline. Commander A holds command from the declaration. At the four-hour rotation, A briefs B, then asks: you're now the incident commander, okay? B acknowledges, and only at the acknowledgement does command pass. The scribe logs the change and announces it. A stays reachable after handing over. There is never a moment with two commanders or none.">
+        <defs>
+          <filter id="ia3cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="37" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia3cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#075A2C" stroke-width="1.4" opacity=".6"/></pattern>
+          <marker id="ia3cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia3cH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia3cL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia3cS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia3cW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .ia3cA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ia3cN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia3cH" x="40" y="26">A HANDOVER AT THE FOUR-HOUR ROTATION</text>
+
+        <g filter="url(#ia3cSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="60" y="52" width="500" height="30" rx="6" fill="#075A2C"/>
+          <rect x="560" y="52" width="270" height="30" rx="6" fill="url(#ia3cHc)"/>
+          <rect x="440" y="104" width="120" height="30" rx="6" fill="#ECF7F0"/>
+          <rect x="560" y="104" width="270" height="30" rx="6" fill="#1C7240"/>
+          <path d="M50 160 L850 160" marker-end="url(#ia3cAr)"/>
+          <path d="M60 150 L60 170"/>
+          <path d="M440 140 L440 180"/>
+          <path d="M500 140 L500 180"/>
+          <circle cx="560" cy="160" r="11" fill="#F2A900"/>
+          <path d="M620 140 L620 180"/>
+        </g>
+
+        <text class="ia3cW" x="74" y="72">commander A · head of data</text>
+        <text class="ia3cA" x="574" y="72">A stays reachable, not in charge</text>
+        <text class="ia3cA" x="452" y="124">B listens</text>
+        <text class="ia3cW" x="574" y="124">commander B · deputy</text>
+
+        <text class="ia3cS" x="60" y="196">0h00 declared</text>
+        <text class="ia3cL" x="404" y="198">1 brief</text>
+        <text class="ia3cL" x="476" y="216">2 ask</text>
+        <text class="ia3cH" x="540" y="198">3 ack</text>
+        <text class="ia3cL" x="610" y="216">4 log</text>
+
+        <text class="ia3cL" x="60" y="252">1 · A briefs B: current state, open actions, who holds which role, next update due.</text>
+        <text class="ia3cL" x="60" y="274">2 · A asks the question out loud: "You're now the incident commander, okay?"</text>
+        <text class="ia3cL" x="60" y="296">3 · B says yes. Command passes here, and only here.</text>
+        <text class="ia3cL" x="60" y="318">4 · The scribe logs the time and the channel is told who commands now.</text>
+
+        <text class="ia3cN" x="40" y="356">Amber: the one moment that matters. Before it, A commands. After it, B does. Never both, never neither.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - command passes at the acknowledgement, not at the briefing and not when someone new joins.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why the acknowledgement is the whole trick<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The failure the acknowledgement prevents is quiet. The outgoing commander assumes the briefing was the handover and goes to bed. The incoming one assumes they are still being briefed and waits. For twenty minutes nobody is deciding anything, and on a data incident that is twenty minutes of the bad table being read. A single spoken question and a spoken yes closes the gap, and the scribe writing the time down makes it checkable afterwards.</p>
+        <p>The SRE workbook's case study also shows the rhythm: the team rotated "on-call engineers and the IC every four hours". Long incidents are a stamina problem as much as a skill problem. A tired commander makes slower decisions, and a planned four-hour rotation means the handover is a routine rather than an emergency.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>One owner, from declaration to close<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>One commander at a time.</strong> Not a commander and a "co-lead". Two people who both think they decide is the same as nobody deciding.</li>
+          <li><strong>The deputy is the default next commander.</strong> PagerDuty's Deputy role exists so the handover has a named destination before anyone is tired.</li>
+          <li><strong>The commander can be the cause.</strong> If the head of data approved the vendor share that leaked the table, command passes to the deputy at declaration. That is not a punishment; it removes a conflict from the call.</li>
+          <li><strong>Close is a handover too.</strong> When the incident closes, the commander hands follow-up actions to named owners. Writing up the incident belongs to the planned runbooks and postmortems course (<a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe hub ↗</a>).</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Staff the room, then watch the deadlines move</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">No code. Run the bench with a declare rule only, then with severity and roles, and read why the deadlines change. Then fill Quarrybank's roles card for the leaked table, page 3 of its incident response plan, and do the same for your own team.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two timelines from the first signal, using the bench's stated rules. With a declare rule only, R1, the incident is declared at 0h15 and then waits 240 minutes because nobody owns assessment; it is assessed at 4h15 and contained at 6h15. With severity and roles, R2, it is declared at 0h15, assessed 20 minutes later at 0h35 and contained at 2h35. The formal notice moves from declare plus 120 hours, when legal finds out, to assess plus 24 hours, owned by the privacy partner.">
+        <defs>
+          <filter id="ia3dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia3dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#075A2C" stroke-width="1.4" opacity=".6"/></pattern>
+          <marker id="ia3dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia3dH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia3dL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia3dS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia3dA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ia3dN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia3dH" x="40" y="26">HOURS AFTER THE FIRST SIGNAL, BY THE BENCH'S STATED RULES</text>
+
+        <text class="ia3dH" x="40" y="64">R1 · declare rule only</text>
+        <text class="ia3dA" x="130" y="88">0h15 declare</text>
+        <text class="ia3dA" x="542" y="88">4h15 assess</text>
+        <text class="ia3dA" x="748" y="88">6h15 contained</text>
+
+        <text class="ia3dH" x="40" y="184">R2 · severity and roles</text>
+        <text class="ia3dA" x="130" y="208">0h15 declare</text>
+        <text class="ia3dA" x="370" y="208">2h35 contained</text>
+
+        <g filter="url(#ia3dSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M100 136 L840 136" stroke="#C3D3C8" marker-end="url(#ia3dAr)"/>
+          <rect x="126" y="98" width="412" height="26" rx="5" fill="#F2A900"/>
+          <rect x="538" y="98" width="206" height="26" rx="5" fill="#FFFFFF"/>
+          <path d="M126 94 L126 128"/>
+          <path d="M538 94 L538 128"/>
+          <path d="M744 94 L744 128"/>
+
+          <path d="M100 256 L840 256" stroke="#C3D3C8" marker-end="url(#ia3dAr)"/>
+          <rect x="126" y="218" width="34" height="26" rx="4" fill="url(#ia3dHc)"/>
+          <rect x="160" y="218" width="206" height="26" rx="5" fill="#FFFFFF"/>
+          <path d="M126 214 L126 248"/>
+          <path d="M160 214 L160 248"/>
+          <path d="M366 214 L366 248"/>
+        </g>
+
+        <text class="ia3dL" x="140" y="116">240 min: nobody owns assessment</text>
+        <text class="ia3dS" x="550" y="116">contain +120 min</text>
+        <text class="ia3dS" x="172" y="236">contain +120 min</text>
+        <text class="ia3dA" x="140" y="274">0h35 assess: 20 min after declaring</text>
+
+        <text class="ia3dL" x="40" y="310">Formal notice, R1: declare + 120 hours, when legal finds out. Leak: GDPR and PDPA both missed.</text>
+        <text class="ia3dL" x="40" y="330">Formal notice, R2: assess + 24 hours, owned by the privacy partner. Leak: both met.</text>
+
+        <text class="ia3dN" x="40" y="362">Constructed Quarrybank example, measured on the bench. Rails run from the first signal, drawn to scale.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - roles do not make anyone faster at fixing; they remove the hours where nobody knew it was their job.</figcaption>
+    </figure>
+
+    <div data-ird-bench="lite" data-presets="r1,r2" data-start="r1"></div>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Run the bench on R1, declare rule only.</strong> This is where session 1 left Quarrybank. Read the headline: 10 consumers and 4 decisions used bad data, 7 consumers were never told, and 0 of 4 notice deadlines were met. Note the containment time in the table: 6h15 after the first signal on all three incidents.</p>
+      </div>
+      <div class="step">
+        <p><strong>Switch to R2, severity and roles.</strong> Same quarter, same events. The headline falls to 7 consumers and 3 decisions, never told falls from 7 to 4, deadlines met rise from 0 of 4 to 3 of 4, and containment moves from 6h15 to 2h35 after the first signal. People who read bad data fall from 62 to 17.</p>
+      </div>
+      <div class="step">
+        <p><strong>Explain the move from the bench's rules, not from intuition.</strong> The bench models plan times by stated rules. Without roles, assessment happens 240 minutes after declaring, because nobody has been told it is their job; with roles it happens 20 minutes after. Containment follows assessment by 120 minutes in both rungs, so the whole saving is the assessment gap. The deadlines move for a different reason: with roles, the privacy partner owns the formal notice and sends it within 24 hours of assessment; without roles it waits until legal finds out, 120 hours after declaring. That is the difference between the leaked table missing both the GDPR and PDPA deadlines and meeting both.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · what moved, R1 to R2</span>                       R1 declare only    R2 severity and roles
+consumers + decisions  10 + 4             7 + 3
+never told             7                  4
+deadlines met          0 of 4             3 of 4
+contained from signal  6h15               2h35
+assess after declare   240 min            20 min
+formal notice          declare + 120h     assess + 24h, privacy partner</div>
+      </div>
+      <div class="step">
+        <p><strong>Find the deadline that still fails.</strong> Three of four are met on R2. The one still missed is the partner's contract notice on the bad load: the partner extract and the forecast model are still never told. Roles gave the notice an owner; they did not tell that owner who read the bad rows. That is lineage, and it arrives in session 4 and responder session 6.</p>
+      </div>
+      <div class="step">
+        <p><strong>Fill the roles card for the leaked table.</strong> Page 3 of Quarrybank's incident response plan. One line per role. The "never does" column matters as much as the "does" column.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · plan, leader page 3, roles card</span>QUARRYBANK INCIDENT RESPONSE PLAN · leader page 3 · roles card
+Incident: customer table (18,400 rows) behind a public link and a vendor share
+
+ROLE           WHO AT QUARRYBANK      DOES                               NEVER DOES                    HANDS OVER HOW
+Commander      head of data           holds state, decides, sets         touches the warehouse;        briefs deputy, asks "You're now
+                                      update times, assigns roles        takes orders from rank        the incident commander, okay?",
+                                                                                                       waits for yes; scribe logs it
+Deputy         analytics manager      runs the call if commander         a second set of decisions     becomes commander on handover;
+                                      is the cause or off shift          while commander holds it      rotates every four hours
+Operations     on-call engineer       the only hands: snapshot,          talks to the vendor or        hands keys and state to next
+                                      revoke link, revoke share          regulator; drops the table    on-call through the commander
+Scribe         data analyst           living incident document,          debugs; edits the record      hands the document, not a summary
+                                      every decision in UTC              after the fact
+Communication  privacy partner        formal notice within 24h of        sends anything before the     hands open notices and their
+(outside)                             assess; vendor and regulator       commander agrees the facts    deadlines to the next commander
+Liaison        finance controller     board and longer-term issues       contacts customers directly   files follow-ups with owners
+(inside)
+
+Until a role is delegated, the commander holds it.</div>
+      </div>
+      <div class="step">
+        <p><strong>Fill it for your own team.</strong> Copy the card and replace every name with a real person on your team. Any row where the honest answer is "the same person as the commander" is a role that will not be done during your next incident.</p>
+      </div>
+    </div>
+
+    <div class="prompt-box bad"><span class="label">The roles card most teams actually have</span>Whoever is most senior on the call leads. Everyone helps fix it. We will update stakeholders when we know more.</div>
+
+    <div class="callout tip">
+      <p><strong>"Everyone helps fix it" is how a leaked table loses its evidence.</strong> Two people revoking access in two different ways, with nobody writing down which door was closed when, leaves you unable to say what was exposed for how long.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 4</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li>Finish your own roles card and show it to the person who would be your deputy. Ask them which handover step they have never actually done.</li>
+      <li>Tell the two most senior people likely to join your next incident call what they will get from it: a named commander and a status at a set cadence. Write down their reaction.</li>
+      <li>Find the person who owns breach notification in your organisation, the one you named in session 1, and ask whether they would want to be on the call in the first hour. Put their answer on the card.</li>
+      <li>Look back at your last incident call or chat thread. Count how many people changed the system during it. If the answer is more than one, write down who decided that.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">The CEO joins Quarrybank's incident call about the bad load. Should the CEO take over running it?</p>
+      <button class="qopt" type="button">A · Yes, the most senior person on the call should always lead it</button>
+      <button class="qopt" type="button">B · Yes, but only if the incident is high severity</button>
+      <button class="qopt" type="button">C · No: the commander outranks everyone on the call "regardless of their day-to-day rank", and command moves only through an explicit handover, for skill, never for title</button>
+      <p class="qwhy">PagerDuty's commander training is explicit, and it even allows removing the CEO from the call. Command can still move to someone more experienced, as in the SRE workbook's case study, but by handover and acknowledgement, not by arrival.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">The commander knows exactly which query would find the duplicated partition. What should they do with that repair work?</p>
+      <button class="qopt" type="button">A · Delegate it to operations: "the Incident Commander is NOT a resolver", and their job is to hold the state and decide</button>
+      <button class="qopt" type="button">B · Run the query themselves, since it is faster than explaining it</button>
+      <button class="qopt" type="button">C · Run it together with the on-call engineer so two people check the result</button>
+      <p class="qwhy">A commander at the keyboard stops updating the picture. Two people modifying the system at once is the failure the SRE book's "only group modifying the system" rule exists to prevent.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">On the bench, what happens to deadlines met when Quarrybank moves from R1 (declare rule) to R2 (severity and roles)?</p>
+      <button class="qopt" type="button">A · Nothing, because roles do not change how fast anything is fixed</button>
+      <button class="qopt" type="button">B · From 0 of 4 to 3 of 4, because assessment comes 20 minutes after declaring instead of 240 and the privacy partner owns the formal notice</button>
+      <button class="qopt" type="button">C · From 0 of 4 to 4 of 4, because every notice now has an owner</button>
+      <p class="qwhy">The partner's contract notice on the bad load is still missed on R2: the notice has an owner, but nobody has traced which consumers read the bad rows. Lineage closes that gap later.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Google SRE book, Managing Incidents (read 2026-11-10)</span><span class="note">The four roles in their own words; the handoff that waits for "You're now the incident commander, okay?"</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Google SRE workbook, Incident Response (read 2026-11-10)</span><span class="note">"By default, the IC assumes all roles that have not been delegated yet"; the case study's four-hour rotation and its experience-based change of command</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">PagerDuty Incident Response documentation, roles and IC training (read 2026-11-10)</span><span class="note">IC, Deputy, Scribe, SME, liaisons; "NOT a resolver"; "regardless of their day-to-day rank"; the wrong decision over no decision</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, RS.MA-01 (read 2026-11-10)</span><span class="note">"Consider designating an incident lead for each incident."</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Bench numbers (10 + 4 to 7 + 3, 7 to 4 never told, 0 of 4 to 3 of 4, 6h15 to 2h35)</span><span class="note">Computed in your browser by replaying a constructed event log under stated rules</span></div>
+      <div class="covered-row"><span class="status pill inkpill">·</span><span class="name">Rota design</span><span class="note">Not covered here: reliability a3 owns who is on call (<a href="https://phoebefu6.github.io/learn-data-reliability-with-phoebe/courses/a3-on-call-is-a-design.html">On-call is a design ↗</a>)</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 3 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Four jobs</b><span>Command holds the state. Operations is the only hand on the system. Communication faces out. Planning handles the longer term.</span></div>
+      <div class="cheat-item"><b>Undelegated means yours</b><span>The commander holds every role not yet given away. Give operations away first.</span></div>
+      <div class="cheat-item"><b>Not a resolver</b><span>The commander delegates all repair work and decides. A wrong decision beats no decision.</span></div>
+      <div class="cheat-item"><b>Rank is not command</b><span>The commander outranks everyone on the call. Command moves for skill, by handover, never for a title.</span></div>
+      <div class="cheat-item"><b>Handover out loud</b><span>Brief, ask "You're now the incident commander, okay?", wait for yes, log the time.</span></div>
+      <div class="cheat-item"><b>Quarrybank on the bench</b><span>Roles: 10 + 4 to 7 + 3, never told 7 to 4, deadlines 0 of 4 to 3 of 4, contained 2h35 not 6h15.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>The communication role now has an owner. Session 4 writes what that owner sends: who is told what and when, a holding statement, an executive update and a partner note, with the regulator's clock treated as a fixed input from the privacy partner.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Leader session 3 of 6 · learn-data-incident-response-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a2-severity-you-can-defend.html">← Prev: Severity you can defend</a> &nbsp;·&nbsp; <a href="a4-telling-people-before-they-ask.html">Next: Telling people before they ask →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/ird-sample.js?v=1"></script>
+<script src="../assets/ird-live.js?v=2"></script>
+</body>
+</html>

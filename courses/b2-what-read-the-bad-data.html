@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Responder session 2 of 8. Trace every table, dashboard, extract, email, model and decision that read Quarrybank's bad load, see exposure grow with containment time, and build the consumer trace on the incident clock.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="What read the bad data - learn incident response for data teams with phoebe">
+<meta property="og:description" content="Responder session 2 of 8. The consumer trace is the list of everyone you will eventually have to tell.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/courses/b2-what-read-the-bad-data.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What read the bad data - learn incident response for data teams with phoebe">
+<meta name="twitter:description" content="A dashboard refreshes when you fix the source. An email in 40 inboxes does not.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Responder session 2 · What read the bad data - learn incident response for data teams with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-data-incident-response-with-phoebe</a> / Responder session 2 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Incident Response for Data Teams with Phoebe · Responder session 2 of 8</div>
+    <h1>What read the <span class="accent">bad data</span></h1>
+    <p class="sub">The record is open and the partition is quarantined. The next question arrives within minutes, usually from the head of data: who has seen this? Tonight you answer it properly. You trace every table, dashboard, extract, email and model that copied Quarrybank's bad load since 02:00Z, sort the copies that fix themselves from the ones that stay wrong until someone is told, and then go looking for the things no lineage graph will ever show you: the decisions people already made on the wrong number.</p>
+    <div class="chip-row">
+      <span class="chip level">🟡 Building</span>
+      <span class="chip audience">Data and analytics engineers on call</span>
+      <span class="chip audience">Whoever runs the lineage query</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Copies, exposure, decisions</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: the consumer trace</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>The trace is the list of everyone you will eventually tell</h2>
+    </div>
+    <p class="lede">A consumer trace sounds like an engineering chore. It is really the first draft of three later jobs: what you stop in session 3, what you correct and check in session 5, and who you notify in session 6. Every name missing from the trace tonight is a person who will hear about the problem from someone other than you, or not at all.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A consumer trace for Quarrybank's bad load, with every copy sorted into "refreshes at correction" or "must be told", the decisions written down next to the copies, and page 2 of the responder half of the plan: a template table you can fill in under pressure.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the list matters more than the graph<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Lineage tools draw beautiful graphs. A graph is not what you need at 03:00. You need a list: each thing that read the bad rows, when it read them, whether it will clean itself up when the source is fixed, and who owns it. The graph is one input to that list, and as Part 3 shows, not the only one.</p>
+        <p>The SRE book asks the incident commander to keep a living incident document. The consumer trace lives inside it, under "consumers reached so far", and it grows while the incident runs. Write each consumer down the moment you find it, with the proof of how you found it, rather than saving the list for the end.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. The bad load was found by a volume monitor at 02:40Z. By then the revenue dashboard, the finance mart, the weekly partner extract and the forecast model retrain had all read the duplicated partition. Nobody on call knew the partner extract had already left, because nobody had asked what ran after the load.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Six kinds of consumer<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Tables</strong> built from the bad table: marts, aggregates, snapshots.</li>
+          <li><strong>Dashboards</strong> that query those tables, live or on a schedule.</li>
+          <li><strong>Extracts</strong> sent out of the warehouse: files to partners, feeds to other systems.</li>
+          <li><strong>Scheduled emails</strong> that render a number into a message and send it to a list.</li>
+          <li><strong>Models</strong> trained or scored on the bad rows, which carry the error in their weights or outputs.</li>
+          <li><strong>Decisions</strong> people made after reading any of the above. These are the hardest to find and the most expensive to miss.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the consumer trace since the bad write</span>
+      <h2>Every copy since 02:00Z, sorted by how it clears</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">Start the trace at the bad write, not at the signal. Everything that read the partition after 02:00Z is a candidate, including the things that read it in the forty minutes before any alarm. Then sort each one by the only question that changes your next move: when the source is corrected, does this copy correct itself, or does it stay wrong until a person is told?</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 410" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The bad load's lineage. The duplicated partition, written at 02:00Z, is copied by six consumers. Three refresh when the source is corrected: the revenue dashboard at 0h15 then hourly, the finance mart at 0h20, the executive dashboard at 4h00. Three are copies that only clear when their owner is told: the partner extract at 0h30, the forecast model retrain at 0h35, and the sales email to 40 people at 5h00. Times are after the bad write.">
+        <defs>
+          <filter id="ib2aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib2aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ib2aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib2aH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib2aL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib2aS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib2aB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ib2aA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ib2aN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ib2aSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="320" y="34" width="240" height="64" rx="10" fill="url(#ib2aHc)" transform="rotate(-0.8 440 66)"/>
+          <path d="M400 102 C360 120 280 128 240 146" marker-end="url(#ib2aAr)"/>
+          <path d="M480 102 C520 120 600 128 640 146" marker-end="url(#ib2aAr)"/>
+          <rect x="40" y="152" width="390" height="208" rx="12" fill="#ECF7F0" stroke="#075A2C" transform="rotate(-0.4 235 256)"/>
+          <rect x="450" y="152" width="390" height="208" rx="12" fill="#FFFFFF" transform="rotate(0.4 645 256)"/>
+          <rect x="60" y="190" width="350" height="38" rx="7" fill="#FFFFFF" transform="rotate(-0.6 235 209)"/>
+          <rect x="60" y="238" width="350" height="38" rx="7" fill="#FFFFFF" transform="rotate(0.5 235 257)"/>
+          <rect x="60" y="286" width="350" height="38" rx="7" fill="#FFFFFF" transform="rotate(-0.4 235 305)"/>
+          <rect x="470" y="190" width="350" height="38" rx="7" fill="#F2A900" transform="rotate(0.6 645 209)"/>
+          <rect x="470" y="238" width="350" height="38" rx="7" fill="#F2A900" transform="rotate(-0.5 645 257)"/>
+          <rect x="470" y="286" width="350" height="38" rx="7" fill="#F2A900" transform="rotate(0.4 645 305)"/>
+        </g>
+
+        <text class="ib2aH" x="440" y="60" text-anchor="middle">duplicated partition</text>
+        <text class="ib2aB" x="440" y="80" text-anchor="middle">bad write 02:00Z</text>
+
+        <text class="ib2aA" x="60" y="178">✓ REFRESHES AT CORRECTION</text>
+        <text class="ib2aL" x="74" y="214">revenue dashboard</text>
+        <text class="ib2aS" x="396" y="214" text-anchor="end">0h15, then hourly</text>
+        <text class="ib2aL" x="74" y="262">finance mart</text>
+        <text class="ib2aS" x="396" y="262" text-anchor="end">0h20</text>
+        <text class="ib2aL" x="74" y="310">executive dashboard</text>
+        <text class="ib2aS" x="396" y="310" text-anchor="end">4h00</text>
+        <text class="ib2aS" x="60" y="346">clear when the source is fixed and re-run</text>
+
+        <text class="ib2aH" x="470" y="178">COPIES · CLEAR ONLY WHEN TOLD</text>
+        <text class="ib2aL" x="484" y="214">partner extract</text>
+        <text class="ib2aL" x="806" y="214" text-anchor="end">0h30</text>
+        <text class="ib2aL" x="484" y="262">forecast model retrain</text>
+        <text class="ib2aL" x="806" y="262" text-anchor="end">0h35</text>
+        <text class="ib2aL" x="484" y="310">sales email, 40 people</text>
+        <text class="ib2aL" x="806" y="310" text-anchor="end">5h00</text>
+        <text class="ib2aS" x="470" y="346">stay wrong until their owner hears from you</text>
+
+        <text class="ib2aN" x="40" y="390">Copy times after the bad write. Constructed Quarrybank example. Lineage query mechanics: observability b7.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - four of the six copies were made in the first 35 minutes, before anyone was paged.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Refreshes at correction, or must be told<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A dashboard that queries the mart shows the right number the next time it refreshes after the fix. A file already delivered to the partner does not. A model already retrained on doubled revenue does not. An email already sitting in 40 inboxes certainly does not. Those copies left the reach of your warehouse when they were made, and the only way to clear them is to reach their owner.</p>
+        <table class="clean">
+          <thead><tr><th>Consumer</th><th>Kind</th><th>Copy time</th><th>Clears how</th></tr></thead>
+          <tbody>
+            <tr><td>Revenue dashboard</td><td>dashboard</td><td>0h15, then hourly</td><td>refreshes at correction</td></tr>
+            <tr><td>Finance mart</td><td>table</td><td>0h20</td><td>refreshes at correction (re-run)</td></tr>
+            <tr><td>Partner extract</td><td>extract</td><td>0h30</td><td>must be told</td></tr>
+            <tr><td>Forecast model retrain</td><td>model</td><td>0h35</td><td>must be told</td></tr>
+            <tr><td>Executive dashboard</td><td>dashboard</td><td>4h00</td><td>refreshes at correction</td></tr>
+            <tr><td>Sales email, 40 people</td><td>scheduled email</td><td>5h00</td><td>must be told</td></tr>
+          </tbody>
+        </table>
+        <p>Times are after the bad write at 02:00Z, not after the signal. Constructed Quarrybank example.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Running the lineage query is not this session's job<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>How you get the downstream list out of your warehouse, catalogue or orchestrator, and how far you trust it, is taught in the observability course's <a href="https://phoebefu6.github.io/learn-data-observability-with-phoebe/courses/b7-lineage-blast-radius.html">lineage session ↗</a>. Here you take its output as an input and do the incident work on top of it: add the copy times, sort by how each one clears, name an owner, and keep the proof.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. The lineage query returned the mart and both dashboards straight away. The partner extract and the model retrain showed up only when the on-call engineer asked the orchestrator what had run after 02:00Z. Two query results, one list, two proof links.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers exposure as a number that grows every hour</span>
+      <h2>Exposure grows for as long as the door is open</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The bad load's list grows with every scheduled job that fires before you stop it. The leaked table shows the same thing as a count: the longer it stays reachable, the more rows somebody fetches. NIST is honest about how hard this is: "Determining the incident's magnitude is often one of the most challenging aspects" of the work. It is also the number everyone asks for first.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 384" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Rows of the leaked customer table exposed against containment time measured from the first signal, four bench points: R5 contained at 0h25, 7,600 rows; R3 at 0h50, 8,400 rows; R2 at 2h35, 12,800 rows; R1 at 6h15, 18,400 rows, the whole table.">
+        <defs>
+          <filter id="ib2bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib2bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".6"/></pattern>
+          <marker id="ib2bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib2bH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib2bL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib2bS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib2bB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ib2bV { font: 800 16px Inter, sans-serif; fill: #053D1E; }
+          .ib2bN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ib2bSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M90 50 L90 300 L840 300" marker-end="url(#ib2bAr)"/>
+          <path d="M96 84 L722 84" stroke="#4A5F52" stroke-dasharray="6 5"/>
+          <path d="M133 300 L133 306"/>
+          <path d="M177 300 L177 306"/>
+          <path d="M359 300 L359 306"/>
+          <path d="M742 300 L742 306"/>
+          <circle cx="133" cy="209" r="7" fill="#ECF7F0"/>
+          <circle cx="177" cy="199" r="7" fill="#ECF7F0"/>
+          <circle cx="359" cy="146" r="7" fill="url(#ib2bHc)"/>
+          <circle cx="742" cy="84" r="8" fill="#F2A900"/>
+        </g>
+
+        <text class="ib2bH" x="100" y="40">ROWS EXPOSED · leaked customer table</text>
+        <text class="ib2bS" x="100" y="72">the whole table, 18,400 rows</text>
+
+        <text class="ib2bV" x="758" y="90">18,400</text>
+        <text class="ib2bL" x="742" y="116" text-anchor="middle">R1</text>
+        <text class="ib2bV" x="359" y="128" text-anchor="middle">12,800</text>
+        <text class="ib2bL" x="380" y="160">R2</text>
+        <text class="ib2bV" x="196" y="186">8,400</text>
+        <text class="ib2bL" x="196" y="204">R3</text>
+        <text class="ib2bV" x="133" y="238" text-anchor="middle">7,600</text>
+        <text class="ib2bL" x="133" y="256" text-anchor="middle">R5</text>
+
+        <text class="ib2bS" x="90" y="320" text-anchor="middle">signal</text>
+        <text class="ib2bS" x="133" y="320" text-anchor="middle">0h25</text>
+        <text class="ib2bS" x="177" y="320" text-anchor="middle">0h50</text>
+        <text class="ib2bS" x="359" y="320" text-anchor="middle">2h35</text>
+        <text class="ib2bS" x="742" y="320" text-anchor="middle">6h15</text>
+        <text class="ib2bB" x="840" y="340" text-anchor="end">containment time, measured from the first signal</text>
+
+        <text class="ib2bN" x="40" y="368">Measured on the bench, constructed. The unknown address was already paging the public link before the 3h20 signal.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - same table, same leak: the only thing that changes the count is how long the door stays open.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why 18,400 and 7,600 are the same incident<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The leaked table is identical on every rung of the bench: 18,400 customer rows, shared through a public link and a vendor workspace share at 09:00Z on 24 February. An unknown address began paging the public link 3h10 after the share, a few hundred rows every few minutes, and kept going until the link was closed. So the number of rows exposed is not a property of the leak. It is a property of the response.</p>
+        <table class="clean">
+          <thead><tr><th>Plan on the bench</th><th>Contained, from the first signal</th><th>Rows exposed</th></tr></thead>
+          <tbody>
+            <tr><td>R1 Declare rule</td><td>6h15</td><td>18,400</td></tr>
+            <tr><td>R2 Severity and roles</td><td>2h35</td><td>12,800</td></tr>
+            <tr><td>R3 Containment playbook</td><td>0h50</td><td>8,400</td></tr>
+            <tr><td>R5 Rehearsed plan</td><td>0h25</td><td>7,600</td></tr>
+          </tbody>
+        </table>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. Even the best plan leaves 7,600 rows exposed, because the paging began before the access-log alert fired at 3h20. What happens before the first signal is detection, which the observability course owns. What happens after it is yours, and on this table it is the difference between 7,600 and every row.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Report the number with its time<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Because exposure moves, a bare number in a status update is wrong by the next update. Write it as "rows exposed as of 12:40Z: N, still open" or "rows exposed, final, door closed 12:50Z: N", with the access-log query as proof. The privacy partner needs the final figure and the time it became final; they own what it means under the GDPR's 72 hours and the PDPA's 3 calendar days, taught in the <a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/b7-breach-response.html">GDPR ↗</a> and <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/b7-breach-response.html">PDPA ↗</a> breach sessions. Closing the doors themselves is session 4.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers the trace you cannot get from lineage</span>
+      <h2>Decisions and inboxes never appear in the graph</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Warehouse lineage stops at the warehouse wall. It can tell you a job exported a file; it cannot tell you who opened it. It can tell you a dashboard queried the mart; it cannot tell you that a regional manager read it at 07:00 and placed an order. The most consequential consumers of bad data are people, and you find them by asking, not by querying.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Inside warehouse lineage: the bad partition feeds the finance mart, the revenue dashboard, the executive dashboard and the export jobs, all visible to the lineage query. Outside lineage: the replenishment order for two regions read from the revenue dashboard, the promotion budget cut in the other regions read from the executive dashboard, 40 inboxes holding the sales email, and the partner's system holding the extract, which fed the partner's volume rebate calculation. None of these appear in warehouse lineage unless the export is logged.">
+        <defs>
+          <filter id="ib2cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="67" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib2cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ib2cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib2cH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib2cL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib2cS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib2cR { font: 800 11px Inter, sans-serif; fill: #991B1B; }
+          .ib2cA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ib2cN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ib2cSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="46" width="800" height="128" rx="12" fill="#ECF7F0" stroke="#075A2C" transform="rotate(-0.2 440 110)"/>
+          <rect x="40" y="226" width="800" height="186" rx="12" fill="#FFFFFF" stroke-dasharray="7 5" transform="rotate(0.2 440 319)"/>
+          <rect x="56" y="104" width="140" height="46" rx="7" fill="url(#ib2cHc)" transform="rotate(-1.2 126 127)"/>
+          <rect x="226" y="104" width="120" height="46" rx="7" fill="#FFFFFF" transform="rotate(0.8 286 127)"/>
+          <rect x="366" y="104" width="150" height="46" rx="7" fill="#FFFFFF" transform="rotate(-0.6 441 127)"/>
+          <rect x="536" y="104" width="160" height="46" rx="7" fill="#FFFFFF" transform="rotate(0.7 616 127)"/>
+          <rect x="716" y="104" width="110" height="46" rx="7" fill="#FFFFFF" transform="rotate(-0.9 771 127)"/>
+          <path d="M126 102 L126 88 L771 88"/>
+          <path d="M286 88 L286 100" marker-end="url(#ib2cAr)"/>
+          <path d="M441 88 L441 100" marker-end="url(#ib2cAr)"/>
+          <path d="M616 88 L616 100" marker-end="url(#ib2cAr)"/>
+          <path d="M771 88 L771 100" marker-end="url(#ib2cAr)"/>
+          <path d="M446 152 C446 200 450 230 450 256" marker-end="url(#ib2cAr)"/>
+          <path d="M626 152 C626 200 630 230 630 256" marker-end="url(#ib2cAr)"/>
+          <path d="M760 152 C760 200 780 230 780 256" marker-end="url(#ib2cAr)"/>
+          <path d="M818 152 C860 220 856 330 842 350" marker-end="url(#ib2cAr)"/>
+          <path d="M702 362 L686 362" marker-end="url(#ib2cAr)"/>
+          <rect x="366" y="262" width="160" height="48" rx="7" fill="#FEF2F2" stroke="#991B1B" transform="rotate(-0.8 446 286)"/>
+          <rect x="546" y="262" width="160" height="48" rx="7" fill="#FEF2F2" stroke="#991B1B" transform="rotate(0.9 626 286)"/>
+          <rect x="724" y="262" width="110" height="48" rx="7" fill="#F2A900" transform="rotate(-1 779 286)"/>
+          <rect x="704" y="336" width="130" height="48" rx="7" fill="#F2A900" transform="rotate(0.8 769 360)"/>
+          <rect x="526" y="338" width="156" height="48" rx="7" fill="#FEF2F2" stroke="#991B1B" transform="rotate(-0.7 604 362)"/>
+        </g>
+
+        <text class="ib2cA" x="56" y="70">INSIDE LINEAGE · the query sees these</text>
+        <text class="ib2cL" x="68" y="132">bad partition</text>
+        <text class="ib2cL" x="238" y="132">finance mart</text>
+        <text class="ib2cL" x="378" y="132">revenue dashboard</text>
+        <text class="ib2cL" x="548" y="132">executive dashboard</text>
+        <text class="ib2cL" x="728" y="132">export jobs</text>
+
+        <text class="ib2cH" x="56" y="256">OUTSIDE LINEAGE</text>
+        <text class="ib2cS" x="56" y="276">copies and decisions the</text>
+        <text class="ib2cS" x="56" y="292">warehouse query cannot see,</text>
+        <text class="ib2cS" x="56" y="308">unless the export is logged</text>
+        <text class="ib2cS" x="56" y="340">found by asking owners,</text>
+        <text class="ib2cS" x="56" y="356">not by querying</text>
+
+        <text class="ib2cL" x="378" y="282">replenishment order</text>
+        <text class="ib2cR" x="378" y="300">DECISION · two regions</text>
+        <text class="ib2cL" x="558" y="282">promotion budget cut</text>
+        <text class="ib2cR" x="558" y="300">DECISION · other regions</text>
+        <text class="ib2cL" x="736" y="282">40 inboxes</text>
+        <text class="ib2cS" x="736" y="300" style="fill:#0D1F14">the sales email</text>
+        <text class="ib2cL" x="716" y="356">partner's system</text>
+        <text class="ib2cS" x="716" y="374" style="fill:#0D1F14">the weekly extract</text>
+        <text class="ib2cL" x="538" y="358">volume rebate</text>
+        <text class="ib2cR" x="538" y="376">DECISION · the partner</text>
+
+        <text class="ib2cN" x="40" y="436">Constructed Quarrybank example. Red is a decision made on the bad number; amber is a copy outside your reach.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the query ends at the dashed line; everything below it you find by asking.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Three decisions already made on the bad load<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>With no plan, the bad load reaches three decisions before anyone stops it: a replenishment order for the two regions whose revenue doubled, a promotion budget cut in the other regions that suddenly looked weak by comparison, and the partner's volume rebate calculation, which ran on the extract. None of those is a table. Each has an owner who acted in good faith on a wrong number and does not yet know it.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. With no plan the bad load reaches 5 consumers and 3 decisions, and none of the 5 is ever told. The partner's rebate is the one with a contract attached: the partner contract notice is missed on that rung.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>How to find what lineage cannot<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Ask the owner of every copy who uses it.</strong> The sales email owner knows the 40 recipients. The partner manager knows what the partner does with the extract.</li>
+          <li><strong>Read the dashboard access log for the window.</strong> Who opened the revenue dashboard between 02:15Z and the fix is a list of people who might have acted.</li>
+          <li><strong>Ask the leader running the incident to ask upward.</strong> "Was any order, budget or price set on this number since 02:00Z?" is a question a responder cannot answer and a head of data can.</li>
+          <li><strong>Log exports going forward.</strong> An export that writes its destination and recipients into the catalogue turns tomorrow's outside copy into an inside one.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Keep the list inside the living document<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The SRE book's "living incident document" is where the trace belongs, not in a spreadsheet on someone's laptop. As consumers are found, they are added; as they are notified or confirmed corrected, their row gains a time and a proof. Session 5 uses the same rows to check every copy reads corrected data, and session 6 sends the notices from them.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Trace the bad load on the bench</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">Open the bench on R0, no plan, and read what the bad load reached. Then switch to R2, severity and roles, and watch the list shrink, but not to zero. The two survivors are the lesson: copies made in the first 35 minutes after the bad write stay on the list whatever you do next.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The six copies of the bad load plotted by copy time after the bad write, against two lines: the signal at 0h40 and containment under R2, 2h35 after the signal, which is 3h15 after the bad write. Revenue dashboard 0h15, finance mart 0h20, partner extract 0h30 and forecast model 0h35 are copied before the signal. The executive dashboard at 4h00 and the sales email at 5h00 come after R2 containment and are prevented. Of the early copies, the dashboard and mart refresh at correction; the partner extract and the forecast model stay on the list.">
+        <defs>
+          <filter id="ib2dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="79" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib2dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.2" opacity=".5"/></pattern>
+          <marker id="ib2dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib2dL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib2dS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib2dB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ib2dA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ib2dH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib2dN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ib2dSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="250" y="66" width="211" height="208" fill="url(#ib2dHc)" stroke="none"/>
+          <path d="M293 62 L293 276" stroke-dasharray="5 4"/>
+          <path d="M461 62 L461 276" stroke="#075A2C" stroke-width="2.6"/>
+          <path d="M250 282 L644 282" marker-end="url(#ib2dAr)"/>
+          <circle cx="266" cy="90" r="6" fill="#FFFFFF"/>
+          <circle cx="272" cy="124" r="6" fill="#FFFFFF"/>
+          <circle cx="282" cy="158" r="6" fill="#F2A900"/>
+          <circle cx="288" cy="192" r="6" fill="#F2A900"/>
+          <circle cx="510" cy="226" r="6" fill="#ECF7F0" stroke="#4A5F52" stroke-dasharray="3 3"/>
+          <circle cx="575" cy="260" r="6" fill="#ECF7F0" stroke="#4A5F52" stroke-dasharray="3 3"/>
+        </g>
+
+        <text class="ib2dH" x="293" y="52" text-anchor="middle">signal 0h40</text>
+        <text class="ib2dA" x="461" y="52" text-anchor="middle">R2 contained 3h15</text>
+
+        <text class="ib2dL" x="40" y="94">revenue dashboard</text>
+        <text class="ib2dS" x="210" y="94">0h15</text>
+        <text class="ib2dL" x="40" y="128">finance mart</text>
+        <text class="ib2dS" x="210" y="128">0h20</text>
+        <text class="ib2dL" x="40" y="162">partner extract</text>
+        <text class="ib2dS" x="210" y="162">0h30</text>
+        <text class="ib2dL" x="40" y="196">forecast model</text>
+        <text class="ib2dS" x="210" y="196">0h35</text>
+        <text class="ib2dL" x="40" y="230">executive dashboard</text>
+        <text class="ib2dS" x="210" y="230">4h00</text>
+        <text class="ib2dL" x="40" y="264">sales email, 40</text>
+        <text class="ib2dS" x="210" y="264">5h00</text>
+
+        <text class="ib2dA" x="664" y="94">refreshes at correction</text>
+        <text class="ib2dA" x="664" y="128">refreshes at correction</text>
+        <text class="ib2dB" x="664" y="162">STAYS: tell the partner</text>
+        <text class="ib2dB" x="664" y="196">STAYS: tell the owner</text>
+        <text class="ib2dS" x="664" y="230">never copied under R2</text>
+        <text class="ib2dS" x="664" y="264">never sent under R2</text>
+
+        <text class="ib2dS" x="250" y="302" text-anchor="middle">0h00</text>
+        <text class="ib2dS" x="380" y="302" text-anchor="middle">2h00</text>
+        <text class="ib2dS" x="510" y="302" text-anchor="middle">4h00</text>
+        <text class="ib2dS" x="640" y="302" text-anchor="middle">6h00</text>
+        <text class="ib2dS" x="644" y="320" text-anchor="end">copy time after the bad write (02:00Z)</text>
+
+        <text class="ib2dN" x="40" y="346">R2 contains 2h35 after the signal, which is 3h15 after the bad write. Constructed Quarrybank example.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - containment removes the late copies; the early ones were made before anyone could know.</figcaption>
+    </figure>
+
+    <div data-ird-bench="lite" data-presets="r0,r1,r2,r3" data-start="r0"></div>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Open "Bad load: what it reached" on R0.</strong> The bench starts on no plan. Expand the bad load's panel and copy the list into your record: 5 consumers (executive dashboard, sales email, partner extract, forecast model, finance mart), 3 decisions, 60 bad reads by 52 people. Under R0 none of the 5 is told.</p>
+      </div>
+      <div class="step">
+        <p><strong>Sort the five.</strong> For each, write the copy time after the bad write from Part 1, and mark it "refreshes at correction" or "must be told". The executive dashboard and finance mart refresh; the extract, the model and the email do not.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · R0 trace, bad load</span>consumer             kind       copy (after 02:00Z)  clears
+executive dashboard  dashboard  4h00                 refreshes at correction
+finance mart         table      0h20                 refreshes at correction
+partner extract      extract    0h30                 must be told
+forecast model       model      0h35                 must be told
+sales email (40)     email      5h00                 must be told
+decisions: replenishment order (2 regions) | promotion budget cut | partner rebate</div>
+      </div>
+      <div class="step">
+        <p><strong>Switch to R2 and read the panel again.</strong> Severity and roles bring containment to 2h35 after the signal, so the bench now shows 2 consumers, the partner extract and the forecast model, and 2 decisions. The executive dashboard and the sales email were scheduled for 4h00 and 5h00 after the bad write; containment at 3h15 after the bad write stopped them happening at all.</p>
+      </div>
+      <div class="step">
+        <p><strong>Explain why two stay.</strong> The extract left at 0h30 and the model retrained at 0h35, both before the 0h40 signal. No response plan can un-send them; only telling their owners clears them. Note that R3, the containment playbook, gives the same list: faster containment cannot reach back before the signal. The bench models times by stated rules, so these shifts come from the plan, not from luck.</p>
+      </div>
+      <div class="step">
+        <p><strong>Save the template.</strong> Keep the shape, drop Quarrybank's rows. This is page 2 of the responder half of the plan.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · plan, responder page 2, consumer trace</span>QUARRYBANK INCIDENT RESPONSE PLAN · responder page 2 · consumer trace
+Start at the bad write, not the signal. Keep the table inside the incident record.
+consumer | kind (table, dashboard, extract, email, model, decision) | copy time (UTC, with Z)
+  | refreshes at correction OR must be told | owner to notify | proof (query id, run id, log link)
+Sources: lineage query output + orchestrator runs after the bad write + export log
+  + dashboard access log + "was anything decided on this?" asked upward
+Rule: a copy outside the warehouse is "must be told" until its owner confirms otherwise.
+Exposure: write rows exposed with an "as of" UTC time until the door is closed.</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>A consumer you cannot name an owner for is still a row.</strong> Write "owner unknown" and keep it on the list. An empty owner cell is a task; a missing row is a person who never hears from you.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 3</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li>Pick one important table where you work and list every consumer downstream of it, using the six kinds from Part 0. Mark each "refreshes at correction" or "must be told".</li>
+      <li>Find every export, extract and scheduled email that leaves your warehouse. For each, check whether its destination and recipients are logged anywhere a responder could query at 3am.</li>
+      <li>Name one decision in your business that is made directly from a dashboard. Write down who makes it and how you would reach them during an incident.</li>
+      <li>Fill in the consumer trace template for the last real data problem you handled, and note every row you could only add by asking a person.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">The source partition has been corrected and re-run. Which of the bad load's copies are still wrong?</p>
+      <button class="qopt" type="button">A · The revenue dashboard and the finance mart, because they read it first</button>
+      <button class="qopt" type="button">B · The partner extract, the forecast model and the sales email, until their owners are told</button>
+      <button class="qopt" type="button">C · None, because lineage propagates the correction</button>
+      <p class="qwhy">Dashboards and tables built on the source refresh at correction. Copies that left the warehouse, a delivered file, a retrained model, an email in 40 inboxes, stay wrong until their owner hears from you.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">On the bench the leaked table exposes 18,400 rows under R1 and 7,600 under R5. Why the difference?</p>
+      <button class="qopt" type="button">A · The R5 table holds fewer customers</button>
+      <button class="qopt" type="button">B · R5 detects the leak earlier</button>
+      <button class="qopt" type="button">C · The address kept paging until the door closed: R1 contains at 6h15 after the signal, R5 at 0h25</button>
+      <p class="qwhy">Same table, same leak, same signal time. Exposure is a function of containment time, which is why it has to be reported with an "as of" time until the door is closed.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">Why does the consumer trace need more than the lineage query?</p>
+      <button class="qopt" type="button">A · Decisions, inboxes and partner systems sit outside the warehouse, and only asking their owners finds them</button>
+      <button class="qopt" type="button">B · Lineage queries are usually wrong</button>
+      <button class="qopt" type="button">C · NIST requires a manual trace</button>
+      <p class="qwhy">Warehouse lineage stops at the warehouse wall. The replenishment order, the promotion cut and the partner's rebate were made by people on the bad number and appear in no graph.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, RS.AN-08 (read 2026-11-10)</span><span class="note">"Determining the incident's magnitude is often one of the most challenging aspects"</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Google SRE book, Managing Incidents (read 2026-11-10)</span><span class="note">The living incident document, where the consumer list is kept as it grows</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Consumer trace: six kinds, refreshes or must be told, asking upward</span><span class="note">Practitioner conventions built on the sources above</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Bench numbers (5 + 3 and 60 reads by 52 people on R0, 2 + 2 on R2; 18,400, 12,800, 8,400, 7,600 rows)</span><span class="note">Computed in your browser by replaying a constructed event log</span></div>
+      <div class="covered-row"><span class="status pill inkpill">·</span><span class="name">Lineage query mechanics</span><span class="note">Not covered here: owned by the observability course's lineage session</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Responder session 2 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Start at the bad write</b><span>Not the signal. Four of six copies were made before the alarm.</span></div>
+      <div class="cheat-item"><b>Two kinds of copy</b><span>Refreshes at correction, or must be told. Sort every row.</span></div>
+      <div class="cheat-item"><b>Must be told</b><span>Extracts, retrained models, sent emails. They left your reach.</span></div>
+      <div class="cheat-item"><b>Exposure moves</b><span>18,400 rows at 6h15, 7,600 at 0h25. Report it "as of" a time.</span></div>
+      <div class="cheat-item"><b>Ask for decisions</b><span>Orders, budgets and rebates never show up in lineage.</span></div>
+      <div class="cheat-item"><b>Bad load on the bench</b><span>R0: 5 consumers, 3 decisions, none told. R2: 2 and 2.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>The trace shows how far the bad load got. Session 3 stops it getting further: pause the jobs, quarantine the partition, trip the circuit breaker, and see on the bench why fixing before you contain lets 37 people read bad data instead of 13.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Responder session 2 of 8 · learn-data-incident-response-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b1-timeline-starts-at-first-signal.html">← Prev: The timeline starts at the first signal</a> &nbsp;·&nbsp; <a href="b3-stop-a-bad-load-spreading.html">Next: Stop a bad load spreading →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/ird-sample.js?v=1"></script>
+<script src="../assets/ird-live.js?v=2"></script>
+</body>
+</html>

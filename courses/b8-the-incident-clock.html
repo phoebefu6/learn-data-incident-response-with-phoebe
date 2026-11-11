@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Responder session 8 of 8. Quarrybank's whole quarter replayed on the incident clock under six plans and three traps: from 14 consumers and 7 decisions on bad data with no plan to 5 and 1 with a rehearsed one, and the floor no response plan can go below.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The incident clock - learn incident response for data teams with phoebe">
+<meta property="og:description" content="Responder session 8 of 8. Six plans, three traps, your own move times, and the whole plan scored.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/courses/b8-the-incident-clock.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The incident clock - learn incident response for data teams with phoebe">
+<meta name="twitter:description" content="14 + 7 with no plan, 5 + 1 with a rehearsed one. The last 5 + 1 happened before anyone could know.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Responder session 8 · The incident clock - learn incident response for data teams with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-data-incident-response-with-phoebe</a> / Responder session 8 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Incident Response for Data Teams with Phoebe · Responder session 8 of 8</div>
+    <h1>The incident <span class="accent">clock</span></h1>
+    <p class="sub">Seven sessions built the parts. Tonight the whole quarter runs at once. The bench replays Quarrybank's three incidents event by event against a response plan, counts every consumer and decision that used bad data before it was corrected or they were told, and checks every notice deadline. You climb the ladder one plan page at a time, spring three traps that look like good ideas at 3am, type your own move times, and finish by scoring the whole plan, both halves.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Capstone</span>
+      <span class="chip audience">Data and analytics engineers on call</span>
+      <span class="chip audience">Leaders signing the plan</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:3">3-15 · Ladder, traps, floor</span>
+      <span class="a3" style="flex:6">15-40 · Build-along: run it, score the plan</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>What the clock measures</h2>
+    </div>
+    <p class="lede">The clock is an event-driven replay, not an animation. Quarrybank's quarter is stored as a log of 222 timestamped events: every time a downstream copy was made from bad data, every read of a dashboard or email, every access through an open door, every decision taken on a number. A plan fixes when each incident is declared, assessed, contained and corrected, and who is told. The engine walks the log against those times and counts what got through.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> The quarter replayed under six plans and three traps, all computed. The headline that ends the "we will improvise" argument: 14 consumers and 7 decisions on bad data with no plan, 5 and 1 with a rehearsed one, and every notice deadline met. The floor you cannot go below with any response plan. And Quarrybank's incident response plan, both halves, scored.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The rules the engine applies<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Tainted</strong>: a consumer that made its copy from bad data before containment landed. Containment stops new copies; it does not fix the ones already made.</li>
+          <li><strong>Cleared</strong>: a tainted copy stops counting when it is corrected or when its users are told. Dashboards and tables refresh at the correction. Copies that left the warehouse, the sales email, the partner extract, the forecast model, the board pack, only clear when someone tells their users.</li>
+          <li><strong>Doors</strong>: on the leaked table, an access counts while its door is open. A containment playbook closes every door; without one, only the public link closes at containment and the vendor share stays open until the close-out.</li>
+          <li><strong>Plan times</strong>, all in minutes after the bad write: declare 15 after the first signal with a rule, 5 when rehearsed, at the first complaint without one; containment 15 after assessment with a playbook, 120 without; correction 360 after containment, 180 rehearsed.</li>
+          <li><strong>Deadlines</strong> are fixed inputs, not taught here: GDPR 72 hours from awareness and PDPA 3 calendar days after assessment for the leak, owned by the <a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/b7-breach-response.html">GDPR ↗</a> and <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/b7-breach-response.html">PDPA ↗</a> courses; a constructed 24-hour partner contract term for the bad load and a constructed 48-hour audit-committee policy for the board deck.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>What is real here<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Computed:</strong> every count on the bench, live in your browser from the event log. A Python reference implementation produces the same numbers on every plan, every trap, the trap switches on the rehearsed plan and two sets of hand-typed move times: 1,151 values compared, none different.</li>
+          <li><strong>Constructed:</strong> Quarrybank, its consumers, readers, row ranges, event times, the partner contract term and the audit-committee policy. No public incident dataset was used, so no real-world frequency is claimed.</li>
+          <li><strong>Modelled crudely, on purpose:</strong> every bad read counts the same; a regional manager glancing at a dashboard weighs as much as a director quoting a margin to a lender. A real plan would weight them, and the first extension of the bench would too.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the full ladder, one plan page per rung</span>
+      <h2>Six plans, measured</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Each rung adds one page of Quarrybank's plan to the one before. Read the two columns on the right together: the headline counts what reached people, the second counter counts the people nobody ever went back to.</p>
+
+    <table class="clean">
+      <thead><tr><th>Rung</th><th>Plan page added</th><th>Consumers + decisions on bad data</th><th>Never told</th><th>Copies still wrong</th><th>Deadlines met</th></tr></thead>
+      <tbody>
+        <tr><td>R0</td><td>No plan</td><td><strong>14 + 7</strong></td><td>11</td><td>7</td><td>0 of 4</td></tr>
+        <tr><td>R1</td><td>Declare rule (leader 1)</td><td>10 + 4</td><td>7</td><td>5</td><td>0 of 4</td></tr>
+        <tr><td>R2</td><td>Severity and roles (leader 2, 3)</td><td>7 + 3</td><td>4</td><td>4</td><td>3 of 4</td></tr>
+        <tr><td>R3</td><td>Containment playbook (responder 3, 4)</td><td>7 + 3</td><td>4</td><td>4</td><td>3 of 4</td></tr>
+        <tr><td>R4</td><td>Lineage-driven consumer notice (responder 2, 6)</td><td><strong>5 + 1</strong></td><td>0</td><td>0</td><td>4 of 4</td></tr>
+        <tr><td>R5</td><td>Rehearsed plan (leader 6)</td><td>5 + 1</td><td>0</td><td>0</td><td>4 of 4</td></tr>
+      </tbody>
+    </table>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bars for six plans. Consumers plus decisions that used bad data: no plan 14 plus 7, declare rule 10 plus 4, severity and roles 7 plus 3, containment playbook 7 plus 3, lineage notice 5 plus 1, rehearsed plan 5 plus 1. A dashed line at 5 plus 1 marks the floor: what reached people before any first signal.">
+        <defs>
+          <filter id="ib8aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib8aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#6B4700" stroke-width="1.2" opacity=".55"/></pattern>
+        </defs>
+        <style>
+          .ib8aH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib8aL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib8aV { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib8aS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib8aA { font: 700 11px Inter, sans-serif; fill: #6B4700; }
+          .ib8aN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib8aH" x="40" y="26">CONSUMERS (GREEN) + DECISIONS (HATCHED AMBER) THAT USED BAD DATA, PER PLAN</text>
+
+        <g filter="url(#ib8aSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="260" y="50" width="320" height="30" rx="4" fill="#075A2C"/>
+          <rect x="580" y="50" width="160" height="30" rx="4" fill="url(#ib8aHc)"/>
+          <rect x="260" y="102" width="229" height="30" rx="4" fill="#075A2C"/>
+          <rect x="489" y="102" width="91" height="30" rx="4" fill="url(#ib8aHc)"/>
+          <rect x="260" y="154" width="160" height="30" rx="4" fill="#075A2C"/>
+          <rect x="420" y="154" width="69" height="30" rx="4" fill="url(#ib8aHc)"/>
+          <rect x="260" y="206" width="160" height="30" rx="4" fill="#075A2C"/>
+          <rect x="420" y="206" width="69" height="30" rx="4" fill="url(#ib8aHc)"/>
+          <rect x="260" y="258" width="114" height="30" rx="4" fill="#075A2C"/>
+          <rect x="374" y="258" width="23" height="30" rx="4" fill="url(#ib8aHc)"/>
+          <rect x="260" y="310" width="114" height="30" rx="4" fill="#075A2C"/>
+          <rect x="374" y="310" width="23" height="30" rx="4" fill="url(#ib8aHc)"/>
+          <path d="M397 44 L397 346" stroke="#6B4700" stroke-dasharray="5 5"/>
+        </g>
+
+        <text class="ib8aL" x="240" y="70" text-anchor="end">R0 no plan</text>
+        <text class="ib8aL" x="240" y="122" text-anchor="end">R1 declare rule</text>
+        <text class="ib8aL" x="240" y="174" text-anchor="end">R2 severity and roles</text>
+        <text class="ib8aL" x="240" y="226" text-anchor="end">R3 containment playbook</text>
+        <text class="ib8aL" x="240" y="278" text-anchor="end">R4 lineage notice</text>
+        <text class="ib8aL" x="240" y="330" text-anchor="end">R5 rehearsed plan</text>
+        <text class="ib8aV" x="752" y="70">14 + 7</text>
+        <text class="ib8aV" x="592" y="122">10 + 4</text>
+        <text class="ib8aV" x="501" y="174">7 + 3</text>
+        <text class="ib8aV" x="501" y="226">7 + 3</text>
+        <text class="ib8aV" x="409" y="278">5 + 1</text>
+        <text class="ib8aV" x="409" y="330">5 + 1</text>
+        <text class="ib8aA" x="460" y="282">floor: reached before</text>
+        <text class="ib8aA" x="460" y="296">any first signal</text>
+
+        <text class="ib8aN" x="40" y="368">Scale: one unit = 22.9 px. Constructed Quarrybank example; computed on the bench.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the biggest single drops are the declare rule and the lineage notice; nothing goes below the floor.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Reading the flat rungs<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two rungs leave the headline where it was, and both are worth more than they look.</p>
+        <ul>
+          <li><strong>R3, the containment playbook, keeps 7 + 3</strong> because the consumers it would have protected were already reached before R2's slower containment landed. What it changes is in the details: customer rows exposed on the leaked table fall from 12,800 to 8,400, and containment arrives 0h50 after the signal instead of 2h35.</li>
+          <li><strong>R5, rehearsal, keeps 5 + 1</strong> because R4 had already reached the floor. What it buys is time: declare, contain and correct at 0h05, 0h25 and 3h25 after the signal instead of 0h15, 0h50 and 6h50, and 7,600 rows exposed instead of 8,400. Those three times are the readiness numbers leader session 6 asks you to report.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Per incident, on the rehearsed plan<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Bad load:</strong> 0 consumers, 0 decisions. The partner is told 1h20 after the bad write against a contract deadline of 24h40.</li>
+          <li><strong>Leaked table:</strong> 2 outside parties reached, vendor analyst A, who downloaded a copy 30 minutes after the share was made, and the unknown address, which began paging through the public link ten minutes before the alert. 7,600 of 18,400 rows exposed. Both notice deadlines met.</li>
+          <li><strong>Board deck:</strong> 3 consumers and 1 decision. The pricing committee decided to hold prices in two regions 24 hours after the pack went out, a full day before the reconciliation that was the first signal.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers the three traps and the floor</span>
+      <h2>Three good ideas at 3am, and the floor under all of them</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">A bench that can only get better measures nothing. Each trap below is one plausible move added to a strong plan, and each one reports a worse number than the plan without it.</p>
+
+    <table class="clean">
+      <thead><tr><th>Trap</th><th>Compared with</th><th>What gets worse</th></tr></thead>
+      <tbody>
+        <tr><td><strong>T1 Fix before you contain</strong></td><td>R4</td><td>7 + 1 instead of 5 + 1; people who read bad data 37 instead of 13; leaked rows 18,400 instead of 8,400</td></tr>
+        <tr><td><strong>T2 Drop the bad table to stop it</strong></td><td>R4</td><td>Leaked rows 18,400 assumed instead of 8,400 measured; correction 10h50 instead of 6h50; evidence lost</td></tr>
+        <tr><td><strong>T3 Tell only the people who complained</strong></td><td>R5</td><td>7 + 3 instead of 5 + 1; 4 consumers never told; 4 copies still wrong; partner deadline missed</td></tr>
+      </tbody>
+    </table>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The floor, incident by incident. Three rails, each with the first signal marked. Leaked table: vendor analyst A downloads at 0h30 and the unknown address starts paging at 3h10, both before the 3h20 signal. Board deck: the pack is emailed at 0h00, the pricing deck is made at 20h00 and the decision to hold prices is taken at 24h00, all before the 48h00 signal. Bad load: nothing survives a rehearsed plan, because every early copy is told or corrected before it is read.">
+        <defs>
+          <filter id="ib8bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="17" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib8bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+        </defs>
+        <style>
+          .ib8bH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib8bL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib8bS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib8bG { font: 800 11px Inter, sans-serif; fill: #053D1E; }
+          .ib8bR { font: 800 11px Inter, sans-serif; fill: #991B1B; }
+          .ib8bN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib8bH" x="40" y="24">THE FLOOR: WHAT REACHED PEOPLE BEFORE ANYONE COULD KNOW</text>
+
+        <g filter="url(#ib8bSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="200" y="58" width="420" height="20" rx="4" fill="url(#ib8bHc)"/>
+          <path d="M200 68 L840 68"/>
+          <path d="M620 50 L620 88" stroke="#053D1E" stroke-width="3"/>
+          <circle cx="260" cy="68" r="6" fill="#6B4700"/>
+          <circle cx="599" cy="68" r="6" fill="#6B4700"/>
+
+          <rect x="200" y="158" width="420" height="20" rx="4" fill="url(#ib8bHc)"/>
+          <path d="M200 168 L840 168"/>
+          <path d="M620 150 L620 188" stroke="#053D1E" stroke-width="3"/>
+          <circle cx="206" cy="168" r="6" fill="#6B4700"/>
+          <circle cx="375" cy="168" r="6" fill="#6B4700"/>
+          <path d="M410 160 l8 8 l-8 8 l-8 -8 z" fill="#991B1B" stroke="#991B1B"/>
+
+          <path d="M200 258 L840 258"/>
+          <path d="M240 250 L240 266" stroke="#053D1E" stroke-width="3"/>
+        </g>
+
+        <text class="ib8bL" x="40" y="72">Leaked table</text>
+        <text class="ib8bS" x="214" y="104">vendor A copy 0h30</text>
+        <text class="ib8bS" x="470" y="104">unknown address 3h10</text>
+        <text class="ib8bG" x="630" y="64">signal 3h20</text>
+
+        <text class="ib8bL" x="40" y="172">Board deck</text>
+        <text class="ib8bS" x="214" y="204">pack sent 0h00</text>
+        <text class="ib8bS" x="330" y="140">pricing deck 20h00</text>
+        <text class="ib8bR" x="430" y="204">hold prices 24h00</text>
+        <text class="ib8bG" x="630" y="164">signal 48h00</text>
+
+        <text class="ib8bL" x="40" y="262">Bad load</text>
+        <text class="ib8bG" x="250" y="254">signal 0h40</text>
+        <text class="ib8bS" x="250" y="284">early copies told or corrected before anyone read them: 0 + 0</text>
+
+        <text class="ib8bN" x="40" y="318">Hatched: before the first signal. Each rail has its own scale. Detection, not response, moves this part.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the floor is the part of the quarter that happened before the first signal, and only earlier detection moves it.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why each trap is tempting, and what it costs<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Fix before you contain</strong> feels efficient: why stop the load if the fix is an hour away? Because the fix took 6h50, and every copy made in the meantime is another consumer. On the bench the sales email to 40 people goes out inside that window. NIST's word for the alternative is plain: "Containment refers to preventing the expansion of an incident."</li>
+          <li><strong>Drop the bad table</strong> feels decisive. It also deletes the access history, so the leaked table's exposure can no longer be measured and every row has to be assumed exposed. Responder session 1 has the full argument.</li>
+          <li><strong>Tell only the people who complained</strong> feels proportionate. The people who complained are the ones who noticed; the forecast model and the partner extract did not complain, and they are the copies that stay wrong.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>The floor belongs to detection<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Five consumers and one decision survive the best response plan, because they were reached before the first signal existed. No declare rule can fire before a signal. Moving the floor means a faster signal: a monitor on the share settings that fires when a link becomes public, a reconciliation that runs before the board pack is sent rather than two days after. That is the observability course's work (<a href="https://phoebefu6.github.io/learn-data-observability-with-phoebe/courses/b7-lineage-blast-radius.html">lineage and blast radius ↗</a>), and it is the right request to make in the postmortem.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Run the quarter, then score the plan</h2>
+      <span class="tag demo">★ 25 min · everyone builds</span>
+    </div>
+    <p class="lede">The full bench is below: every plan, every trap, the seven plan pages as switches, and your own move times per incident. Work the steps in order and write each number down; the last step turns them into the plan's scorecard.</p>
+
+    <div data-ird-bench="full" data-start="r0"></div>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Start at R0 and climb to R5.</strong> Click each rung in turn. Copy the headline, never told and deadlines met for each into your notes. Check them against the table in Part 1; if any differs, reload the page, because the bench and the table come from the same engine.</p>
+      </div>
+      <div class="step">
+        <p><strong>Open the three "what it reached" panels on R0 and on R5.</strong> On R0 the board deck reaches five consumers, including the investor update and the lender's covenant certificate, both outside the building. On R5 it reaches three, all inside, and one decision that predates the signal.</p>
+      </div>
+      <div class="step">
+        <p><strong>Spring the traps.</strong> Click T1, T2 and T3 and compare each with the rung it modifies, as in the Part 2 table. Then click R5 and tick each trap switch on its own. Fix before you contain lifts the leaked rows from 7,600 to 14,800; dropping the table lifts them to 18,400 assumed and pushes every correction from 3h25 to 7h25. The headline stays at the floor both times, which is why the second counters are on the bench.</p>
+      </div>
+      <div class="step">
+        <p><strong>Type your own moves.</strong> Click R0, then for each incident type these minutes after the bad write and press replay: bad load 60, 90, 300; leaked table 240, 250, 600; board deck 2900, 2910, 3000. These are fast, confident times with no plan pages behind them. The bench reports 7 consumers and 3 decisions, 4 never told and 0 of 4 deadlines met. Speed without roles, lineage and a notice owner meets no deadline at all.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · the hand-typed moves (minutes after the bad write)</span>incident        declare  contain  correct
+bad load             60       90      300
+leaked table        240      250      600
+board deck         2900     2910     3000
+result on R0: 7 consumers + 3 decisions, 4 never told, 0 of 4 deadlines</div>
+      </div>
+      <div class="step">
+        <p><strong>Score the whole plan.</strong> Gather both halves of Quarrybank's plan, six leader pages and seven responder pages. Mark each page as modelled on the bench or checked by hand, then fill the scorecard from R5.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · Quarrybank incident response plan, scorecard</span>MODELLED ON THE BENCH (score from R5)
+  declare rule (L1) . severity matrix (L2) . roles card (L3) . comms templates (L4)
+  timeline template (R1) . consumer trace (R2) . bad-load playbook (R3)
+  exposure playbook (R4) . consumer notice (R6) . readiness plan (L6)
+  consumers + decisions on bad data   5 + 1   (floor: before any signal)
+  consumers never told                0
+  copies still wrong                  0
+  notice deadlines met                4 of 4
+  readiness: declare / contain / correct after signal   0h05 / 0h25 / 3h25
+  customer rows exposed, leaked table 7,600 of 18,400
+CHECKED BY HAND (the bench does not model these)
+  restatement rule (L5)   correction check (R5)   close-out record (R7)
+  each: owner named? tested on one past incident? date of last review?</div>
+      </div>
+      <div class="step">
+        <p><strong>Write the one request for the postmortem.</strong> The scorecard is at the floor, so the next improvement is not in the response plan. Name the signal that would have fired earlier for each surviving consumer, and hand that list to whoever owns detection.</p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Score your own quarter the same way.</strong> The bench's rules fit on half a page. Take your last three incidents, list every copy and decision with a timestamp, and replay them against the times your plan would have produced. The first time a team does this, the never-told count is the number that changes the conversation.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Closing the track</h2>
+      <span class="tag exercise">45 min</span>
+    </div>
+    <ol>
+      <li>Fill the scorecard for your own organisation's plan. Where a page does not exist, score that rung as absent and say which number it would move.</li>
+      <li>Replay one real incident from the last quarter by hand: list every copy, read and decision with its UTC time, and mark which ones were reached before the first signal.</li>
+      <li>Take the floor list to the owner of detection and agree one earlier signal.</li>
+      <li>Hand the close-out record and scorecard to whoever writes your postmortems; the write-up itself is the runbooks and postmortems course's craft.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Which single plan page cuts Quarrybank's never-told count from 4 to 0?</p>
+      <button class="qopt" type="button">A · The containment playbook</button>
+      <button class="qopt" type="button">B · Lineage-driven consumer notice, which tells every consumer the trace finds instead of only the complainers</button>
+      <button class="qopt" type="button">C · Rehearsal</button>
+      <p class="qwhy">R3 to R4 adds the lineage notice: never told goes from 4 to 0, copies still wrong from 4 to 0, and the partner deadline is met. Containment stops new copies; it does not tell anyone about the old ones.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">On the rehearsed plan, 5 consumers and 1 decision still used bad data. Why can no response plan remove them?</p>
+      <button class="qopt" type="button">A · They were reached before the first signal existed, so only earlier detection can move them</button>
+      <button class="qopt" type="button">B · The engine has a minimum built in</button>
+      <button class="qopt" type="button">C · The privacy partner was too slow</button>
+      <p class="qwhy">The vendor's download, the unknown address's first pages, the board pack reads and the pricing decision all come before their incident's first signal. A declare rule cannot fire before a signal.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Your team types fast move times on the bench but has no roles, lineage notice or notice owner. What does the bench report?</p>
+      <button class="qopt" type="button">A · The same result as the rehearsed plan, because speed is what matters</button>
+      <button class="qopt" type="button">B · Fewer consumers than the rehearsed plan</button>
+      <button class="qopt" type="button">C · 7 consumers and 3 decisions, 4 never told and 0 of 4 deadlines met</button>
+      <p class="qwhy">Fast containment helps the headline, but without lineage nobody tells the copies outside the warehouse, and without roles nobody owns the formal notices.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, RS.MI-01 and ID.IM (read 2026-11-10)</span><span class="note">Containment as preventing expansion; improvement fed by lessons at all times</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Google SRE book and workbook, incident chapters (read 2026-11-10)</span><span class="note">Declare early, roles, the living document: each one a rung</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">GDPR Art. 33 (read 2026-11-10) and the PDPA 3-day rule (reported)</span><span class="note">Fixed inputs on the bench, owned by the GDPR and PDPA courses</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">The engine's rules and every bench number</span><span class="note">Computed in your browser; checked against a Python reference, 1,151 values, 0 different</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Quarrybank's log, contract term and audit-committee policy</span><span class="note">Constructed for teaching; no public base rate is used</span></div>
+      <div class="covered-row"><span class="status pill inkpill">·</span><span class="name">Weighting reads by impact; detection</span><span class="note">Not modelled: named as the first extension, and the observability course's subject</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Responder session 8 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>14 + 7 to 5 + 1</b><span>No plan against a rehearsed plan, same quarter, same events.</span></div>
+      <div class="cheat-item"><b>Biggest drops</b><span>Declare rule (14 + 7 to 10 + 4) and lineage notice (7 + 3 to 5 + 1, never told 4 to 0).</span></div>
+      <div class="cheat-item"><b>Deadlines need owners</b><span>0 of 4 until roles; 4 of 4 once the notice reaches every consumer.</span></div>
+      <div class="cheat-item"><b>Three traps</b><span>Fix before contain, drop the table, tell only complainers. Each one worse.</span></div>
+      <div class="cheat-item"><b>The floor</b><span>5 + 1 reached before any signal. Only detection moves it.</span></div>
+      <div class="cheat-item"><b>Readiness numbers</b><span>Rehearsed: declare 0h05, contain 0h25, correct 3h25 after the signal.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Course home</span>
+    <p>Both tracks end here. The leader track's session 6 turns the readiness numbers into a tabletop and a signed plan; the write-up of each incident goes to the runbooks and postmortems course on the <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe shelf ↗</a>.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Responder session 8 of 8 · learn-data-incident-response-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b7-close-with-evidence.html">← Prev: Close with evidence</a> &nbsp;·&nbsp; <a href="../index.html">Course home</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/ird-sample.js?v=1"></script>
+<script src="../assets/ird-live.js?v=2"></script>
+</body>
+</html>

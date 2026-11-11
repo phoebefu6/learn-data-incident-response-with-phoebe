@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Responder session 1 of 8. The incident record, the scribe's log, UTC timestamps and the evidence you must not destroy, opened for Quarrybank's bad load and replayed on the incident clock.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="The timeline starts at the first signal - learn incident response for data teams with phoebe">
+<meta property="og:description" content="Responder session 1 of 8. Open the record at the first signal, keep it in UTC, and keep the bad table.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/courses/b1-timeline-starts-at-first-signal.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The timeline starts at the first signal - learn incident response for data teams with phoebe">
+<meta name="twitter:description" content="The record you open in the first five minutes is the evidence you show the board a month later.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Responder session 1 · The timeline starts at the first signal - learn incident response for data teams with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-data-incident-response-with-phoebe</a> / Responder session 1 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Incident Response for Data Teams with Phoebe · Responder session 1 of 8</div>
+    <h1>The timeline starts at the <span class="accent">first signal</span></h1>
+    <p class="sub">When the monitor fires at 02:40 you are the only person awake, and the most valuable thing you can do in the next five minutes is not the fix. It is opening a record that says what you saw and when, in a clock everyone shares, and making sure the evidence is still there in the morning. Tonight you open that record for Quarrybank's bad load, learn what a scribe writes down and why it is written in UTC, and see on the bench why dropping the bad table to make the problem go away is the most expensive fast move there is.</p>
+    <div class="chip-row">
+      <span class="chip level">🟢 Foundations</span>
+      <span class="chip audience">Data and analytics engineers on call</span>
+      <span class="chip audience">Whoever keeps the timeline</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Record, clock, evidence</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: open the record</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>How the responder track works</h2>
+    </div>
+    <p class="lede">Eight sessions, 45 minutes each, on the hands-on side of Quarrybank's three incidents. Tonight opens the record. Session 2 traces what read the bad data. Session 3 stops a bad load spreading, session 4 closes a leaked table's doors, session 5 corrects and proves the correction landed, session 6 tells every consumer, session 7 closes with evidence, and session 8 replays the whole quarter on the incident clock under every plan. The leader track runs alongside and makes the calls you will be asked to execute.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A timeline template you can open in under five minutes, the six fields a scribe writes for every entry, the habit of UTC, and the first page of the responder half of Quarrybank's plan. Plus a first look at the incident clock, which replays Quarrybank's quarter and measures every response from the first signal.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why the record comes before the fix<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Google's SRE book is direct about it: "The incident commander's most important responsibility is to keep a living incident document." Not the fix, the document. The fix ends the incident; the document is what lets anyone else join it, take it over, explain it to the board, or learn from it.</p>
+        <p>It also has a second job that data teams underrate. Every question you will be asked later, by the head of data, the privacy partner, the auditor or a regulator, is a question about time: when did you know, when did you act, who had read it by then. A record opened at the first signal answers all of them. A record reconstructed from chat history the next day answers them badly and in the wrong time zone.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. The bad load's volume monitor fired at 02:40 UTC. The on-call engineer spent the first 40 minutes investigating in a direct message to a colleague. When the incident was finally declared, nobody could say from the record when the partner extract had gone out relative to the alert, which was exactly the question the partner's contract cared about.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Who reads the record, and when<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>In the first hour</strong>: the next person to join. The record is their briefing, so the current status sits at the top.</li>
+          <li><strong>At a handover</strong>: the incoming commander. The SRE book has the outgoing one stay until the incoming one says yes.</li>
+          <li><strong>Within days</strong>: the privacy partner, who needs the time you became aware, and the finance controller, who needs which figures were touched.</li>
+          <li><strong>Weeks later</strong>: whoever writes the postmortem. That write-up is the docs course's craft; the raw material is your record.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers the living incident document and the scribe role</span>
+      <h2>One record, written as it happens</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">The record is one document per incident, editable by everyone on the response, with the current state at the top and an append-only timeline underneath. PagerDuty's response guide names the person who keeps it: "A Scribe documents the timeline of an incident as it progresses." On a small team at 02:40, the scribe is you.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The incident record as one document. At the top a status block: type, severity, owner, next update. Below it the timeline, one row per entry with UTC time, who, what was seen or done. Then decisions, consumers reached, and an evidence list. Three sources feed it: the scribe writes the timeline, the commander writes the status and decisions, responders post findings. Readers on the right: the next person to join, the privacy partner, the postmortem author.">
+        <defs>
+          <filter id="ib1aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="5" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib1aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#075A2C" stroke-width="1" opacity=".45"/></pattern>
+          <marker id="ib1aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib1aH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib1aL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib1aS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib1aM { font: 600 11px ui-monospace, Menlo, monospace; fill: #053D1E; }
+          .ib1aB { font: 800 11px Inter, sans-serif; fill: #0D1F14; }
+          .ib1aN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib1aH" x="300" y="24">THE INCIDENT RECORD · ONE PER INCIDENT</text>
+
+        <g filter="url(#ib1aSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="60" width="150" height="40" rx="8" fill="#FFFFFF" transform="rotate(-1 115 80)"/>
+          <rect x="40" y="150" width="150" height="40" rx="8" fill="#FFFFFF" transform="rotate(0.8 115 170)"/>
+          <rect x="40" y="240" width="150" height="40" rx="8" fill="#FFFFFF" transform="rotate(-0.6 115 260)"/>
+          <path d="M194 80 C230 80 250 74 290 70" marker-end="url(#ib1aAr)"/>
+          <path d="M194 170 C240 170 250 140 290 134" marker-end="url(#ib1aAr)"/>
+          <path d="M194 260 C240 260 250 226 290 220" marker-end="url(#ib1aAr)"/>
+          <rect x="296" y="40" width="300" height="270" rx="10" transform="rotate(0.3 446 175)" fill="#FFFFFF"/>
+          <rect x="310" y="52" width="272" height="44" rx="6" fill="#F2A900"/>
+          <rect x="310" y="106" width="272" height="96" rx="6" fill="url(#ib1aHc)"/>
+          <path d="M310 214 L582 214"/>
+          <path d="M310 248 L582 248"/>
+          <path d="M310 280 L582 280"/>
+          <path d="M600 110 C630 100 640 84 676 80" marker-end="url(#ib1aAr)"/>
+          <path d="M600 170 L676 170" marker-end="url(#ib1aAr)"/>
+          <path d="M600 240 C630 250 640 258 676 262" marker-end="url(#ib1aAr)"/>
+          <rect x="682" y="60" width="170" height="40" rx="8" fill="#ECF7F0"/>
+          <rect x="682" y="150" width="170" height="40" rx="8" fill="#ECF7F0"/>
+          <rect x="682" y="242" width="170" height="40" rx="8" fill="#ECF7F0"/>
+        </g>
+
+        <text class="ib1aL" x="52" y="85">commander</text>
+        <text class="ib1aL" x="52" y="175">scribe</text>
+        <text class="ib1aL" x="52" y="265">responders</text>
+        <text class="ib1aS" x="52" y="118">status, decisions</text>
+        <text class="ib1aS" x="52" y="208">every timeline row</text>
+        <text class="ib1aS" x="52" y="298">findings, with proof</text>
+
+        <text class="ib1aB" x="322" y="70">STATUS · quality · owner · next update 03:30</text>
+        <text class="ib1aB" x="322" y="88">current state goes at the top</text>
+        <text class="ib1aM" x="322" y="128">02:40Z monitor: row count x2, 2 regions</text>
+        <text class="ib1aM" x="322" y="148">02:44Z on-call: partition 2026-02-10</text>
+        <text class="ib1aM" x="322" y="168">02:55Z declared, record opened</text>
+        <text class="ib1aM" x="322" y="188">03:02Z partition copied to quarantine</text>
+        <text class="ib1aL" x="322" y="236">decisions, with who made them</text>
+        <text class="ib1aL" x="322" y="268">consumers reached so far</text>
+        <text class="ib1aL" x="322" y="300">evidence kept, and where</text>
+
+        <text class="ib1aL" x="694" y="85">next to join</text>
+        <text class="ib1aL" x="694" y="175">privacy partner</text>
+        <text class="ib1aL" x="694" y="267">postmortem author</text>
+
+        <text class="ib1aN" x="40" y="330">Constructed Quarrybank example. The timeline is append-only; the status block is rewritten every update.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - status on top, append-only timeline below, and everyone who will read it later on the right.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What goes in a timeline row<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Six fields, every row, no exceptions. A row missing one of them is a row someone will have to re-investigate.</p>
+        <table class="clean">
+          <thead><tr><th>Field</th><th>Example</th><th>Why it is there</th></tr></thead>
+          <tbody>
+            <tr><td>Time, UTC</td><td>02:40Z</td><td>The only clock every system and person can agree on</td></tr>
+            <tr><td>Who</td><td>volume monitor / on-call</td><td>Machines and people both write; say which</td></tr>
+            <tr><td>Saw or did</td><td>saw</td><td>Observations and actions answer different questions later</td></tr>
+            <tr><td>What</td><td>row count doubled for two regions</td><td>One fact per row, in plain words</td></tr>
+            <tr><td>Proof</td><td>query id, screenshot, log link</td><td>NIST RS.AN-06: records with integrity and provenance</td></tr>
+            <tr><td>Next</td><td>check the supplier feed</td><td>So the next reader knows what is in flight</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The status block, rewritten every update<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The SRE book asks for the most important information at the top of the living document. In practice that is a five-line block the commander rewrites, while the timeline below only grows: type, severity, owner, what is known now, and when the next update is due. Someone who reads only the block should be able to answer the head of data's question correctly.</p>
+        <div class="callout tip">
+          <p><strong>Never edit a timeline row.</strong> If an entry was wrong, add a new row that corrects it. The record is evidence, and evidence that changes quietly stops being evidence.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers timestamps that survive a merge</span>
+      <h2>Every entry in UTC, because the evidence already is</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Warehouse logs, orchestrator runs and access logs are usually stamped in UTC. Chat messages, emails and people's memories are stamped in whatever zone the person was in. A timeline built from both without converting puts events in the wrong order, and the order is the whole point.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two versions of the same three events. Left, mixed clocks: the declaration typed in local time at 10:55 sorts after the partner extract logged at 02:30 UTC and the monitor at 02:40 UTC, but a reader cannot tell the gap. Right, all UTC: partner extract 02:30Z, monitor 02:40Z, declared 02:55Z, which shows the extract left ten minutes before anyone was alerted.">
+        <defs>
+          <filter id="ib1bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="13" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+        </defs>
+        <style>
+          .ib1bH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib1bR { font: 800 12px Inter, sans-serif; fill: #991B1B; }
+          .ib1bM { font: 600 11px ui-monospace, Menlo, monospace; fill: #0D1F14; }
+          .ib1bS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib1bG { font: 800 11px Inter, sans-serif; fill: #053D1E; }
+          .ib1bN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ib1bSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="40" width="390" height="200" rx="12" fill="#FEF2F2" stroke="#FCA5A5" transform="rotate(-0.4 235 140)"/>
+          <rect x="450" y="40" width="390" height="200" rx="12" fill="#ECF7F0" stroke="#075A2C" transform="rotate(0.4 645 140)"/>
+          <rect x="468" y="160" width="354" height="26" rx="6" fill="#F2A900"/>
+        </g>
+
+        <text class="ib1bR" x="58" y="72">✗ Mixed clocks, merged next day</text>
+        <text class="ib1bM" x="58" y="104">02:30   extract sent (orchestrator)</text>
+        <text class="ib1bM" x="58" y="128">02:40   monitor fired (alert log)</text>
+        <text class="ib1bM" x="58" y="152">10:55   "declaring" (chat, UTC+8)</text>
+        <text class="ib1bS" x="58" y="188">reads as eight hours of nothing,</text>
+        <text class="ib1bS" x="58" y="204">and nobody can check which was first</text>
+
+        <text class="ib1bH" x="468" y="72">✓ Converted to UTC at write time</text>
+        <text class="ib1bM" x="468" y="104">02:30Z  extract sent to the partner</text>
+        <text class="ib1bM" x="468" y="128">02:40Z  volume monitor fired</text>
+        <text class="ib1bM" x="468" y="152">02:55Z  declared, record opened</text>
+        <text class="ib1bG" x="478" y="178">the extract left 10 min before any alarm</text>
+        <text class="ib1bS" x="468" y="212">the partner question answered</text>
+
+        <text class="ib1bN" x="40" y="276">Constructed Quarrybank example. Write the Z. A time without a zone is a time someone will guess.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the same three facts, and only the UTC version can answer "did it leave before we knew?"</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Three habits that keep the clock honest<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Write the Z.</strong> 02:40Z, not 02:40. The suffix costs one character and ends the argument.</li>
+          <li><strong>Take machine times from the machine.</strong> The query id, the run id or the log line carries its own timestamp. Copy it, do not retype it from memory.</li>
+          <li><strong>Note when you learned something, not just when it happened.</strong> "02:30Z extract sent, learned at 03:10Z" is two facts, and the privacy partner and the partner contract both care about the second one.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why "when did you become aware" is a timeline question<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Some notice deadlines run from the moment an organisation became aware, and the GDPR's 72 hours is the best known. Whether a given moment counts as awareness is a legal judgement that belongs to the privacy partner and the <a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/b7-breach-response.html">GDPR course ↗</a>. Your job is narrower and more mechanical: make sure the record holds every candidate moment, first signal, first human look, declaration, with a UTC time and its proof, so that the person making that judgement is not guessing.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers preserving evidence, NIST RS.AN-06 and RS.AN-07</span>
+      <h2>Do not drop the bad table</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The fastest way to stop a bad table being read is to delete it, and at 02:45 it feels responsible. It destroys the only record of which rows were wrong and who read them. NIST asks that incident data be collected with "integrity and provenance" preserved, and notes that collected data "is still considered evidence" even when nobody expects a prosecution.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two ways to stop the bad table being read. Drop it: the table and its access history are gone, so for the leaked table every one of 18,400 rows must be assumed exposed, and the correction lands at 10h50 because the data has to be reloaded. Quarantine it: move it out of reach of readers, keep it and its access log, and the bench measures 8,400 rows exposed with the correction at 6h50 under the same plan.">
+        <defs>
+          <filter id="ib1cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="29" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib1cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ib1cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib1cH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib1cR { font: 800 12px Inter, sans-serif; fill: #991B1B; }
+          .ib1cL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib1cS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib1cV { font: 800 18px Inter, sans-serif; fill: #053D1E; }
+          .ib1cN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ib1cSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="40" width="390" height="200" rx="12" fill="#FEF2F2" stroke="#FCA5A5" transform="rotate(-0.4 235 140)"/>
+          <rect x="450" y="40" width="390" height="200" rx="12" fill="#ECF7F0" stroke="#075A2C" transform="rotate(0.4 645 140)"/>
+          <rect x="60" y="88" width="110" height="46" rx="6" stroke="#991B1B" stroke-dasharray="5 4"/>
+          <path d="M66 94 L164 128" stroke="#991B1B" data-strike="1"/>
+          <rect x="470" y="88" width="110" height="46" rx="6" fill="url(#ib1cHc)"/>
+          <path d="M584 111 L626 111" marker-end="url(#ib1cAr)"/>
+          <rect x="632" y="88" width="150" height="46" rx="6" fill="#FFFFFF"/>
+        </g>
+
+        <text class="ib1cR" x="58" y="72">✗ Drop it</text>
+        <text class="ib1cS" x="186" y="104">table and access</text>
+        <text class="ib1cS" x="186" y="120">history both gone</text>
+        <text class="ib1cV" x="58" y="174">18,400</text>
+        <text class="ib1cL" x="140" y="172">rows assumed exposed</text>
+        <text class="ib1cV" x="58" y="208">10h50</text>
+        <text class="ib1cL" x="140" y="206">to correct, reload first</text>
+
+        <text class="ib1cH" x="468" y="72">✓ Quarantine it, keep the log</text>
+        <text class="ib1cL" x="482" y="116">bad table</text>
+        <text class="ib1cL" x="644" y="108">quarantine schema</text>
+        <text class="ib1cS" x="644" y="124">no readers, kept</text>
+        <text class="ib1cV" x="468" y="174">8,400</text>
+        <text class="ib1cL" x="540" y="172">rows measured exposed</text>
+        <text class="ib1cV" x="468" y="208">6h50</text>
+        <text class="ib1cL" x="540" y="206">to correct</text>
+
+        <text class="ib1cN" x="40" y="276">Bench, same plan both sides (declare, roles, playbook, lineage notice); times from the first signal. Constructed.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - dropping the table is fast, and it turns a measured exposure into an assumed one.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Quarantine, snapshot, then fix<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ol>
+          <li><strong>Quarantine</strong>: move or rename the bad partition out of reach of every reader, or revoke read on it. Readers stop; the rows stay.</li>
+          <li><strong>Snapshot</strong>: copy the bad rows, the load log and the access history for the window to a protected location, and write its path in the record.</li>
+          <li><strong>Then fix</strong>, in a new partition or table, so the before and after both exist. Session 5 covers fix forward against roll back.</li>
+        </ol>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. With the same plan, keeping the evidence leaves the leaked table's exposure measured at 8,400 of 18,400 customer rows. Dropping it means nobody can show which rows were fetched, so all 18,400 have to be treated as exposed, and the bad load's correction slips from 6h50 to 10h50 because the data has to be reloaded before it can be fixed.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Retention and access for the evidence itself<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Evidence of a leaked table is itself a copy of the leaked data. NIST RS.AN-06 asks that incident records be safeguarded and that "only authorized personnel have access". Put the snapshot somewhere with its own narrow access list and a deletion date agreed with the privacy partner, and record both in the evidence section.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Open the record for the bad load</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">You are the on-call engineer at 02:40Z on 10 February. Open Quarrybank's record for the bad load, run the bench to see the times your record will have to hold, and leave with the timeline template that becomes page 1 of the responder half of the plan.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The bad load's record under a declare rule, as a UTC timeline: 02:00Z bad write, 02:30Z partner extract sent, 02:40Z volume monitor fires, 02:55Z declared, 08:55Z contained, 14:55Z corrected. Containment and correction times are what the bench computes for plan R1, six hours fifteen and twelve hours fifteen after the signal.">
+        <defs>
+          <filter id="ib1dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="37" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+        </defs>
+        <style>
+          .ib1dL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib1dM { font: 700 11px ui-monospace, Menlo, monospace; fill: #053D1E; }
+          .ib1dS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib1dW { font: 800 11px Inter, sans-serif; fill: #FFFFFF; }
+          .ib1dK { font: 800 11px Inter, sans-serif; fill: #0D1F14; }
+          .ib1dN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ib1dSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M50 120 L840 120"/>
+          <circle cx="70" cy="120" r="7" fill="#FFFFFF"/>
+          <circle cx="218" cy="120" r="7" fill="#FFFFFF"/>
+          <circle cx="366" cy="120" r="7" fill="#F2A900"/>
+          <circle cx="514" cy="120" r="7" fill="#075A2C"/>
+          <circle cx="662" cy="120" r="7" fill="#075A2C"/>
+          <circle cx="810" cy="120" r="7" fill="#053D1E"/>
+          <rect x="324" y="72" width="84" height="22" rx="6" fill="#F2A900"/>
+          <rect x="472" y="72" width="84" height="22" rx="6" fill="#075A2C"/>
+        </g>
+
+        <text class="ib1dM" x="70" y="62" text-anchor="middle">02:00Z</text>
+        <text class="ib1dM" x="218" y="62" text-anchor="middle">02:30Z</text>
+        <text class="ib1dK" x="366" y="88" text-anchor="middle">SIGNAL</text>
+        <text class="ib1dM" x="366" y="62" text-anchor="middle">02:40Z</text>
+        <text class="ib1dW" x="514" y="88" text-anchor="middle">DECLARED</text>
+        <text class="ib1dM" x="514" y="62" text-anchor="middle">02:55Z</text>
+        <text class="ib1dM" x="662" y="62" text-anchor="middle">08:55Z</text>
+        <text class="ib1dM" x="810" y="62" text-anchor="middle">14:55Z</text>
+        <text class="ib1dL" x="70" y="150" text-anchor="middle">bad write</text>
+        <text class="ib1dL" x="218" y="150" text-anchor="middle">extract sent</text>
+        <text class="ib1dL" x="366" y="150" text-anchor="middle">monitor fires</text>
+        <text class="ib1dL" x="514" y="150" text-anchor="middle">record opened</text>
+        <text class="ib1dL" x="662" y="150" text-anchor="middle">contained</text>
+        <text class="ib1dL" x="810" y="150" text-anchor="middle">corrected</text>
+        <text class="ib1dS" x="218" y="168" text-anchor="middle">before any alarm</text>
+        <text class="ib1dS" x="662" y="168" text-anchor="middle">signal + 6h15</text>
+        <text class="ib1dS" x="810" y="168" text-anchor="middle">signal + 12h15</text>
+
+        <text class="ib1dN" x="50" y="222">Plan R1 on the bench. Even spacing for reading, not to scale. Constructed Quarrybank example.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - six rows your record must hold, and the clock starts at the third one.</figcaption>
+    </figure>
+
+    <div data-ird-bench="lite" data-presets="r0,r1" data-start="r0"></div>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Open the record from the template.</strong> One document, named for the date and the type. Fill the status block before anything else, even if most of it says "unknown".</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · status block, 02:55Z</span>INCIDENT 2026-02-10 quality · Quarrybank bad load
+STATUS   investigating
+SEVERITY unset (leader sets it, session 2)
+OWNER    on-call analytics engineer
+KNOWN    row count doubled for 2 regions in partition 2026-02-10
+NEXT UPDATE 03:30Z in #incident</div>
+      </div>
+      <div class="step">
+        <p><strong>Write the first four timeline rows, in UTC, with proof.</strong> Use the six fields from Part 1. The partner extract row is the one most teams leave out because nobody had noticed it yet; ask the orchestrator what ran after the load and write down everything.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · first timeline rows</span>time    who            saw/did  what                                  proof
+02:00Z  supplier feed  saw      partition 2026-02-10 loaded (dup)     load run id
+02:30Z  orchestrator   saw      weekly partner extract sent           run id, file name
+02:40Z  volume monitor saw      row count x2, regions North and East  alert id
+02:55Z  on-call        did      declared, record opened               this document</div>
+      </div>
+      <div class="step">
+        <p><strong>Quarantine before you fix, and write it down.</strong> Copy the partition and its load log to a protected location, revoke read on the original, and record both paths. Do not delete anything.</p>
+      </div>
+      <div class="step">
+        <p><strong>Run the bench, R0 then R1.</strong> In the table, read the bad load's row: under no plan it is declared 6h30 after the signal; under a declare rule, 0h15. Then read the contain and correct columns for R1, 6h15 and 12h15: those are the last two rows of your timeline, and they are slow because nobody yet owns severity or roles. Sessions 2 and 3 of the leader track fix that.</p>
+      </div>
+      <div class="step">
+        <p><strong>Save the template.</strong> Strip Quarrybank's specifics out of steps 1 and 2 and keep the shape. That is page 1 of the responder half of the plan.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · plan, responder page 1, timeline template</span>QUARRYBANK INCIDENT RESPONSE PLAN · responder page 1 · timeline template
+Open within 5 minutes of declaring. One record per incident.
+STATUS block (rewrite every update): status / type / severity / owner / known / next update
+TIMELINE (append only, never edit a row; correct with a new row):
+  time in UTC with Z | who (person or system) | saw or did | what, one fact | proof | next
+EVIDENCE: where the quarantined copy and logs are, who can read them, delete-by date
+Rule: quarantine and snapshot before any fix. Never drop the bad table.</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>A record opened late is reconstructed, not recorded.</strong> If you are already an hour in when you start, say so in the first row: "record opened 03:45Z, rows above reconstructed from chat and logs". Honesty about provenance is part of provenance.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 2</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li>Make the timeline template real where you work: one document or ticket type that anyone on call can open in under five minutes.</li>
+      <li>Find out which of your systems log in UTC and which do not. List the ones that do not; those are the rows that will be misordered.</li>
+      <li>Write down how you would quarantine a bad partition in your warehouse without deleting it, and who has permission to do it at 3am.</li>
+      <li>For the last real data problem you handled, try to rebuild its timeline in UTC from logs alone. Note every row you could not prove.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">At 02:45Z the bad partition is still being read by dashboards. What should happen to it first?</p>
+      <button class="qopt" type="button">A · Quarantine it and snapshot it with its logs, then fix in a new partition</button>
+      <button class="qopt" type="button">B · Drop it, so nobody can read it</button>
+      <button class="qopt" type="button">C · Leave it until the fix is ready, so nothing is lost</button>
+      <p class="qwhy">Quarantine stops the reading and keeps the evidence. On the bench, dropping the table turns a measured exposure of 8,400 rows into an assumed 18,400 and delays the correction by four hours.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">A colleague wrote "10:55 declaring" in chat from an office eight hours ahead of UTC. The monitor log says 02:40. What does the record need?</p>
+      <button class="qopt" type="button">A · Both times as written, so nothing is changed</button>
+      <button class="qopt" type="button">B · Only the chat time, because a human made the decision</button>
+      <button class="qopt" type="button">C · The declaration converted to 02:55Z, with the chat message as its proof</button>
+      <p class="qwhy">One clock, with the zone written. Mixed clocks put events in the wrong order and make "did it leave before we knew?" unanswerable.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Which document does the SRE book call the incident commander's most important responsibility?</p>
+      <button class="qopt" type="button">A · The postmortem</button>
+      <button class="qopt" type="button">B · A living incident document, with the most important information at the top</button>
+      <button class="qopt" type="button">C · The status page</button>
+      <p class="qwhy">"The incident commander's most important responsibility is to keep a living incident document." The postmortem is written later, from it.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Google SRE book, Managing Incidents (read 2026-11-10)</span><span class="note">The living incident document, most important information at the top</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">PagerDuty Incident Response, roles (read 2026-11-10)</span><span class="note">The scribe "documents the timeline of an incident as it progresses"</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, RS.AN-06 and RS.AN-07 (read 2026-11-10)</span><span class="note">Records and incident data with integrity and provenance preserved; collected data is evidence</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Six fields per row, UTC habits, quarantine before fix</span><span class="note">Practitioner conventions built on the sources above</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Bench numbers (6h30, 0h15, 6h15, 12h15, 8,400 against 18,400)</span><span class="note">Computed in your browser by replaying a constructed event log</span></div>
+      <div class="covered-row"><span class="status pill inkpill">·</span><span class="name">What counts as becoming aware</span><span class="note">Not covered here: a legal judgement owned by the GDPR and PDPA courses</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Responder session 1 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Record before fix</b><span>A living document: status on top, append-only timeline below.</span></div>
+      <div class="cheat-item"><b>Six fields</b><span>UTC time, who, saw or did, what, proof, next. Every row.</span></div>
+      <div class="cheat-item"><b>Write the Z</b><span>One clock. Copy machine times from the machine.</span></div>
+      <div class="cheat-item"><b>Never edit a row</b><span>Correct with a new row. Evidence that changes quietly is not evidence.</span></div>
+      <div class="cheat-item"><b>Do not drop the table</b><span>Quarantine, snapshot, then fix. Dropping turned 8,400 measured rows into 18,400 assumed.</span></div>
+      <div class="cheat-item"><b>Bad load on the bench</b><span>No plan: declared 6h30 after the signal. Declare rule: 0h15.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>The record says what happened. Session 2 asks who it happened to: trace every table, dashboard, extract, email and model that read the bad data since the bad write, and watch that list grow every hour nobody stops it.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Responder session 1 of 8 · learn-data-incident-response-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="../index.html">← Course home</a> &nbsp;·&nbsp; <a href="b2-what-read-the-bad-data.html">Next: What read the bad data →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/ird-sample.js?v=1"></script>
+<script src="../assets/ird-live.js?v=2"></script>
+</body>
+</html>

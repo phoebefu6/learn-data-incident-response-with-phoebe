@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Responder session 7 of 8. Exit criteria per incident type, the record the write-up needs, and follow-ups with one owner and one date, closed for Quarrybank's leaked table on the incident clock.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Close with evidence - learn incident response for data teams with phoebe">
+<meta property="og:description" content="Responder session 7 of 8. Declare the end on criteria, show the proof for each one, and hand every follow-up to a named owner.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/courses/b7-close-with-evidence.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Close with evidence - learn incident response for data teams with phoebe">
+<meta name="twitter:description" content="An incident is closed when every exit criterion has a proof in the record, not when the room goes quiet.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Responder session 7 · Close with evidence - learn incident response for data teams with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-data-incident-response-with-phoebe</a> / Responder session 7 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Incident Response for Data Teams with Phoebe · Responder session 7 of 8</div>
+    <h1>Close with <span class="accent">evidence</span></h1>
+    <p class="sub">The doors are shut, the rows are corrected, every consumer has a notice, and the call has gone quiet. It is tempting to say the incident is over. Tonight you learn to say it the way NIST asks: on criteria you wrote before the incident, each one opened by a proof that already sits in the record. You check the exit criteria against the bench for Quarrybank's leaked table, gather what the postmortem author will need, and hand every follow-up to one named owner with one date.</p>
+    <div class="chip-row">
+      <span class="chip level">🔴 Advanced</span>
+      <span class="chip audience">Data and analytics engineers on call</span>
+      <span class="chip audience">Whoever signs the incident closed</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Criteria, record, follow-ups</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: the close-out record</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>Closing is a decision, not a feeling</h2>
+    </div>
+    <p class="lede">Every session so far has moved an incident forward: open the record, trace the readers, stop the spread, close the doors, correct and prove it, tell everyone. Tonight is the last move a responder makes on a live incident, and it is the one most often skipped. Somebody says "I think we're done", nobody disagrees, and the incident ends without anyone being able to show why.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> Exit criteria for each of Quarrybank's three incident types, the list of what the record must hold before the postmortem author picks it up, a follow-up table where every row has an owner and a date, and page 7 of the responder half of the plan: the close-out record.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why "the call went quiet" is not a close<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A quiet call means people stopped talking. It says nothing about whether a vendor still holds a copy, whether a director still has the wrong pack in their inbox, or whether the privacy partner's notice went out. The questions that arrive weeks later, from the audit committee chair, the auditor or a regulator, are all versions of one question: how did you know it was over?</p>
+        <p>The answer that holds up is a short list of criteria, agreed before the incident, each one ticked with a pointer to proof in the record. That is the whole of tonight.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. After the bad load was corrected, the team marked the incident resolved in the ticket. Two weeks later the finance controller asked whether the demand forecast model had been rescored on corrected rows. Nobody could say, because "resolved" had meant "the table is fixed", and the model keeps its own copy that a rerun does not refresh.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Who signs, and what they sign<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>The incident lead signs the close.</strong> NIST RS.MA-01 suggests "designating an incident lead for each incident"; the person who held the incident is the person who declares its end.</li>
+          <li><strong>They sign the criteria, not the mood.</strong> The signature sits under a list where every line has a proof pointer. A line without one is open.</li>
+          <li><strong>Exceptions are signed too.</strong> Anything that cannot be closed by action, such as a party nobody can contact, is closed by a recorded decision with a name on it.</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers exit criteria, NIST RC.RP-06</span>
+      <h2>Exit criteria, one set per incident type</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">NIST SP 800-61 Rev. 3 states it in one line under RC.RP-06: "The end of incident recovery is declared based on criteria, and incident-related documentation is completed." Its first recommendation adds an after-action report documenting the incident, the response and recovery actions, and the lessons. Two things, then: criteria for the end, and a record complete enough to write from.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The exit gate for the leaked table. On the left, the record holds four proofs: a revoke log for both doors, vendor analyst A's deletion confirmation, the unknown address recorded as not notifiable with 7,600 rows, and the notice list with sent and acknowledged times. Each proof has an arrow to one lock on the gate. The third lock, the unknown address, is highlighted because it cannot be opened by a notice, only by a recorded decision. When all four locks open, the incident passes to declared closed under RC.RP-06.">
+        <defs>
+          <filter id="ib7aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="71" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib7aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#075A2C" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ib7aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib7aH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib7aL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib7aS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib7aA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ib7aW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .ib7aN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib7aH" x="40" y="28">THE EXIT GATE · LEAKED TABLE, ONE LOCK PER CRITERION</text>
+
+        <g filter="url(#ib7aSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="50" width="260" height="345" rx="10" fill="#FFFFFF" transform="rotate(0.3 170 222)"/>
+          <rect x="56" y="96" width="228" height="64" rx="6" fill="url(#ib7aHc)" transform="rotate(-0.8 170 128)"/>
+          <rect x="56" y="170" width="228" height="64" rx="6" fill="url(#ib7aHc)" transform="rotate(0.6 170 202)"/>
+          <rect x="56" y="244" width="228" height="64" rx="6" fill="url(#ib7aHc)" transform="rotate(-0.5 170 276)"/>
+          <rect x="56" y="318" width="228" height="64" rx="6" fill="url(#ib7aHc)" transform="rotate(0.7 170 350)"/>
+          <path d="M290 128 L434 128" marker-end="url(#ib7aAr)"/>
+          <path d="M290 202 L434 202" marker-end="url(#ib7aAr)"/>
+          <path d="M290 276 L434 276" marker-end="url(#ib7aAr)"/>
+          <path d="M290 350 L434 350" marker-end="url(#ib7aAr)"/>
+          <rect x="430" y="64" width="60" height="320" rx="4" fill="#ECF7F0" transform="rotate(0.4 460 224)"/>
+          <path d="M450 70 L450 104"/>
+          <path d="M470 70 L470 104"/>
+          <path d="M450 380 L450 368"/>
+          <path d="M470 380 L470 368"/>
+          <rect x="440" y="114" width="40" height="28" rx="4" fill="#FFFFFF" transform="rotate(-2 460 128)"/>
+          <rect x="440" y="188" width="40" height="28" rx="4" fill="#FFFFFF" transform="rotate(2 460 202)"/>
+          <rect x="440" y="262" width="40" height="28" rx="4" fill="#F2A900" transform="rotate(-1.5 460 276)"/>
+          <rect x="440" y="336" width="40" height="28" rx="4" fill="#FFFFFF" transform="rotate(1.5 460 350)"/>
+          <path d="M494 240 L596 240" marker-end="url(#ib7aAr)"/>
+          <rect x="600" y="180" width="240" height="120" rx="10" fill="#075A2C" transform="rotate(-0.6 720 240)"/>
+        </g>
+
+        <text class="ib7aH" x="56" y="80">THE RECORD HOLDS</text>
+        <text class="ib7aL" x="68" y="122">Every door closed</text>
+        <text class="ib7aS" x="68" y="142">revoke log, both doors</text>
+        <text class="ib7aL" x="68" y="196">Every copy accounted for</text>
+        <text class="ib7aS" x="68" y="216">vendor A deletion confirmed</text>
+        <text class="ib7aL" x="68" y="270">Unknown address recorded</text>
+        <text class="ib7aS" x="68" y="290">not notifiable, 7,600 rows</text>
+        <text class="ib7aL" x="68" y="344">Everyone notifiable told</text>
+        <text class="ib7aS" x="68" y="364">notice list, sent + acknowledged</text>
+
+        <text class="ib7aA" x="430" y="56">exit gate</text>
+
+        <text class="ib7aW" x="616" y="214">DECLARED CLOSED</text>
+        <text class="ib7aW" x="616" y="240">RC.RP-06: on criteria,</text>
+        <text class="ib7aW" x="616" y="260">documentation complete</text>
+        <text class="ib7aS" x="600" y="160">no proof, no lock opened</text>
+        <text class="ib7aS" x="600" y="326">signed by the incident lead</text>
+        <text class="ib7aA" x="510" y="296">closed by decision,</text>
+        <text class="ib7aA" x="510" y="312">not by notice</text>
+
+        <text class="ib7aN" x="40" y="420">Constructed Quarrybank example. A lock opens only on a proof that already sits in the record.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - four locks, four proofs, and one lock that only a recorded decision can open.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Quarrybank's exit criteria by type<span class="mini">4 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The three incident types from leader session 1 each end in a different way, so each gets its own short list. Write them into the plan now, while nobody is tired.</p>
+        <table class="clean">
+          <thead><tr><th>Type</th><th>Exit criterion</th><th>The proof that opens it</th></tr></thead>
+          <tbody>
+            <tr><td>Quality</td><td>Every consumer on the trace reads corrected rows</td><td>The correction check from session 5, one result per consumer</td></tr>
+            <tr><td>Exposure</td><td>Every door closed</td><td>Revoke log for each door, with UTC times</td></tr>
+            <tr><td>Exposure</td><td>Every copy accounted for, or its deletion confirmed</td><td>Written confirmation from each holder, filed in the evidence section</td></tr>
+            <tr><td>Exposure</td><td>Parties who cannot be told are recorded as not notifiable</td><td>A signed line in the record, with the rows they fetched</td></tr>
+            <tr><td>Decision</td><td>Everyone who acted on the number has been told</td><td>The notice list, with sent and acknowledged times</td></tr>
+            <tr><td>Decision</td><td>Restatement decided</td><td>The leader's restatement call, with who made it</td></tr>
+          </tbody>
+        </table>
+        <p>Every type also carries two shared lines: every notice deadline met or its miss explained, and the record complete enough for the after-action report.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Criteria are written before, ticked after<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Criteria written at the end of an incident tend to describe whatever the team managed to do. Criteria written in the plan describe what "safe" means, and the incident has to meet them. That is the same logic as NIST's declare rule in DE.AE-08, "Incidents are declared when adverse events meet the defined incident criteria", applied at the other end.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. On the leaked table, the vendor workspace share was revoked at containment, but vendor analyst A had already downloaded a copy through it 0h30 after the bad write. "Every door closed" was true. "Every copy accounted for" was not, until the vendor sent written confirmation that the file was deleted. Two criteria, two different proofs; ticking one does not tick the other.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>When a criterion cannot be met<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Some criteria can never be met by action. The unknown address that paged through the leaked table's public link cannot be told, because nobody knows who it is. The close-out record does not pretend otherwise. It records the party, the rows it fetched, the fact that it is not notifiable, and the name of the person who accepted that, and it hands the "could this happen again" question to a follow-up. Whether that exposure changes what the privacy partner tells the regulator is their call, owned by the <a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/b7-breach-response.html">GDPR ↗</a> and <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/b7-breach-response.html">PDPA ↗</a> breach response sessions.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers what the record must hold for the postmortem</span>
+      <h2>What the record hands the write-up</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The second half of RC.RP-06 is "incident-related documentation is completed". The responder does not write the postmortem; that craft belongs to the planned runbooks and postmortems course on the <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe hub ↗</a>. The responder makes sure the author never has to reconstruct anything, because every section they need is already in the record with proof.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The hand-off. Left column, five sections of the record: living record with status and timeline, consumer trace, notice list with sent and acknowledged times, evidence locations with delete-by date, and the bench-style numbers. Each has an arrow to the matching input the postmortem author needs on the right: what happened when, who and what it reached, who was told and how fast, what was kept, how ready the team was. Below, the signed close-out record flows into the incident package.">
+        <defs>
+          <filter id="ib7bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="83" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib7bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#075A2C" stroke-width="1" opacity=".5"/></pattern>
+          <marker id="ib7bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib7bH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib7bL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib7bS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib7bW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .ib7bN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib7bH" x="40" y="28">THE HAND-OFF · RECORD SECTIONS INTO THE WRITE-UP</text>
+        <text class="ib7bH" x="40" y="56">THE RECORD HOLDS</text>
+        <text class="ib7bH" x="580" y="56">THE AUTHOR NEEDS</text>
+
+        <g filter="url(#ib7bSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="68" width="260" height="46" rx="6" fill="url(#ib7bHc)" transform="rotate(-0.6 170 91)"/>
+          <rect x="40" y="124" width="260" height="46" rx="6" fill="url(#ib7bHc)" transform="rotate(0.5 170 147)"/>
+          <rect x="40" y="180" width="260" height="46" rx="6" fill="url(#ib7bHc)" transform="rotate(-0.4 170 203)"/>
+          <rect x="40" y="236" width="260" height="46" rx="6" fill="url(#ib7bHc)" transform="rotate(0.6 170 259)"/>
+          <rect x="40" y="292" width="260" height="46" rx="6" fill="url(#ib7bHc)" transform="rotate(-0.5 170 315)"/>
+          <path d="M304 91 L574 91" marker-end="url(#ib7bAr)"/>
+          <path d="M304 147 L574 147" marker-end="url(#ib7bAr)"/>
+          <path d="M304 203 L574 203" marker-end="url(#ib7bAr)"/>
+          <path d="M304 259 L574 259" marker-end="url(#ib7bAr)"/>
+          <path d="M304 315 L574 315" marker-end="url(#ib7bAr)"/>
+          <rect x="580" y="68" width="260" height="46" rx="6" fill="#FFFFFF" transform="rotate(0.5 710 91)"/>
+          <rect x="580" y="124" width="260" height="46" rx="6" fill="#FFFFFF" transform="rotate(-0.6 710 147)"/>
+          <rect x="580" y="180" width="260" height="46" rx="6" fill="#FFFFFF" transform="rotate(0.4 710 203)"/>
+          <rect x="580" y="236" width="260" height="46" rx="6" fill="#FFFFFF" transform="rotate(-0.5 710 259)"/>
+          <rect x="580" y="292" width="260" height="46" rx="6" fill="#FFFFFF" transform="rotate(0.6 710 315)"/>
+          <rect x="40" y="362" width="260" height="42" rx="8" fill="#F2A900" transform="rotate(-0.8 170 383)"/>
+          <path d="M304 383 L574 383" marker-end="url(#ib7bAr)"/>
+          <rect x="580" y="362" width="260" height="42" rx="8" fill="#053D1E" transform="rotate(0.8 710 383)"/>
+        </g>
+
+        <text class="ib7bL" x="52" y="88">Living record, status + timeline</text>
+        <text class="ib7bS" x="52" y="105">session 1, UTC, append only</text>
+        <text class="ib7bL" x="52" y="144">Consumer trace</text>
+        <text class="ib7bS" x="52" y="161">5 consumers + 1 decision on R5</text>
+        <text class="ib7bL" x="52" y="200">Notice list</text>
+        <text class="ib7bS" x="52" y="217">sent and acknowledged times</text>
+        <text class="ib7bL" x="52" y="256">Evidence locations</text>
+        <text class="ib7bS" x="52" y="273">where kept, who reads, delete-by</text>
+        <text class="ib7bL" x="52" y="312">Bench-style numbers</text>
+        <text class="ib7bS" x="52" y="329">0h05 / 0h25 / 3h25, 4 of 4</text>
+
+        <text class="ib7bL" x="592" y="88">What happened, and when</text>
+        <text class="ib7bS" x="592" y="105">one clock, every row proven</text>
+        <text class="ib7bL" x="592" y="144">Who and what it reached</text>
+        <text class="ib7bS" x="592" y="161">the impact section</text>
+        <text class="ib7bL" x="592" y="200">Who was told, how fast</text>
+        <text class="ib7bS" x="592" y="217">the communication section</text>
+        <text class="ib7bL" x="592" y="256">What was kept</text>
+        <text class="ib7bS" x="592" y="273">the evidence appendix</text>
+        <text class="ib7bL" x="592" y="312">How ready the team was</text>
+        <text class="ib7bS" x="592" y="329">the three readiness times</text>
+
+        <text class="ib7bL" x="54" y="388">Close-out record, signed</text>
+        <text class="ib7bW" x="594" y="388">Incident package, b6</text>
+
+        <text class="ib7bN" x="40" y="428">Constructed Quarrybank example. The author copies; nobody re-investigates.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - five sections of the record become five inputs to the write-up, with the signed close-out record on top.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The five things the record must hold<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ol>
+          <li><strong>The living record</strong> from responder session 1: the status block and the append-only timeline, in UTC, every row with proof.</li>
+          <li><strong>The consumer trace</strong> from session 2: every table, dashboard, extract, email, model and outside party that read the bad data, and every decision made on it.</li>
+          <li><strong>The notice list</strong> from session 6, with sent and acknowledged times for each name. Sent is your action; acknowledged is the proof it landed.</li>
+          <li><strong>The evidence locations</strong>: where the quarantined copies and logs are, who can read them, and the delete-by date agreed with the privacy partner. NIST RS.AN-06 asks that records keep "integrity and provenance", which includes knowing where they are.</li>
+          <li><strong>The bench-style numbers</strong>: consumers and decisions on bad data, never told, copies still wrong, deadlines met, and the three readiness times, declare, contain and correct, measured from the first signal.</li>
+        </ol>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The numbers, filled in for R5<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Quarrybank's quarter under the rehearsed plan, R5, measured on the bench. These are the numbers the close-out record carries, in the same shape the bench prints them.</p>
+        <table class="clean">
+          <thead><tr><th>Number</th><th>R5</th><th>Measured from</th></tr></thead>
+          <tbody>
+            <tr><td>Consumers + decisions on bad data</td><td>5 + 1</td><td>whole quarter</td></tr>
+            <tr><td>Never told</td><td>0</td><td>whole quarter</td></tr>
+            <tr><td>Copies still wrong</td><td>0</td><td>whole quarter</td></tr>
+            <tr><td>Deadlines met</td><td>4 of 4</td><td>due and done times run from the bad write</td></tr>
+            <tr><td>Declare / contain / correct</td><td>0h05 / 0h25 / 3h25</td><td>the first signal</td></tr>
+            <tr><td>Leaked table rows exposed</td><td>7,600 of 18,400</td><td>before every door closed</td></tr>
+          </tbody>
+        </table>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. "Never told: 0" on the leaked table is true and still needs a sentence. The unknown address is on the reached list, and the bench leaves it out of "never told" because it is not notifiable. A postmortem author reading only the zero would miss it. The close-out record names it.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where the record goes next<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Two places. The postmortem write-up, whose structure and tone belong to the planned runbooks and postmortems course (watch the <a href="https://phoebefu6.github.io/learn-with-phoebe/">hub ↗</a> for it). And the incident package that reliability keeps for each incident, covered in <a href="https://phoebefu6.github.io/learn-data-reliability-with-phoebe/courses/b6-incident-package.html">reliability b6 ↗</a>. NIST adds a timing point worth keeping: lessons "should often be shared as soon as they are identified, not delayed until after recovery concludes." The close-out record collects them; it does not have to be the first place they are said.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers follow-ups with owners and dates</span>
+      <h2>Every follow-up has one name and one date</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">A follow-up with a team as its owner is owned by nobody. A follow-up with no date is a wish. The close-out record lists every follow-up as a row with exactly one person and exactly one date, and the incident is not closed until the table is complete, even if the work itself runs for months.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Top: the floor, what reached people before the first signal on R5. Leaked table: vendor analyst A downloads at 0h30, the unknown address starts at 3h10, signal at 3h20, all from the bad write. Board deck: the pack and pricing deck were read and the decision Hold prices in two regions was made at 24h00, signal at 48h00. An arrow from the floor goes down to the detection card. Below, four follow-up cards, one per lever: detection, declare rule tuning, playbook gap, notice list gap, each with blank owner and due lines.">
+        <defs>
+          <filter id="ib7cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="97" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib7cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".6"/></pattern>
+          <marker id="ib7cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib7cH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib7cL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib7cS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib7cB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ib7cK { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib7cW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .ib7cN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib7cH" x="40" y="28">THE FLOOR · WHAT REACHED PEOPLE BEFORE THE FIRST SIGNAL (R5)</text>
+
+        <g filter="url(#ib7cSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="44" width="390" height="100" rx="10" fill="#FFF6DC" transform="rotate(-0.4 235 94)"/>
+          <rect x="450" y="44" width="390" height="100" rx="10" fill="#FFF6DC" transform="rotate(0.4 645 94)"/>
+          <rect x="52" y="54" width="10" height="80" rx="3" fill="url(#ib7cHc)"/>
+          <rect x="462" y="54" width="10" height="80" rx="3" fill="url(#ib7cHc)"/>
+          <path d="M150 148 C150 164 136 172 128 186" marker-end="url(#ib7cAr)"/>
+          <path d="M560 148 C470 168 260 162 146 188" marker-end="url(#ib7cAr)"/>
+          <rect x="40" y="194" width="185" height="190" rx="10" fill="#FFFFFF" transform="rotate(-1.5 132 289)"/>
+          <rect x="40" y="194" width="185" height="30" rx="8" fill="#F2A900" transform="rotate(-1.5 132 289)"/>
+          <rect x="245" y="194" width="185" height="190" rx="10" fill="#FFFFFF" transform="rotate(1 337 289)"/>
+          <rect x="245" y="194" width="185" height="30" rx="8" fill="#075A2C" transform="rotate(1 337 289)"/>
+          <rect x="450" y="194" width="185" height="190" rx="10" fill="#FFFFFF" transform="rotate(-1 542 289)"/>
+          <rect x="450" y="194" width="185" height="30" rx="8" fill="#075A2C" transform="rotate(-1 542 289)"/>
+          <rect x="655" y="194" width="185" height="190" rx="10" fill="#FFFFFF" transform="rotate(1.5 747 289)"/>
+          <rect x="655" y="194" width="185" height="30" rx="8" fill="#075A2C" transform="rotate(1.5 747 289)"/>
+          <path d="M56 324 L208 324"/>
+          <path d="M56 362 L208 362"/>
+          <path d="M261 324 L413 324"/>
+          <path d="M261 362 L413 362"/>
+          <path d="M466 324 L618 324"/>
+          <path d="M466 362 L618 362"/>
+          <path d="M671 324 L823 324"/>
+          <path d="M671 362 L823 362"/>
+        </g>
+
+        <text class="ib7cK" x="76" y="70">Leaked table</text>
+        <text class="ib7cB" x="76" y="92">0h30 vendor analyst A downloads</text>
+        <text class="ib7cB" x="76" y="110">3h10 unknown address starts</text>
+        <text class="ib7cS" x="76" y="128">signal 3h20, all from the bad write</text>
+        <text class="ib7cK" x="486" y="70">Board deck</text>
+        <text class="ib7cB" x="486" y="92">pack and pricing deck read</text>
+        <text class="ib7cB" x="486" y="110">24h00 "Hold prices in two regions"</text>
+        <text class="ib7cS" x="486" y="128">signal 48h00, all from the bad write</text>
+
+        <text class="ib7cK" x="54" y="214">DETECTION</text>
+        <text class="ib7cL" x="54" y="250">Catch it sooner</text>
+        <text class="ib7cS" x="54" y="270">the floor's only lever</text>
+        <text class="ib7cS" x="54" y="288">owned by observability</text>
+        <text class="ib7cW" x="259" y="214">DECLARE RULE</text>
+        <text class="ib7cL" x="259" y="250">Tune the trigger</text>
+        <text class="ib7cS" x="259" y="270">access alert means declare</text>
+        <text class="ib7cW" x="464" y="214">PLAYBOOK GAP</text>
+        <text class="ib7cL" x="464" y="250">Vendor share revoke</text>
+        <text class="ib7cS" x="464" y="270">the second door</text>
+        <text class="ib7cW" x="669" y="214">NOTICE LIST GAP</text>
+        <text class="ib7cL" x="669" y="250">Not-notifiable parties</text>
+        <text class="ib7cS" x="669" y="270">a row, never a skip</text>
+
+        <text class="ib7cS" x="56" y="314">owner</text>
+        <text class="ib7cS" x="56" y="352">due</text>
+        <text class="ib7cS" x="261" y="314">owner</text>
+        <text class="ib7cS" x="261" y="352">due</text>
+        <text class="ib7cS" x="466" y="314">owner</text>
+        <text class="ib7cS" x="466" y="352">due</text>
+        <text class="ib7cS" x="671" y="314">owner</text>
+        <text class="ib7cS" x="671" y="352">due</text>
+
+        <text class="ib7cN" x="40" y="414">Constructed Quarrybank example. Floor times from the bad write, measured on the bench. One name, one date per card.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - what reached people before anyone could know is a detection follow-up, and every card needs a name and a date before the close.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The floor goes to detection<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Even the rehearsed plan leaves 5 consumers and 1 decision on bad data, measured on the bench. None of them is a response failure. On the leaked table, vendor analyst A downloaded a copy 0h30 after the bad write, and the unknown address began paging through the public link at 3h10, ten minutes before the 3h20 access alert. On the board deck, the pack and the pricing committee deck were read and "Hold prices in two regions" was decided at 24h00, a full day before the 48h00 reconciliation signal. All of those times run from the bad write.</p>
+        <p>No response plan moves an event that happened before the first signal. The follow-up for the floor is a detection follow-up, and its owner is whoever owns detection, the work covered in <a href="https://phoebefu6.github.io/learn-data-observability-with-phoebe/">learn-data-observability ↗</a>. Writing it into the close-out record is how that request reaches them with evidence attached.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. The first draft of the leaked table's follow-ups said "improve monitoring, data team". The incident lead sent it back: one person, one date, one sentence of what "done" looks like. The rewrite read "alert on any new outside share of a table tagged customer, owner the observability lead, due before the next quarterly tabletop".</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>One card per lever<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <thead><tr><th>Lever</th><th>What the leaked table showed</th><th>Owner goes to</th></tr></thead>
+          <tbody>
+            <tr><td>Detection</td><td>A copy and an unknown reader before the signal</td><td>Whoever owns monitoring</td></tr>
+            <tr><td>Declare rule tuning</td><td>Was the access alert a declare trigger on its own?</td><td>The leader who owns the declare rule</td></tr>
+            <tr><td>Playbook gap</td><td>The vendor workspace share is a second door; is it in the exposure playbook?</td><td>The owner of responder page 4</td></tr>
+            <tr><td>Notice list gap</td><td>Parties who cannot be told need a row, not a silence</td><td>The owner of responder page 6</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Follow-ups are not blame<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The owner of a follow-up is the person who will change the system, not the person who was on call when it broke. Practitioners keep those apart on purpose: if owning a follow-up reads as fault, people stop volunteering what they saw, and the next record is thinner. The tone of the write-up itself is the docs course's ground; the close-out record only needs the names to point at work, not at people.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Write the close-out record for the leaked table</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">You are the incident lead for the leaked table, 2026-02-24, on the rehearsed plan. Open the bench on R5, read what each incident reached, check every exit criterion against the panel, and sign the close-out record that becomes page 7 of the responder half of the plan.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The leaked table on plan R5, as a timeline with two clocks. Measured from the bad write: bad write 0h00, vendor analyst A downloads a copy at 0h30, the unknown address starts paging the public link at 3h10, the access alert fires at 3h20. Measured from the first signal: declared at plus 0h05, doors closed at plus 0h25 with 7,600 of 18,400 rows exposed, corrected at plus 3h25.">
+        <defs>
+          <filter id="ib7dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="103" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib7dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ib7dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib7dL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib7dM { font: 700 11px ui-monospace, Menlo, monospace; fill: #053D1E; }
+          .ib7dS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib7dB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ib7dA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ib7dK { font: 800 11px Inter, sans-serif; fill: #0D1F14; }
+          .ib7dN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib7dB" x="50" y="34">MEASURED FROM THE BAD WRITE</text>
+        <text class="ib7dA" x="510" y="34">MEASURED FROM THE FIRST SIGNAL</text>
+
+        <g filter="url(#ib7dSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="140" y="112" width="220" height="16" rx="4" fill="url(#ib7dHc)"/>
+          <path d="M50 120 L840 120" marker-end="url(#ib7dAr)"/>
+          <path d="M490 46 L490 104" stroke="#4A5F52" stroke-dasharray="4 4"/>
+          <circle cx="70" cy="120" r="7" fill="#FFFFFF"/>
+          <circle cx="190" cy="120" r="7" fill="#FFFFFF"/>
+          <circle cx="310" cy="120" r="7" fill="#FFFFFF"/>
+          <circle cx="430" cy="120" r="7" fill="#F2A900"/>
+          <circle cx="550" cy="120" r="7" fill="#075A2C"/>
+          <circle cx="670" cy="120" r="7" fill="#075A2C"/>
+          <circle cx="790" cy="120" r="7" fill="#053D1E"/>
+          <rect x="396" y="72" width="68" height="22" rx="6" fill="#F2A900"/>
+        </g>
+
+        <text class="ib7dM" x="70" y="62" text-anchor="middle">0h00</text>
+        <text class="ib7dM" x="190" y="62" text-anchor="middle">0h30</text>
+        <text class="ib7dM" x="310" y="62" text-anchor="middle">3h10</text>
+        <text class="ib7dM" x="430" y="62" text-anchor="middle">3h20</text>
+        <text class="ib7dK" x="430" y="88" text-anchor="middle">SIGNAL</text>
+        <text class="ib7dM" x="550" y="62" text-anchor="middle">+0h05</text>
+        <text class="ib7dM" x="670" y="62" text-anchor="middle">+0h25</text>
+        <text class="ib7dM" x="790" y="62" text-anchor="middle">+3h25</text>
+
+        <text class="ib7dL" x="70" y="152" text-anchor="middle">bad write</text>
+        <text class="ib7dL" x="190" y="152" text-anchor="middle">vendor A copy</text>
+        <text class="ib7dL" x="310" y="152" text-anchor="middle">unknown address</text>
+        <text class="ib7dL" x="430" y="152" text-anchor="middle">access alert</text>
+        <text class="ib7dL" x="550" y="152" text-anchor="middle">declared</text>
+        <text class="ib7dL" x="670" y="152" text-anchor="middle">doors closed</text>
+        <text class="ib7dL" x="790" y="152" text-anchor="middle">corrected</text>
+        <text class="ib7dS" x="70" y="170" text-anchor="middle">09:00Z</text>
+        <text class="ib7dS" x="190" y="170" text-anchor="middle">before any alarm</text>
+        <text class="ib7dS" x="310" y="170" text-anchor="middle">pages the link</text>
+        <text class="ib7dS" x="670" y="170" text-anchor="middle">7,600 of 18,400</text>
+        <text class="ib7dB" x="250" y="194" text-anchor="middle">the floor: reached before the signal</text>
+
+        <text class="ib7dN" x="50" y="240">Plan R5 on the bench. Even spacing for reading, not to scale. Constructed Quarrybank example.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - two clocks in one record: what reached people runs from the bad write, how fast you answered runs from the signal.</figcaption>
+    </figure>
+
+    <div data-ird-bench="lite" data-presets="r4,r5" data-start="r5"></div>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Open all three "what it reached" panels on R5.</strong> Bad load, leaked table, wrong number on the board deck. Read the headline first: 5 + 1 on bad data, 0 never told, 0 copies still wrong, 4 of 4 deadlines met. Then switch to R4 and back. The headline does not move; the readiness times do, because the bench models plan times by stated rules and rehearsal shortens each step.</p>
+      </div>
+      <div class="step">
+        <p><strong>Copy what the close-out record needs.</strong> From the panels and the table, not from memory. Note which clock each number runs on.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · R5 numbers for the record</span>headline (quarter)    5 + 1 on bad data · 0 never told · 0 still wrong · 4 of 4
+readiness (signal)    declare 0h05 · contain 0h25 · correct 3h25
+bad load              reached nothing · partner told 1h20, due 24h40 (from bad write)
+leaked table          reached vendor analyst A; unknown address
+                      rows 7,600 of 18,400 · GDPR and PDPA met (from bad write)
+board deck            reached portal, emailed pack, pricing deck
+                      decision "Hold prices in two regions" at 24h00 (from bad write)</div>
+      </div>
+      <div class="step">
+        <p><strong>Check each exit criterion against the leaked table's panel.</strong> Who was reached, who was told, and whether each deadline was met. Every row gets a proof pointer or it stays open.</p>
+        <div class="prompt-box good"><span class="label">★ Step 3 · criteria check, leaked table</span>criterion                       panel says                    proof in record
+every door closed               public link + vendor share    revoke log, UTC
+every copy accounted for        vendor analyst A reached      deletion confirmation, filed
+unknown address recorded        reached, not notifiable       signed line, rows fetched
+everyone notifiable told        never told: nobody            notice list, sent + acked
+deadlines met                   GDPR met, PDPA met            privacy partner's filing ref</div>
+      </div>
+      <div class="step">
+        <p><strong>Write the follow-ups, one owner and one date each.</strong> Start with the floor: vendor analyst A's download and the unknown address both happened before the 3h20 signal. That card goes to whoever owns detection. Then one card each for the declare rule, the playbook and the notice list.</p>
+      </div>
+      <div class="step">
+        <p><strong>Sign the close-out record.</strong> Strip the specifics you do not need from steps 2 and 3, keep the shape, and save it. That is page 7 of the responder half of the plan.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · plan, responder page 7, close-out record</span>QUARRYBANK INCIDENT RESPONSE PLAN · responder page 7 · close-out record
+INCIDENT   2026-02-24 exposure · leaked customer table (18,400 rows)
+EXIT CRITERIA (each needs a proof pointer, or it stays open)
+  [x] every door closed: public link, vendor share      -&gt; revoke log
+  [x] every copy accounted for or deletion confirmed    -&gt; vendor A confirmation
+  [x] unknown address: recorded as not notifiable       -&gt; signed line, 7,600 rows
+  [x] everyone notifiable told                          -&gt; notice list, sent + acked
+  [x] GDPR and PDPA deadlines met (privacy partner)     -&gt; filing references
+NUMBERS (R5, bench-style)
+  5 + 1 on bad data · 0 never told · 0 still wrong · 4 of 4 deadlines
+  declare 0h05 · contain 0h25 · correct 3h25, from the first signal
+  rows exposed 7,600 of 18,400
+FOLLOW-UPS (one owner, one date)
+  detection: outside share alerts       owner ________  due ________
+  declare rule: access alert trigger    owner ________  due ________
+  playbook: vendor share revoke         owner ________  due ________
+  notice list: not-notifiable row       owner ________  due ________
+HAND-OFF  record + trace + notice list + evidence to the postmortem author
+SIGN-OFF  incident lead ________  UTC time ________</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>An unticked box is not a failure, it is the honest state.</strong> If vendor A's confirmation has not arrived, the incident stays open on that one line, with an owner chasing it and a date. Closing around it is how a copy goes missing for good.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 8</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li>Write exit criteria for the three incident types where you work, each with the proof that opens it. Keep each list to five lines or fewer.</li>
+      <li>Take your last closed incident and check it against those criteria. Count the lines you could not prove from the record.</li>
+      <li>Find every follow-up from that incident. Rewrite any with a team as owner, or with no date, as one name and one date.</li>
+      <li>Decide who in your organisation would own a detection follow-up, and ask them whether they would accept one from an incident record.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">What does NIST RC.RP-06 require before the end of incident recovery is declared?</p>
+      <button class="qopt" type="button">A · That the incident commander and the head of data agree it is over</button>
+      <button class="qopt" type="button">B · That the end is declared based on criteria, and incident-related documentation is completed</button>
+      <button class="qopt" type="button">C · That the postmortem has been published</button>
+      <p class="qwhy">"The end of incident recovery is declared based on criteria, and incident-related documentation is completed." The after-action report follows from that record; agreement in the room is not a criterion.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">On the leaked table under R5, which reached party cannot be closed by a notice, and how does the close-out record handle it?</p>
+      <button class="qopt" type="button">A · Vendor analyst A; the record waits until they reply to the notice</button>
+      <button class="qopt" type="button">B · The unknown address; the record leaves it out because "never told" reads 0</button>
+      <button class="qopt" type="button">C · The unknown address; the record names it as not notifiable, with the rows it fetched and who accepted that</button>
+      <p class="qwhy">The unknown address can never be told, and the bench leaves it out of "never told" for that reason. The record still names it, so the zero is not read as "nobody outside saw it", and its detection lesson becomes a follow-up.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">The close-out record is signed. Where does the write-up go?</p>
+      <button class="qopt" type="button">A · To the postmortem author, whose craft belongs to the planned runbooks and postmortems course, and into reliability's incident package</button>
+      <button class="qopt" type="button">B · Nowhere; the close-out record is the postmortem</button>
+      <button class="qopt" type="button">C · To the observability team, who own every follow-up</button>
+      <p class="qwhy">The responder hands over a complete record. The write-up is a separate piece of work, and only the detection follow-up goes to whoever owns monitoring.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, RC.RP-06 (read 2026-11-10)</span><span class="note">End of recovery declared on criteria, documentation completed; R1 an after-action report</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, RS.AN-06 records (read 2026-11-10)</span><span class="note">Actions recorded, with the records' integrity and provenance preserved</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">Google SRE book, Managing Incidents (read 2026-11-10)</span><span class="note">The living incident document as the raw material for everything after</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Exit criteria per incident type, follow-ups with one owner and one date</span><span class="note">Practitioner conventions built on the sources above</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Bench numbers (5 + 1, 0, 0, 4 of 4, 0h05 / 0h25 / 3h25, 7,600 of 18,400)</span><span class="note">Computed in your browser by replaying a constructed event log</span></div>
+      <div class="covered-row"><span class="status pill inkpill">·</span><span class="name">Writing the postmortem</span><span class="note">Not covered here: owned by the planned runbooks and postmortems course</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Responder session 7 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Close on criteria</b><span>RC.RP-06: the end is declared on criteria, and the documentation is complete.</span></div>
+      <div class="cheat-item"><b>One proof per lock</b><span>Every exit criterion points to a proof already in the record, or it stays open.</span></div>
+      <div class="cheat-item"><b>Closed doors are not deleted copies</b><span>Revoke log for the doors, written confirmation for every copy.</span></div>
+      <div class="cheat-item"><b>Name the unnotifiable</b><span>The unknown address is recorded, with its rows and who accepted it. Never hidden behind a zero.</span></div>
+      <div class="cheat-item"><b>R5 on the bench</b><span>5 + 1, 0 never told, 0 still wrong, 4 of 4; 0h05 / 0h25 / 3h25 from the signal.</span></div>
+      <div class="cheat-item"><b>One name, one date</b><span>Every follow-up. The floor before the signal goes to whoever owns detection.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Seven sessions, seven plan pages. Session 8 replays Quarrybank's whole quarter on the incident clock under every plan, every trap and your own hand-typed times, and scores the plan you have built.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Responder session 7 of 8 · learn-data-incident-response-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b6-tell-every-consumer.html">← Prev: Tell every consumer who read it</a> &nbsp;·&nbsp; <a href="b8-the-incident-clock.html">Next: The incident clock →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/ird-sample.js?v=1"></script>
+<script src="../assets/ird-live.js?v=2"></script>
+</body>
+</html>

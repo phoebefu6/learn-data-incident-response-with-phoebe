@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Leader session 5 of 6. Decision incidents: tracing which decisions used a wrong board figure, restate versus footnote versus correct next period, IAS 8 as the analogy a controller reaches for, and materiality taught as the disagreement it is.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="When the board already used the number - learn incident response for data teams with phoebe">
+<meta property="og:description" content="Leader session 5 of 6. Fixing the table does not fix the decision. A restatement rule written before the board pack goes out.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/courses/a5-when-the-board-used-the-number.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="When the board already used the number - learn incident response for data teams with phoebe">
+<meta name="twitter:description" content="The margin figure was wrong, and a pricing decision was made on it before anyone knew. Restate, footnote, or correct next period?">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Leader session 5 · When the board already used the number - learn incident response for data teams with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-data-incident-response-with-phoebe</a> / Leader session 5 of 6</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Incident Response for Data Teams with Phoebe · Leader session 5 of 6</div>
+    <h1>When the board already <span class="accent">used</span> the number</h1>
+    <p class="sub">Some incidents are found after the damage is a decision, not a dashboard. Quarrybank's board pack carried a margin figure built on the bad load, and by the time finance noticed, prices had already been held in two regions. Tonight is about the part of incident response that happens in the audit committee: which decisions used the wrong figure, whether to restate, footnote or correct next period, and who gets to call it material.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Hands-on</span>
+      <span class="chip audience">Heads of data and finance controllers</span>
+      <span class="chip audience">Anyone who signs a board pack</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Trace, route, judge</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: the restatement rule</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>When fixing the table is the easy part</h2>
+    </div>
+    <p class="lede">Session 1 named three kinds of data incident. The third, the decision incident, is the one security frameworks rarely name, because in security the harm is usually the event itself. In a decision incident the data was only wrong for a while, and the harm is what somebody did while it was wrong. The warehouse can be corrected in an afternoon. The price that was held, the certificate that was signed and the update that was sent cannot be corrected by anyone on the data team.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> A way to trace a wrong figure into every decision that used it, three correction routes and when each one applies, an honest view of why materiality is argued rather than looked up, and page 5 of Quarrybank's incident response plan: a restatement rule that says when the board pack is restated, when it is footnoted, who decides, who signs, and who is told by when.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>The incident the finance controller dreads<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A quality incident has a clean finish line: every consumer reads corrected rows. A decision incident does not. Once a number has been read in a board meeting, it lives in minutes, in emails, in a pricing committee's slide and in a certificate a lender holds. Correcting the source table changes none of those. The response has to follow the number out of the warehouse and into every room it reached.</p>
+        <p>That makes the decision incident a leadership problem more than a technical one. The on-call engineer can fix the margin calculation. Only the finance controller, the chief financial officer and, at Quarrybank, the audit committee chair can decide what the organisation says about the figures it already used.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. The monthly board pack went out on 2026-03-03 at 08:00 UTC. Its margin figure was overstated because it used the bad load from February, the duplicated supplier partition that doubled revenue for two regions. Nobody could see that from the pack. A finance analyst's reconciliation flagged it 48 hours later. The first outside complaint, from the external auditor, came at 168 hours.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where this session sits on the seams<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Accounting standards are not taught here.</strong> IAS 8 appears as the analogy a controller reaches for, quoted where it was read. How a published set of financial statements is restated is a question for the finance function and its auditors.</li>
+          <li><strong>Telling people was session 4.</strong> The holding statement, the executive update and the cadence carry over; tonight adds the correction notice for the board.</li>
+          <li><strong>The write-up belongs to the planned runbooks and postmortems course</strong>, listed on the <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe hub ↗</a>. Tonight produces the rule, not the after-action report.</li>
+          <li><strong>Why the bad load reached the pack</strong> is a lineage question the observability course owns (<a href="https://phoebefu6.github.io/learn-data-observability-with-phoebe/courses/b7-lineage-blast-radius.html">lineage and blast radius ↗</a>).</li>
+        </ul>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers tracing which decisions used the wrong figure</span>
+      <h2>Follow the number into the room</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">The first job in a decision incident is a list: every place the wrong figure was read, and every decision that was taken on it, with a time against each. The times matter more than in any other incident type, because they split the list in two. Decisions taken before the first signal could not have been stopped by any response plan. Decisions taken after it are the cost of declaring late.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 384" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The board pack's wrong margin on a time rail measured from the bad write. The pack goes out at 0h00. The decision to hold prices in two regions is taken at 24h00, before the finance reconciliation signal at 48h00. With no plan, three more decisions follow after the signal: the investor update at 72h00, the covenant certificate at 100h00 and the bonus accrual at 133h20, and the response starts at 168h00, 120h00 after the signal. A declare rule declares at 48h15 and none of the three later decisions happen. Below, the five consumers of the pack: board portal copy, emailed pack to 9 directors and the pricing committee deck are reached under both plans; the investor update and the lender covenant certificate only with no plan.">
+        <defs>
+          <filter id="ia5aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia5aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ia5aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia5aH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia5aL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia5aS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia5aB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ia5aA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ia5aR { font: 800 11px Inter, sans-serif; fill: #991B1B; }
+          .ia5aN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia5aA" x="110" y="52">before the signal</text>
+        <text class="ia5aA" x="362" y="52">after the signal: a declare rule stops all three</text>
+
+        <g filter="url(#ia5aSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="149" y="66" width="110" height="64" rx="8" fill="#F2A900" transform="rotate(-1.5 204 98)"/>
+          <rect x="358" y="66" width="110" height="64" rx="8" fill="#FEF2F2" stroke="#991B1B" transform="rotate(1 413 98)"/>
+          <rect x="480" y="66" width="110" height="64" rx="8" fill="#FEF2F2" stroke="#991B1B" transform="rotate(-1 535 98)"/>
+          <rect x="625" y="66" width="110" height="64" rx="8" fill="#FEF2F2" stroke="#991B1B" transform="rotate(1.2 680 98)"/>
+
+          <rect x="100" y="190" width="731" height="20" rx="4" fill="url(#ia5aHc)"/>
+          <path d="M92 200 L850 200" marker-end="url(#ia5aAr)"/>
+          <path d="M204 190 L204 136" marker-end="url(#ia5aAr)"/>
+          <path d="M413 190 L413 136" marker-end="url(#ia5aAr)"/>
+          <path d="M535 190 L535 136" marker-end="url(#ia5aAr)"/>
+          <path d="M680 190 L680 136" marker-end="url(#ia5aAr)"/>
+          <path d="M309 40 L309 224" stroke="#053D1E" stroke-width="3"/>
+          <path d="M831 182 L831 222" stroke="#6B4700" stroke-width="3"/>
+
+          <rect x="40" y="290" width="150" height="44" rx="8" fill="url(#ia5aHc)" transform="rotate(-0.8 115 312)"/>
+          <rect x="204" y="290" width="150" height="44" rx="8" fill="url(#ia5aHc)" transform="rotate(0.6 279 312)"/>
+          <rect x="368" y="290" width="150" height="44" rx="8" fill="url(#ia5aHc)" transform="rotate(-0.5 443 312)"/>
+          <rect x="532" y="290" width="150" height="44" rx="8" fill="#FFFFFF" transform="rotate(0.7 607 312)"/>
+          <rect x="696" y="290" width="150" height="44" rx="8" fill="#FFFFFF" transform="rotate(-0.6 771 312)"/>
+        </g>
+
+        <text class="ia5aH" x="40" y="24">THE WRONG MARGIN, FROM THE PACK INTO EACH DECISION (CONSTRUCTED QUARRYBANK EXAMPLE)</text>
+
+        <text class="ia5aL" x="160" y="90">Hold prices</text>
+        <text class="ia5aL" x="160" y="105">in two regions</text>
+        <text class="ia5aB" x="160" y="121" style="fill:#0D1F14">24h00</text>
+        <text class="ia5aL" x="369" y="90">Investor</text>
+        <text class="ia5aS" x="369" y="105">update sent</text>
+        <text class="ia5aR" x="369" y="121">72h00</text>
+        <text class="ia5aL" x="491" y="90">Covenant</text>
+        <text class="ia5aS" x="491" y="105">certificate</text>
+        <text class="ia5aR" x="491" y="121">100h00</text>
+        <text class="ia5aL" x="636" y="90">Bonus accrual</text>
+        <text class="ia5aS" x="636" y="105">set from pack</text>
+        <text class="ia5aR" x="636" y="121">133h20</text>
+
+        <text class="ia5aA" x="315" y="156">48h00 signal</text>
+        <text class="ia5aS" x="315" y="171">reconciliation</text>
+        <text class="ia5aL" x="20" y="204">0h00 pack</text>
+        <text class="ia5aA" x="315" y="240">declare rule: 48h15</text>
+        <text class="ia5aB" x="846" y="240" text-anchor="end">no plan: declared 168h00</text>
+        <text class="ia5aS" x="846" y="256" text-anchor="end">120h00 after the signal</text>
+
+        <text class="ia5aH" x="40" y="280">CONSUMERS OF THE PACK · hatched: reached under both plans · white: no plan only</text>
+        <text class="ia5aL" x="52" y="309">board portal copy</text>
+        <text class="ia5aS" x="52" y="325">directors' portal</text>
+        <text class="ia5aL" x="216" y="309">emailed pack</text>
+        <text class="ia5aS" x="216" y="325">9 directors</text>
+        <text class="ia5aL" x="380" y="309">pricing deck</text>
+        <text class="ia5aS" x="380" y="325">pricing committee</text>
+        <text class="ia5aL" x="544" y="309">investor update</text>
+        <text class="ia5aS" x="544" y="325">left the building</text>
+        <text class="ia5aL" x="708" y="309">lender certificate</text>
+        <text class="ia5aS" x="708" y="325">left the building</text>
+
+        <text class="ia5aN" x="40" y="362">Times measured from the bad write. Hatched rail: the wrong margin is live and nobody owns it.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - one decision sits before the signal and survives any plan; the three after it are the price of waiting for the auditor.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Why fixing the table does not fix the decision<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A corrected table changes what the next reader sees. It does not reach back into the meeting where prices were held, the email that carried the investor update, or the certificate a lender filed. Each of those is now a separate artefact with its own owner, outside the warehouse and outside the data team's reach.</p>
+        <p>So the trace for a decision incident has two columns the quality trace does not: <strong>what was decided on it</strong>, and <strong>who owns undoing or confirming that decision</strong>. For Quarrybank the pricing committee owns the held prices, investor relations owns the update, the chief financial officer owns the covenant certificate and finance owns the bonus accrual. The data team owns none of them, and has to tell all of them.</p>
+        <div class="callout tip">
+          <p><strong>Ask "what was decided on it?", not only "who read it?"</strong> A consumer trace counts readers. A decision trace counts acts. The second list is shorter and every item on it is more expensive.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The decision no plan can reach<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The pricing committee held prices in two regions 24 hours after the pack went out. The finance reconciliation flagged the margin 24 hours after that. No response plan starts before its first signal, so no response plan could have stopped that decision. The best a plan can do is tell the pricing committee quickly, so the decision can be revisited.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. With no plan, the board deck incident is declared 120h00 after the signal, when the auditor complains, and the wrong margin reaches 5 consumers and 4 decisions, with 35 bad reads by 17 people. With a declare rule (R1) it is declared 0h15 after the signal and the count falls to 3 consumers and 1 decision. That 1 decision, "Hold prices in two regions", stays on every rung of the bench.</p>
+        </div>
+        <p>What happens before the first signal is a detection problem: how long it took a reconciliation to notice the margin had moved. That belongs to the observability course. Tonight takes the signal as given.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers restate vs footnote vs correct next period, and IAS 8</span>
+      <h2>Restate, footnote, or fix it next time</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">There are three honest ways to correct a figure the board has already seen. Restate it: reissue the corrected figure and say plainly that the earlier one was wrong. Footnote it: carry a correction note in the next pack and tell the people who acted on it. Correct it next period: fix the source and let the next pack be right. Which one fits depends less on the size of the error than on where the figure went and what was done with it.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 370" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A decision tree for correcting a wrong board figure. First question: did the figure leave the building, to an investor, a lender or anyone outside? Yes leads to restate: reissue the corrected figure, tell every recipient by name, the chief financial officer signs. With no plan, Quarrybank lands here, because the investor update and the lender certificate went out. No leads to a second question: was a decision taken on it? Yes leads to footnote: note it in the next pack and tell every decider now. With a declare rule, Quarrybank lands here, because of the price decision. No leads to correct next period: fix the table and log it.">
+        <defs>
+          <filter id="ia5bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="61" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia5bHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#075A2C" stroke-width="1.4" opacity=".5"/></pattern>
+          <marker id="ia5bAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia5bH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia5bL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia5bS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia5bB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ia5bW { font: 800 12px Inter, sans-serif; fill: #FFFFFF; }
+          .ia5bA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ia5bN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ia5bH" x="40" y="24">WHICH CORRECTION ROUTE? QUARRYBANK'S CONSTRUCTED ROUTING, NOT A STANDARD</text>
+
+        <g filter="url(#ia5bSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="46" width="280" height="62" rx="10" fill="#FFFFFF" transform="rotate(-0.6 180 77)"/>
+          <rect x="40" y="166" width="280" height="62" rx="10" fill="#FFFFFF" transform="rotate(0.5 180 197)"/>
+          <rect x="40" y="286" width="280" height="50" rx="10" fill="#ECF7F0" transform="rotate(-0.4 180 311)"/>
+          <path d="M324 77 L514 77" marker-end="url(#ia5bAr)"/>
+          <path d="M180 112 L180 160" marker-end="url(#ia5bAr)"/>
+          <path d="M324 197 L514 197" marker-end="url(#ia5bAr)"/>
+          <path d="M180 232 L180 280" marker-end="url(#ia5bAr)"/>
+          <rect x="520" y="42" width="320" height="70" rx="10" fill="#075A2C" transform="rotate(0.4 680 77)"/>
+          <rect x="520" y="162" width="320" height="70" rx="10" fill="url(#ia5bHc)" transform="rotate(-0.4 680 197)"/>
+          <rect x="520" y="126" width="12" height="12" rx="2" fill="#F2A900"/>
+          <rect x="520" y="246" width="12" height="12" rx="2" fill="#F2A900"/>
+        </g>
+
+        <text class="ia5bL" x="54" y="72">Did the figure leave the building?</text>
+        <text class="ia5bS" x="54" y="90">investor, lender, anyone outside</text>
+        <text class="ia5bL" x="54" y="192">Was a decision taken on it?</text>
+        <text class="ia5bS" x="54" y="210">price, accrual, signature, approval</text>
+        <text class="ia5bL" x="54" y="308">CORRECT NEXT PERIOD</text>
+        <text class="ia5bS" x="54" y="325">fix the table, log it, no notice</text>
+
+        <text class="ia5bA" x="400" y="68">yes</text>
+        <text class="ia5bA" x="190" y="140">no</text>
+        <text class="ia5bA" x="400" y="188">yes</text>
+        <text class="ia5bA" x="190" y="260">no</text>
+
+        <text class="ia5bW" x="536" y="70">RESTATE: reissue the corrected figure</text>
+        <text class="ia5bW" x="536" y="90">tell every recipient by name, CFO signs</text>
+        <text class="ia5bL" x="536" y="190">FOOTNOTE: note it in the next pack</text>
+        <text class="ia5bS" x="536" y="208">and tell every decider now, in writing</text>
+
+        <text class="ia5bB" x="540" y="137">Quarrybank, no plan: investor and lender reached</text>
+        <text class="ia5bB" x="540" y="257">Quarrybank, declare rule: the price decision</text>
+
+        <text class="ia5bN" x="40" y="360">The route is set by where the figure went and what was done with it, before anyone argues about size.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - a figure that left the building is restated; one that only reached a decision inside is footnoted and the deciders told.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>What IAS 8 says, and why it is only an analogy here<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A finance controller asked "do we restate?" reaches for IAS 8, the international standard that covers errors in financial statements. Its rule is short: "an entity corrects material prior period errors retrospectively by restating the comparative amounts", with an escape for when it cannot be done: "Unless it is impracticable to determine the effects of the error". The standard was retitled in April 2024 to "Basis of Preparation of Financial Statements".</p>
+        <p>A board pack is management information, not published financial statements, so IAS 8 does not bind it. It is the analogy, not the rule. What it lends the board pack is a shape worth copying: a material error is corrected by putting the earlier figure right in the record, not only by getting the next one right, and "impracticable" is a narrow escape that has to be argued, not assumed.</p>
+        <div class="callout tip">
+          <p><strong>Say "by analogy with IAS 8" in the room, out loud.</strong> It stops two arguments at once: the one that says the standard forces a restatement of a management pack, and the one that says the standard is irrelevant because the pack is internal.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Three routes, and what each one protects<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <table class="clean">
+          <thead><tr><th>Route</th><th>What happens</th><th>When it fits</th><th>What it costs</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Restate</strong></td><td>The corrected figure is reissued and the error is named</td><td>The figure left the building: an investor, a lender, an auditor relied on it</td><td>Attention, and the questions every restatement invites</td></tr>
+            <tr><td><strong>Footnote</strong></td><td>A correction note in the next pack, every decider told now</td><td>The figure stayed inside but a decision was taken on it</td><td>Less visibility; relies on the deciders being told directly</td></tr>
+            <tr><td><strong>Correct next period</strong></td><td>The source is fixed and the next pack is right</td><td>Nobody acted on it and nobody outside saw it</td><td>Nothing, if those two conditions are really true</td></tr>
+          </tbody>
+        </table>
+        <p>The routes are not a ranking of severity. A small error that reached a lender may need a restatement; a larger one that nobody acted on may not. Quarrybank's own rung on the bench decides its route: with no plan the investor update and the covenant certificate carried the wrong margin out of the building; with a declare rule only the price decision did.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers materiality as the disagreement it is</span>
+      <h2>Materiality is argued, not looked up</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Every correction route above turns on one word: material. Was the error big enough, or important enough, that the people who used the figure would have acted differently? Two serious views answer that differently, and a leader's job is to know both and decide who settles it, not to pretend there is a table to look it up in.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 344" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two sides of the restate or footnote argument. The case for restating: a lender and investors relied on the figure, a quiet fix reads as concealment later, and the record should match what was decided; it protects the lender, the investors and the auditor. The case for a footnote: the error may not have changed the decision, restating small errors teaches readers to ignore restatements, and reissuing costs the board's attention; it protects the directors, management and the trust in every other figure in the pack. Between them: materiality is a judgement owned by a named person.">
+        <defs>
+          <filter id="ia5cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="67" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia5cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#075A2C" stroke-width="1.4" opacity=".5"/></pattern>
+          <marker id="ia5cAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia5cH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia5cL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia5cS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia5cA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ia5cN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ia5cSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="36" width="390" height="214" rx="12" fill="#FAFCFA" transform="rotate(-0.4 235 143)"/>
+          <rect x="450" y="36" width="390" height="214" rx="12" fill="#FAFCFA" transform="rotate(0.4 645 143)"/>
+          <rect x="58" y="180" width="110" height="40" rx="8" fill="url(#ia5cHc)" transform="rotate(-2 113 200)"/>
+          <rect x="182" y="180" width="110" height="40" rx="8" fill="url(#ia5cHc)" transform="rotate(1.5 237 200)"/>
+          <rect x="306" y="180" width="110" height="40" rx="8" fill="url(#ia5cHc)" transform="rotate(-1 361 200)"/>
+          <rect x="468" y="180" width="110" height="40" rx="8" fill="#ECF7F0" transform="rotate(1.8 523 200)"/>
+          <rect x="592" y="180" width="110" height="40" rx="8" fill="#ECF7F0" transform="rotate(-1.2 647 200)"/>
+          <rect x="716" y="180" width="110" height="40" rx="8" fill="#ECF7F0" transform="rotate(1 771 200)"/>
+          <rect x="230" y="270" width="420" height="40" rx="10" fill="#F2A900" transform="rotate(-0.5 440 290)"/>
+          <path d="M235 254 L300 266" marker-end="url(#ia5cAr)"/>
+          <path d="M645 254 L580 266" marker-end="url(#ia5cAr)"/>
+        </g>
+
+        <text class="ia5cH" x="58" y="64">THE CASE FOR RESTATING</text>
+        <text class="ia5cS" x="58" y="90">a lender and investors relied on the figure</text>
+        <text class="ia5cS" x="58" y="110">a quiet fix reads as concealment later</text>
+        <text class="ia5cS" x="58" y="130">the record should match what was decided</text>
+        <text class="ia5cA" x="58" y="166">protects:</text>
+        <text class="ia5cL" x="72" y="205">the lender</text>
+        <text class="ia5cL" x="196" y="205">investors</text>
+        <text class="ia5cL" x="320" y="205">the auditor</text>
+
+        <text class="ia5cH" x="468" y="64">THE CASE FOR A FOOTNOTE</text>
+        <text class="ia5cS" x="468" y="90">the error may not have changed the decision</text>
+        <text class="ia5cS" x="468" y="110">restating small errors trains readers to skim</text>
+        <text class="ia5cS" x="468" y="130">reissuing spends the board's attention</text>
+        <text class="ia5cA" x="468" y="166">protects:</text>
+        <text class="ia5cL" x="482" y="205">directors</text>
+        <text class="ia5cL" x="606" y="205">management</text>
+        <text class="ia5cL" x="730" y="205">other figures</text>
+
+        <text class="ia5cL" x="440" y="295" text-anchor="middle">Materiality: a judgement, owned by a named person</text>
+
+        <text class="ia5cN" x="40" y="334">Both sides are serious. The rule does not settle the argument; it names who settles it, and by when.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - each side protects real people; the rule's job is to say who weighs them, not to pretend one side is wrong.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Two views of material, taught as a disagreement<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p><strong>The quantitative view</strong> sets a threshold: an error is material if it moves the figure by more than an agreed amount. Its strength is consistency. The same error is treated the same way every month, and nobody has to win an argument at 9pm. Its weakness is that a threshold measures the number, not what was done with it.</p>
+        <p><strong>The qualitative view</strong> asks what the error did. Did it change a decision? Did it reach a lender or an investor? Did it cross a line that matters, such as a covenant? Its strength is that it follows the harm. Its weakness is that it needs judgement, and judgement under pressure tends to find reasons why this one is not material.</p>
+        <p>Practitioners hold both, and they disagree about which leads. There is no threshold number here, because none was read at source and any number quoted would be a guess presented as a rule. The IAS 8 materiality definition was clarified in 2018; its text was not read, so it is not paraphrased here.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. Quarrybank's controller argues the margin error is not material on its own size. The audit committee chair argues it is material because it informed a price decision and, with no plan, reached a lender's covenant certificate. Both are right about what they are measuring. The restatement rule exists so that this argument has an owner and a deadline instead of a winner.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>How a regulator ties a clock to a materiality call<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>The clearest public example of a clock attached to a materiality determination is SEC Form 8-K Item 1.05. It is due "four business days after a registrant determines that a cybersecurity incident is material", and describes the "material aspects of the incident's nature, scope, and timing". It applies to US registrants and to cybersecurity incidents only. Quarrybank is not a registrant, and a margin error is not a cybersecurity incident.</p>
+        <p>The shape is still worth borrowing. The clock starts at the determination, not at the event, so the speed of the determination becomes the thing to manage. Quarrybank's constructed policy does the same for its own board: the audit committee chair is told within 48 hours of anyone becoming aware of a misstated board figure.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. Becoming aware is the 48h00 reconciliation, so the chair notice is due 96h00 after the bad write. With only a declare rule (R1) the chair is told at 168h15 after the bad write: missed, because nobody owns the notice. With severity and roles (R2) the chair is told at 72h35: met. A declare rule starts the clock; it takes a named owner to beat it.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Trace the margin, then write the restatement rule</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">No code. Open the board deck incident on three rungs of the bench, list every consumer and decision the wrong margin reached, write the correction notice Quarrybank sends to its board, and then write page 5 of the incident response plan so the next one is routed before anyone argues.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 384" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The board deck incident on three bench rungs. No plan, R0: all five consumers reached, four decisions, 4 consumers never told, chair notice missed. Declare rule, R1: three consumers reached, the board portal copy, the emailed pack and the pricing deck; one decision; 2 never told; chair notice missed, told 168h15 against a due time of 96h00. Lineage-driven notice, R4: the same three consumers and one decision, 0 never told, chair notice met. In all three columns the decision to hold prices in two regions, made at 24h00 before the signal, remains.">
+        <defs>
+          <filter id="ia5dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="71" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ia5dHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ia5dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ia5dH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia5dL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ia5dS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ia5dB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ia5dR { font: 800 11px Inter, sans-serif; fill: #991B1B; }
+          .ia5dA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ia5dN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ia5dSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="30" y="30" width="260" height="316" rx="12" fill="#FAFCFA" transform="rotate(-0.3 160 188)"/>
+          <rect x="310" y="30" width="260" height="316" rx="12" fill="#FAFCFA" transform="rotate(0.3 440 188)"/>
+          <rect x="590" y="30" width="260" height="316" rx="12" fill="#FAFCFA" transform="rotate(-0.3 720 188)"/>
+
+          <rect x="40" y="62" width="240" height="26" rx="6" fill="url(#ia5dHc)"/>
+          <rect x="40" y="94" width="240" height="26" rx="6" fill="url(#ia5dHc)"/>
+          <rect x="40" y="126" width="240" height="26" rx="6" fill="url(#ia5dHc)"/>
+          <rect x="40" y="158" width="240" height="26" rx="6" fill="url(#ia5dHc)"/>
+          <rect x="40" y="190" width="240" height="26" rx="6" fill="url(#ia5dHc)"/>
+
+          <rect x="320" y="62" width="240" height="26" rx="6" fill="url(#ia5dHc)"/>
+          <rect x="320" y="94" width="240" height="26" rx="6" fill="url(#ia5dHc)"/>
+          <rect x="320" y="126" width="240" height="26" rx="6" fill="url(#ia5dHc)"/>
+          <rect x="320" y="158" width="240" height="26" rx="6" fill="#FFFFFF" stroke="#C3D3C8"/>
+          <rect x="320" y="190" width="240" height="26" rx="6" fill="#FFFFFF" stroke="#C3D3C8"/>
+
+          <rect x="600" y="62" width="240" height="26" rx="6" fill="url(#ia5dHc)"/>
+          <rect x="600" y="94" width="240" height="26" rx="6" fill="url(#ia5dHc)"/>
+          <rect x="600" y="126" width="240" height="26" rx="6" fill="url(#ia5dHc)"/>
+          <rect x="600" y="158" width="240" height="26" rx="6" fill="#FFFFFF" stroke="#C3D3C8"/>
+          <rect x="600" y="190" width="240" height="26" rx="6" fill="#FFFFFF" stroke="#C3D3C8"/>
+
+          <rect x="40" y="226" width="240" height="40" rx="8" fill="#F2A900" transform="rotate(-1 160 246)"/>
+          <rect x="320" y="226" width="240" height="40" rx="8" fill="#F2A900" transform="rotate(0.8 440 246)"/>
+          <rect x="600" y="226" width="240" height="40" rx="8" fill="#F2A900" transform="rotate(-0.8 720 246)"/>
+        </g>
+
+        <text class="ia5dH" x="40" y="52">R0 · NO PLAN</text>
+        <text class="ia5dH" x="320" y="52">R1 · DECLARE RULE</text>
+        <text class="ia5dH" x="600" y="52">R4 · LINEAGE-DRIVEN NOTICE</text>
+
+        <text class="ia5dL" x="50" y="80">board portal copy</text>
+        <text class="ia5dL" x="50" y="112">emailed pack, 9 directors</text>
+        <text class="ia5dL" x="50" y="144">pricing committee deck</text>
+        <text class="ia5dL" x="50" y="176">investor update</text>
+        <text class="ia5dL" x="50" y="208">lender certificate</text>
+
+        <text class="ia5dL" x="330" y="80">board portal copy</text>
+        <text class="ia5dL" x="330" y="112">emailed pack</text>
+        <text class="ia5dB" x="550" y="112" text-anchor="end">never told</text>
+        <text class="ia5dL" x="330" y="144">pricing committee deck</text>
+        <text class="ia5dB" x="550" y="144" text-anchor="end">never told</text>
+        <text class="ia5dS" x="330" y="176">investor update</text>
+        <text class="ia5dS" x="550" y="176" text-anchor="end">not reached</text>
+        <text class="ia5dS" x="330" y="208">lender certificate</text>
+        <text class="ia5dS" x="550" y="208" text-anchor="end">not reached</text>
+
+        <text class="ia5dL" x="610" y="80">board portal copy</text>
+        <text class="ia5dL" x="610" y="112">emailed pack</text>
+        <text class="ia5dA" x="830" y="112" text-anchor="end">told</text>
+        <text class="ia5dL" x="610" y="144">pricing committee deck</text>
+        <text class="ia5dA" x="830" y="144" text-anchor="end">told</text>
+        <text class="ia5dS" x="610" y="176">investor update</text>
+        <text class="ia5dS" x="830" y="176" text-anchor="end">not reached</text>
+        <text class="ia5dS" x="610" y="208">lender certificate</text>
+        <text class="ia5dS" x="830" y="208" text-anchor="end">not reached</text>
+
+        <text class="ia5dL" x="52" y="243">Hold prices in two regions</text>
+        <text class="ia5dL" x="52" y="259">24h00, before the signal</text>
+        <text class="ia5dL" x="332" y="243">Hold prices in two regions</text>
+        <text class="ia5dL" x="332" y="259">still stands: no plan undoes it</text>
+        <text class="ia5dL" x="612" y="243">Hold prices in two regions</text>
+        <text class="ia5dL" x="612" y="259">deciders told, cannot be undone</text>
+
+        <text class="ia5dR" x="40" y="290">+ 3 decisions after the signal</text>
+        <text class="ia5dL" x="40" y="310">never told: 4</text>
+        <text class="ia5dR" x="40" y="330">chair notice: missed</text>
+
+        <text class="ia5dA" x="320" y="290">no decisions after the signal</text>
+        <text class="ia5dL" x="320" y="310">never told: 2</text>
+        <text class="ia5dR" x="320" y="330">chair: 168h15, due 96h00, missed</text>
+
+        <text class="ia5dA" x="600" y="290">no decisions after the signal</text>
+        <text class="ia5dL" x="600" y="310">never told: 0</text>
+        <text class="ia5dA" x="600" y="330">chair notice: met</text>
+
+        <text class="ia5dN" x="30" y="370">Hatched: read the wrong margin. Chair times measured from the bad write. Constructed Quarrybank example.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - better plans shrink the list and tell everyone on it, but the price decision taken before the signal stays in every column.</figcaption>
+    </figure>
+
+    <div data-ird-bench="lite" data-presets="r0,r1,r4" data-start="r0"></div>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Open the board deck on R0, no plan.</strong> In the bench, open "Wrong number on the board deck: what it reached". Write down every consumer and every decision, with its time after the bad write. Mark each decision as before or after the 48h00 signal.</p>
+        <div class="prompt-box good"><span class="label">★ Step 1 · decision trace, Quarrybank board deck, R0</span>consumers reached     board portal copy; emailed pack (9 directors);
+                      pricing committee deck; investor update;
+                      lender covenant certificate
+decisions on it       Hold prices in two regions          24h00  BEFORE signal
+                      Investor update sent with margin    72h00  after
+                      Covenant certificate signed         100h00 after
+                      Bonus accrual set from the pack     133h20 after
+declared              120h00 after the signal (the auditor's complaint)</div>
+      </div>
+      <div class="step">
+        <p><strong>Switch to R1, declare rule.</strong> Declared 0h15 after the signal. The investor update, the covenant certificate and the bonus accrual never happen on the bad figure, and the list falls to 3 consumers and 1 decision. Note what is left: the emailed pack and the pricing deck holders are still never told, and the chair deadline is still missed.</p>
+      </div>
+      <div class="step">
+        <p><strong>Switch to R4, lineage-driven notice.</strong> Same 3 consumers, same 1 decision. Never told for this incident goes from 2 under R1 to 0: the emailed pack and the pricing deck holders are told because lineage says they read the pack. Now look at "Hold prices in two regions". It is still there. R4 tells the pricing committee; it cannot undo the price decision. That decision is what the correction notice is for.</p>
+      </div>
+      <div class="step">
+        <p><strong>Write Quarrybank's correction notice for the board.</strong> One page, plain words, no defence. It names the figure, what was wrong with it, which decision used it, and what happens next. Do not put a corrected margin value in it until finance has one; say the figure was overstated and why.</p>
+        <div class="prompt-box good"><span class="label">★ Step 4 · correction notice, Quarrybank board</span>To: board directors; audit committee chair; pricing committee
+From: chief financial officer
+Subject: Correction to the margin figure in the 3 March board pack
+
+The margin figure in the board pack of 3 March was overstated. It was
+calculated on sales data that contained a duplicated supplier load from
+February, which doubled reported revenue for two regions.
+
+Decisions that used it: the pricing committee's decision to hold prices
+in two regions. Please treat that decision as open for review.
+
+What happens next: a corrected figure, signed by finance, by [date].
+Route under our restatement rule: [restate / footnote], decided by
+[name], because [the figure left the building / a decision used it].
+Questions: [finance controller, contact].</div>
+      </div>
+      <div class="step">
+        <p><strong>Write the restatement rule.</strong> Page 5 of Quarrybank's incident response plan. Its job is to route the next wrong board figure before anyone argues about size, and to make sure the materiality call has an owner and a deadline.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · plan, leader page 5, restatement rule</span>QUARRYBANK INCIDENT RESPONSE PLAN · leader page 5 · restatement rule
+Applies to: any figure in a board pack, investor update or lender document
+found to be wrong after it was sent.
+
+WHEN WE RESTATE   the figure left the building (investor, lender, auditor,
+                  anyone outside), OR the materiality owner calls it material
+WHEN WE FOOTNOTE  the figure stayed inside AND a decision was taken on it:
+                  note in the next pack, every decider told in writing now
+NEXT PERIOD ONLY  nobody acted on it AND nobody outside saw it: fix, log
+WHO DECIDES       finance controller proposes; CFO decides materiality,
+                  by analogy with IAS 8, quantitative AND qualitative
+WHO SIGNS         CFO signs every restatement and every correction notice
+WHO IS TOLD       every consumer and every decider on the trace, by name
+BY WHEN           audit committee chair: within 48 hours of becoming aware
+                  (policy input); route decided before the chair is told
+A decision taken before the first signal is listed, never hidden.</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>Route first, argue size second.</strong> Where the figure went and what was done with it can be checked in an hour. How material it was can take a week of meetings. Let the checkable question choose the route, and give the argument a named owner and a clock.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 6</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li>Take your last board pack, or the nearest equivalent. For its three most-used figures, list every place each one went after the meeting: decks, emails, certificates, filings.</li>
+      <li>Find out who in your organisation decides whether an error in management information is material. If the answer is "it depends", write down who it depended on last time.</li>
+      <li>Read your restatement rule to your finance controller. Change every route they would argue with, and note the arguments you kept.</li>
+      <li>Check whether any policy, contract or lender agreement sets a clock for telling someone about a wrong figure. Write each one on the rule as an input, with its owner.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Quarrybank has corrected the margin calculation in the warehouse. Why is the decision incident not over?</p>
+      <button class="qopt" type="button">A · Because the warehouse fix has to be rehearsed before it counts</button>
+      <button class="qopt" type="button">B · Because IAS 8 requires every management pack to be restated</button>
+      <button class="qopt" type="button">C · Because the held prices, the update and the certificate live outside the warehouse; each owner has to be told and each decision revisited</button>
+      <p class="qwhy">A corrected table changes what the next reader sees. It cannot reach back into decisions already taken on the old figure, so the response has to follow the number to every person who acted on it.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">On the bench, which board deck decision survives every plan from R1 to R5, and why?</p>
+      <button class="qopt" type="button">A · "Hold prices in two regions", because it was taken at 24h00, before the 48h00 signal, when no plan had started</button>
+      <button class="qopt" type="button">B · "Bonus accrual set from the pack", because accruals cannot be reversed</button>
+      <button class="qopt" type="button">C · "Covenant certificate signed on the margin", because lenders are never told</button>
+      <p class="qwhy">No response plan starts before its first signal. The bonus accrual and the covenant certificate happen after the signal and disappear once the incident is declared 0h15 after it.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">Quarrybank's controller says the error is not material by size; the chair says it is, because it informed a price decision. How should the restatement rule treat this?</p>
+      <button class="qopt" type="button">A · Look up the materiality threshold in IAS 8 and apply it</button>
+      <button class="qopt" type="button">B · As a judgement with two serious sides: name who decides, by when, and route on where the figure went before arguing size</button>
+      <button class="qopt" type="button">C · Always footnote, because the board pack is internal</button>
+      <p class="qwhy">Quantitative and qualitative views of materiality both have merit and practitioners disagree on which leads. No threshold was read at source, and a board pack can still reach a lender. The rule gives the argument an owner and a clock.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">IAS 8, IFRS Foundation (read 2026-11-10)</span><span class="note">Restating comparatives for material prior period errors, the "impracticable" escape, the April 2024 retitling; used as an analogy, since a board pack is not published financial statements</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">SEC Form 8-K Item 1.05, press release 2023-139 (read 2026-11-10)</span><span class="note">Four business days after a materiality determination; the board angle only; applies to US registrants and cybersecurity incidents, not to Quarrybank</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Materiality</span><span class="note">Contested: quantitative and qualitative views taught as a disagreement, with no threshold given</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Bench numbers (5 + 4 and 3 + 1 on the board deck, never told 2 to 0, chair 168h15 and 72h35 against 96h00)</span><span class="note">Computed in your browser by replaying a constructed event log</span></div>
+      <div class="covered-row"><span class="status pill inkpill">·</span><span class="name">Accounting standards themselves</span><span class="note">Not taught here: how financial statements are restated is a matter for finance and its auditors</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Leader session 5 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>Decision incident</b><span>The data was wrong for a while and somebody acted on it. Fixing the table does not fix the act.</span></div>
+      <div class="cheat-item"><b>Trace acts, not only readers</b><span>For each figure: where it went, what was decided on it, when, and who owns that decision.</span></div>
+      <div class="cheat-item"><b>Before the signal</b><span>A decision taken before the first signal survives every plan. List it, tell its owner, never hide it.</span></div>
+      <div class="cheat-item"><b>Three routes</b><span>Left the building: restate. Decision inside: footnote and tell. Neither: correct next period.</span></div>
+      <div class="cheat-item"><b>IAS 8 as analogy</b><span>"corrects material prior period errors retrospectively". A board pack is not bound by it; borrow the shape.</span></div>
+      <div class="cheat-item"><b>Materiality has an owner</b><span>Two serious views, no lookup table. The rule names who decides and by when.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>Five pages of plan are only a plan until someone runs them under pressure. Session 6 runs a tabletop on all three Quarrybank incidents, sets three readiness numbers from the bench, and turns the whole plan into something you rehearse before the next one arrives.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Leader session 5 of 6 · learn-data-incident-response-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="a4-telling-people-before-they-ask.html">← Prev: Telling people before they ask</a> &nbsp;·&nbsp; <a href="a6-ready-before-the-next-one.html">Next: Ready before the next one →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/ird-sample.js?v=1"></script>
+<script src="../assets/ird-live.js?v=2"></script>
+</body>
+</html>

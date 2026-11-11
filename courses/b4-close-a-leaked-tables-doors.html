@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- social:start -->
+<meta name="description" content="Responder session 4 of 8. Close a leaked table door by door: snapshot the logs, revoke every door, rotate what the share exposed, and chase the copies a revoke cannot recall, measured on Quarrybank's leaked customer table.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Learn with Phoebe">
+<meta property="og:title" content="Close a leaked table's doors - learn incident response for data teams with phoebe">
+<meta property="og:description" content="Responder session 4 of 8. Snapshot first, revoke every door, rotate, then chase the copies already outside.">
+<meta property="og:url" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/courses/b4-close-a-leaked-tables-doors.html">
+<meta property="og:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Close a leaked table's doors - learn incident response for data teams with phoebe">
+<meta name="twitter:description" content="Closing the door everyone saw is easy. The exposure lives in the door nobody listed.">
+<meta name="twitter:image" content="https://phoebefu6.github.io/learn-data-incident-response-with-phoebe/assets/og-cover.png">
+<!-- social:end -->
+<title>Responder session 4 · Close a leaked table's doors - learn incident response for data teams with phoebe</title>
+<link rel="stylesheet" href="../assets/style.css?v=2">
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="wrap">
+    <span class="crumb"><a href="../index.html">learn-data-incident-response-with-phoebe</a> / Responder session 4 of 8</span>
+    <button class="btn" id="toggle-all" type="button">Expand all</button>
+    <button class="btn primary" id="zoom-toggle" type="button">Projector zoom: off</button>
+  </div>
+</div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Learn Incident Response for Data Teams with Phoebe · Responder session 4 of 8</div>
+    <h1>Close a leaked table's <span class="accent">doors</span></h1>
+    <p class="sub">A leaked table is never open through one door. Quarrybank's customer table went out through a public link and a vendor workspace share, and the alert only pointed at the first. Tonight you close an exposure the way it has to be closed: snapshot the logs before you touch a setting, list every door, revoke them all, rotate whatever the share exposed, and then face the part no revoke fixes, the copies already sitting outside.</p>
+    <div class="chip-row">
+      <span class="chip level">🟠 Hands-on</span>
+      <span class="chip audience">Data and analytics engineers on call</span>
+      <span class="chip audience">Platform and access owners</span>
+      <span class="chip time">45 min</span>
+    </div>
+    <div class="agenda">
+      <span class="a1" style="flex:1">0-3 · Welcome</span>
+      <span class="a2" style="flex:4">3-18 · Doors, revoke order, copies</span>
+      <span class="a3" style="flex:5">18-40 · Build-along: the exposure playbook</span>
+      <span class="a4" style="flex:1">40-45 · Q&amp;A</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ INTRO ============ -->
+  <section class="section" id="intro">
+    <div class="section-kicker">
+      <span class="klabel">Part 0</span>
+      <h2>An exposure closes door by door</h2>
+    </div>
+    <p class="lede">Session 3 stopped bad rows travelling outward through pipelines. An exposure runs the other way: the rows sit still and people come to them, through every link, share, grant and key that points at the table. Containment for an exposure is therefore a list, and the incident is contained only when the last item on that list is shut.</p>
+
+    <div class="legend">
+      <span class="pill">Live = presented in the 45 minutes</span>
+      <span class="pill">Self-study = the full depth, after class</span>
+      <span class="pill">🔍 Every diagram zooms</span>
+    </div>
+
+    <div class="callout win">
+      <p><strong>★ What you walk out with tonight.</strong> An exposure playbook in seven steps, with who may do each one: snapshot, list the doors, revoke them all, rotate, list the copies, request deletion, page the privacy partner. It becomes page 4 of the responder half of Quarrybank's plan, and you will see on the bench how much it changes the row count.</p>
+    </div>
+
+    <details class="card" open>
+      <summary><span class="mode live">Live</span>Why "we turned off the link" is not containment<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>NIST SP 800-61 Rev. 3 defines the job plainly: "Containment refers to preventing the expansion of an incident." For a leaked table, expansion means one more person reading one more row. Turning off the link the alert named stops that through one door. Every other door keeps the incident expanding while the record says "contained".</p>
+        <p>The fix is not heroics, it is inventory. Before anyone clicks revoke, someone writes down every way the table can be reached from outside, and the revoke step is done when every line on that list has a time next to it.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. At 12:20Z on 24 February an access-log alert flagged an unknown address paging through the customer table. The on-call engineer disabled the public link within minutes and wrote "contained" in the record. The vendor workspace share, set up the same morning for an analytics project, stayed open, because nobody had it on a list.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Where this session stops<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <ul>
+          <li><strong>Detecting exfiltration</strong>, the alerting that produced the 12:20Z signal, belongs to the <a href="https://phoebefu6.github.io/learn-cyber-security-with-phoebe/courses/b5-exfiltration-detection.html">cyber security course, exfiltration detection ↗</a>.</li>
+          <li><strong>Restoring after a destructive event</strong> belongs to <a href="https://phoebefu6.github.io/learn-cyber-security-with-phoebe/courses/b6-destructive-events.html">cyber security, destructive events ↗</a>.</li>
+          <li><strong>How to rotate secrets and keys</strong> belongs to <a href="https://phoebefu6.github.io/learn-data-access-control-with-phoebe/courses/b6-secrets-and-keys.html">access control, secrets and keys ↗</a>.</li>
+          <li><strong>Whether and when to notify</strong> is the privacy partner's call. The GDPR and PDPA deadlines arrive here as fixed inputs, taught in their own courses.</li>
+        </ul>
+        <p>What stays here is the responder's sequence: what to do, in what order, and what to write down as you do it.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 1 ============ -->
+  <section class="section" id="part-1">
+    <div class="section-kicker">
+      <span class="klabel">Part 1 · covers every door the table is open through</span>
+      <h2>List the doors before you shut any</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Quarrybank's customer table holds 18,400 rows with contact and credit-limit columns. On the morning of 24 February it was opened two ways at once: a public link anyone holding the URL could use, and a share into the vendor's workspace for named vendor accounts. Four outside parties came through over the following day, and the alert saw only one of them.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 372" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Quarrybank's customer table, 18,400 rows, with two doors. Through the public link: an unknown address paging from 3h10 after the share, and the person the link was forwarded to from 21h40. Through the vendor workspace share: vendor analyst A, who downloaded a copy at 0h30, and vendor analyst B from 26h40. The vendor share is the door a hurried revoke forgets. The signal came at 3h20.">
+        <defs>
+          <filter id="ib4aSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="41" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib4aHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".7"/></pattern>
+          <marker id="ib4aAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib4aH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib4aL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib4aS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib4aK { font: 400 11px Inter, sans-serif; fill: #0D1F14; }
+          .ib4aB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ib4aV { font: 800 18px Inter, sans-serif; fill: #053D1E; }
+          .ib4aN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib4aH" x="40" y="26">ONE TABLE, TWO DOORS · times after the share, 09:00Z</text>
+        <text class="ib4aH" x="600" y="26">WHO CAME THROUGH</text>
+        <text class="ib4aH" x="280" y="76">DOORS</text>
+
+        <g filter="url(#ib4aSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="120" width="170" height="130" rx="8" fill="#FFFFFF" transform="rotate(-0.6 125 185)"/>
+          <rect x="40" y="120" width="170" height="16" rx="4" fill="url(#ib4aHc)"/>
+          <path d="M212 166 C240 160 250 122 274 118" marker-end="url(#ib4aAr)"/>
+          <path d="M212 214 C240 220 250 256 274 258" marker-end="url(#ib4aAr)"/>
+          <rect x="280" y="90" width="190" height="56" rx="8" fill="#FFFFFF" transform="rotate(1.2 375 118)"/>
+          <rect x="280" y="230" width="190" height="56" rx="8" fill="#F2A900" transform="rotate(-1.4 375 258)"/>
+          <path d="M474 112 C520 100 550 70 594 66" marker-end="url(#ib4aAr)"/>
+          <path d="M474 124 C520 126 550 126 594 126" marker-end="url(#ib4aAr)"/>
+          <path d="M474 252 C520 244 550 228 594 226" marker-end="url(#ib4aAr)"/>
+          <path d="M474 264 C520 272 550 286 594 286" marker-end="url(#ib4aAr)"/>
+          <rect x="600" y="44" width="240" height="44" rx="8" fill="#FFFFFF" transform="rotate(-0.8 720 66)"/>
+          <rect x="600" y="104" width="240" height="44" rx="8" fill="#FFFFFF" transform="rotate(0.7 720 126)"/>
+          <rect x="600" y="204" width="240" height="44" rx="8" fill="#ECF7F0" transform="rotate(-0.6 720 226)"/>
+          <rect x="600" y="264" width="240" height="44" rx="8" fill="#FFFFFF" transform="rotate(0.9 720 286)"/>
+        </g>
+
+        <text class="ib4aL" x="54" y="160">customer table</text>
+        <text class="ib4aV" x="54" y="188">18,400 rows</text>
+        <text class="ib4aS" x="54" y="210">contact, credit limit</text>
+        <text class="ib4aS" x="54" y="228">personal data</text>
+
+        <text class="ib4aL" x="294" y="114">public link</text>
+        <text class="ib4aS" x="294" y="132">anyone holding the URL</text>
+        <text class="ib4aL" x="294" y="254">vendor workspace share</text>
+        <text class="ib4aK" x="294" y="272">named vendor accounts</text>
+        <text class="ib4aB" x="280" y="306">the door a hurried revoke forgets</text>
+
+        <text class="ib4aL" x="612" y="63">unknown address</text>
+        <text class="ib4aS" x="612" y="79">pages through from 3h10</text>
+        <text class="ib4aL" x="612" y="123">forwarded recipient</text>
+        <text class="ib4aS" x="612" y="139">link forwarded, reads at 21h40</text>
+        <text class="ib4aL" x="612" y="223">vendor analyst A</text>
+        <text class="ib4aS" x="612" y="239">downloads a copy at 0h30</text>
+        <text class="ib4aL" x="612" y="283">vendor analyst B</text>
+        <text class="ib4aS" x="612" y="299">reads from 26h40 onward</text>
+
+        <text class="ib4aN" x="40" y="350">Constructed Quarrybank example. The signal, an access-log alert on the unknown address, came at 3h20.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the alert named the public link; half the visitors came in through the other door.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Where doors hide on a data platform<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>A door is anything that lets someone outside the response read the table without asking you first. On most warehouses and BI tools the list is longer than people expect:</p>
+        <ul>
+          <li><strong>Links</strong>: public or "anyone with the link" shares on the table, a dashboard over it, or an exported file.</li>
+          <li><strong>Shares and grants</strong>: workspace shares to partners or vendors, role grants, data-sharing objects between accounts.</li>
+          <li><strong>Credentials</strong>: service accounts, API keys and connection strings that can query it, including the one the vendor's notebook uses.</li>
+          <li><strong>Downstream copies that are themselves open</strong>: an extract in a bucket, a cached dashboard, a sandbox someone cloned it into.</li>
+          <li><strong>Agents</strong>: an AI agent or automation holding a share to the table can read it on its own schedule.</li>
+        </ul>
+        <p>Ask the platform, not your memory: list the grants, shares and links on the object, and the credentials that touched it in the access log for the window.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Who came through, and when<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example. Times after the share at 09:00Z. Vendor analyst A downloaded a full copy through the vendor share at 0h30, before anything looked wrong. The unknown address began paging through the public link at 3h10, ten minutes before the alert at 3h20. The person the link had been forwarded to read at 21h40. Vendor analyst B came in through the vendor share from 26h40 onward. Two of the four arrived after the signal, which means a response could have stopped them.</p>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 2 ============ -->
+  <section class="section" id="part-2">
+    <div class="section-kicker">
+      <span class="klabel">Part 2 · covers snapshot first, then revoke, then rotate</span>
+      <h2>Snapshot, revoke every door, rotate</h2>
+      <span class="tag concept">6 min live</span>
+    </div>
+    <p class="lede">The order matters because each step destroys something the next person needs. Revoking a share can reset its settings page and, on some tools, its access history. Rotating a key breaks every job using it. So the evidence goes first, then the doors all close together, then anything the exposure revealed is changed.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 318" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two plans on the bench. Left, R2, severity and roles but no playbook: at containment, 2h35 after the signal, only the public link is closed; the vendor share stays open until the correction at 8h35; 12,800 rows exposed. Right, R3, containment playbook: both doors close at containment, 0h50 after the signal; 8,400 rows exposed. Below: trap T2, dropping the table, leaves 18,400 rows assumed exposed.">
+        <defs>
+          <filter id="ib4bSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="53" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+        </defs>
+        <style>
+          .ib4bH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib4bR { font: 800 12px Inter, sans-serif; fill: #991B1B; }
+          .ib4bL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib4bS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib4bB { font: 800 11px Inter, sans-serif; fill: #6B4700; }
+          .ib4bA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ib4bV { font: 800 20px Inter, sans-serif; fill: #053D1E; }
+          .ib4bN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <g filter="url(#ib4bSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="40" width="390" height="200" rx="12" fill="#FEF2F2" stroke="#FCA5A5" transform="rotate(-0.4 235 140)"/>
+          <rect x="450" y="40" width="390" height="200" rx="12" fill="#ECF7F0" stroke="#075A2C" transform="rotate(0.4 645 140)"/>
+          <rect x="60" y="90" width="150" height="36" rx="6" fill="#FFFFFF" transform="rotate(-1 135 108)"/>
+          <rect x="60" y="138" width="150" height="36" rx="6" fill="#F2A900" transform="rotate(1.2 135 156)"/>
+          <rect x="470" y="90" width="150" height="36" rx="6" fill="#FFFFFF" transform="rotate(0.9 545 108)"/>
+          <rect x="470" y="138" width="150" height="36" rx="6" fill="#FFFFFF" transform="rotate(-1.1 545 156)"/>
+        </g>
+
+        <text class="ib4bR" x="58" y="70">✗ R2 · revoke the door the alert named</text>
+        <text class="ib4bL" x="74" y="113">public link</text>
+        <text class="ib4bA" x="226" y="113">closed at 2h35</text>
+        <text class="ib4bL" x="74" y="161">vendor share</text>
+        <text class="ib4bB" x="226" y="161">open until 8h35</text>
+        <text class="ib4bV" x="58" y="214">12,800</text>
+        <text class="ib4bL" x="140" y="212">rows exposed</text>
+
+        <text class="ib4bH" x="468" y="70">✓ R3 · the playbook closes every door</text>
+        <text class="ib4bL" x="484" y="113">public link</text>
+        <text class="ib4bA" x="636" y="113">closed at 0h50</text>
+        <text class="ib4bL" x="484" y="161">vendor share</text>
+        <text class="ib4bA" x="636" y="161">closed at 0h50</text>
+        <text class="ib4bV" x="468" y="214">8,400</text>
+        <text class="ib4bL" x="540" y="212">rows exposed</text>
+
+        <text class="ib4bS" x="40" y="268">Trap T2, drop the table and its history: 18,400 rows assumed exposed, because the logs that measured them are gone.</text>
+        <text class="ib4bN" x="40" y="298">Bench times from the first signal. R2: roles, no playbook. R3: adds the playbook. Constructed.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - the same incident, the same people; the only change is whether the second door was on the list.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Step one: snapshot before you change anything<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Copy the access log for the window, the share and link settings as they stand (who, what scope, created when, by whom), and the list of credentials that touched the table. Put them in the protected evidence location from session 1 and write the path in the record.</p>
+        <p>NIST RS.AN-07 is the reason this is not optional: collected incident data "is still considered evidence" even without a formal chain of custody. The access log is also the only thing that turns "every row may have leaked" into a measured number. Session 1's trap showed the cost of losing it, and the bench prints it again tonight.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Step two: revoke every door, then prove each one shut<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Work down the list from Part 1. For each door write the time it closed and how you know: a failed test request through the old link, the share listing now empty, the grant gone from the role. A door is closed when a test says so, not when a button was clicked.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. With severity and roles but no playbook (R2), containment lands 2h35 after the signal and closes only the public link; the vendor share stays open until the correction at 8h35, and 12,800 rows end up exposed. With the containment playbook (R3), both doors close at 0h50 and the count is 8,400. The bench models these times by stated rules: a playbook makes containment faster and makes it cover every door.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Step three: rotate what the exposure revealed<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Revoking stops access through a door. It does not change anything the people who came through already learned. If the share carried a service account, a connection string or an API key, or if the table itself held anything that works as a credential, it has to be rotated. The mechanics of rotation, and keeping jobs alive while you do it, belong to <a href="https://phoebefu6.github.io/learn-data-access-control-with-phoebe/courses/b6-secrets-and-keys.html">access control, secrets and keys ↗</a>.</p>
+        <p>If an AI agent or automation holds the share, revoking a human's access does not stop it. Use the agent's kill switch and pull its audit record: <a href="https://phoebefu6.github.io/learn-agent-secrets-access-with-phoebe/courses/06-prove-what-it-did.html">agent secrets and access, prove what it did ↗</a>.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>When the door was opened by an attacker, not a colleague<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Quarrybank's doors were opened by staff on purpose and stayed open by mistake. If the access log suggests someone created a door you did not, the incident is also a security incident: detection of exfiltration is covered in <a href="https://phoebefu6.github.io/learn-cyber-security-with-phoebe/courses/b5-exfiltration-detection.html">cyber security, exfiltration detection ↗</a>, and restoring after anything was altered or destroyed in <a href="https://phoebefu6.github.io/learn-cyber-security-with-phoebe/courses/b6-destructive-events.html">cyber security, destructive events ↗</a>. Your sequence does not change; the security team joins the room.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ PART 3 ============ -->
+  <section class="section" id="part-3">
+    <div class="section-kicker">
+      <span class="klabel">Part 3 · covers what was already copied</span>
+      <h2>A revoke does not recall a download</h2>
+      <span class="tag concept">5 min live</span>
+    </div>
+    <p class="lede">Once every door is shut, nobody new can read the table. Everything already read is still out there. Vendor analyst A's download sits on a laptop or in a vendor bucket; the unknown address kept whatever it paged through. Containment ends the expansion; it does not shrink what already escaped. That part is a list of copies and, for each, a request.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 286" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The copies outside, by holder. Reached under every plan from R1: vendor analyst A, holding a downloaded copy from 0h30, who can be asked to delete it and confirm; and the unknown address, which paged through the link from 3h10 and can never be told. Reached only with no plan, R0: the forwarded recipient at 21h40 and vendor analyst B from 26h40, both never told at R0.">
+        <defs>
+          <filter id="ib4cSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="67" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <pattern id="ib4cHc" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(-38)"><line x1="0" y1="0" x2="0" y2="7" stroke="#F2A900" stroke-width="1.4" opacity=".6"/></pattern>
+        </defs>
+        <style>
+          .ib4cH { font: 800 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib4cL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib4cS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib4cK { font: 800 11px Inter, sans-serif; fill: #0D1F14; }
+          .ib4cR { font: 800 11px Inter, sans-serif; fill: #991B1B; }
+          .ib4cN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib4cH" x="40" y="40">REACHED UNDER EVERY PLAN FROM R1</text>
+        <text class="ib4cH" x="460" y="40">REACHED ONLY WITH NO PLAN (R0)</text>
+
+        <g filter="url(#ib4cSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="40" y="56" width="180" height="150" rx="10" fill="#FFFFFF" transform="rotate(-1.2 130 131)"/>
+          <rect x="250" y="56" width="180" height="150" rx="10" fill="#FFFFFF" transform="rotate(0.9 340 131)"/>
+          <path d="M445 52 L445 214" stroke="#C3D3C8" stroke-dasharray="5 5"/>
+          <rect x="460" y="56" width="180" height="150" rx="10" fill="#FFFFFF" transform="rotate(-0.7 550 131)"/>
+          <rect x="670" y="56" width="180" height="150" rx="10" fill="#FFFFFF" transform="rotate(1.1 760 131)"/>
+          <rect x="52" y="160" width="156" height="32" rx="6" fill="#F2A900"/>
+          <rect x="262" y="160" width="156" height="32" rx="6" fill="#FEF2F2" stroke="#FCA5A5"/>
+          <rect x="472" y="160" width="156" height="32" rx="6" fill="url(#ib4cHc)"/>
+          <rect x="682" y="160" width="156" height="32" rx="6" fill="url(#ib4cHc)"/>
+        </g>
+
+        <text class="ib4cL" x="56" y="84">vendor analyst A</text>
+        <text class="ib4cS" x="56" y="106">downloaded a copy, 0h30</text>
+        <text class="ib4cS" x="56" y="124">a revoke cannot recall it</text>
+        <text class="ib4cS" x="56" y="142">a named contact exists</text>
+        <text class="ib4cK" x="62" y="180">ask: delete + confirm</text>
+
+        <text class="ib4cL" x="266" y="84">unknown address</text>
+        <text class="ib4cS" x="266" y="106">paged through the link</text>
+        <text class="ib4cS" x="266" y="124">from 3h10, before signal</text>
+        <text class="ib4cS" x="266" y="142">no contact, no identity</text>
+        <text class="ib4cR" x="272" y="180">can never be told</text>
+
+        <text class="ib4cL" x="476" y="84">forwarded recipient</text>
+        <text class="ib4cS" x="476" y="106">read at 21h40</text>
+        <text class="ib4cS" x="476" y="124">after the signal</text>
+        <text class="ib4cS" x="476" y="142">stopped by any plan</text>
+        <text class="ib4cK" x="482" y="180">never told at R0</text>
+
+        <text class="ib4cL" x="686" y="84">vendor analyst B</text>
+        <text class="ib4cS" x="686" y="106">read from 26h40</text>
+        <text class="ib4cS" x="686" y="124">after the signal</text>
+        <text class="ib4cS" x="686" y="142">stopped by any plan</text>
+        <text class="ib4cK" x="692" y="180">never told at R0</text>
+
+        <text class="ib4cN" x="40" y="246">A revoke stops new reads. It does not recall a file already on someone else's machine.</text>
+        <text class="ib4cN" x="40" y="268">Constructed Quarrybank example. Times after the share; the signal came at 3h20.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - two copies outlive every plan; only one of them has an address you can write to.</figcaption>
+    </figure>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>The copies list and the deletion request<span class="mini">3 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Build the copies list from the snapshot: every download, export and query result fetched through a door before it closed, with who holds it and whether you can reach them. For each reachable holder, the request is specific: delete every copy, including derived files and backups, and confirm in writing when it is done. The confirmation goes in the evidence section of the record.</p>
+        <p>Some holders cannot be reached. The bench marks the unknown address not notifiable, and no plan changes that. Write it down as an open exposure, with what it read, so the privacy partner can weigh it.</p>
+        <div class="callout example">
+          <span class="ex-pill">Real world</span>
+          <p>Constructed Quarrybank example, measured on the bench. With no plan (R0) the leak reaches 4 outside parties and 2 are never told: vendor analyst B and the forwarded recipient. With a declare rule or any later plan, 2 parties are reached, vendor analyst A and the unknown address, both before or near the 3h20 signal. Those two are the floor: what happens before the first signal is detection's problem, not the responder's.</p>
+        </div>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode live">Live</span>Page the privacy partner early, with numbers<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>Customer contact and credit-limit columns are personal data, so a notice clock may be running. Under GDPR Art. 33 the controller notifies the authority "not later than 72 hours after having become aware of it", where feasible; Singapore's PDPA is reported to require notice to the PDPC no later than 3 calendar days after determining the breach is notifiable. Neither rule is yours to interpret. Your job is to hand the privacy partner, early, the inputs they need: when each door opened and closed, the rows measured exposed, who holds copies and who has confirmed deletion.</p>
+        <p>The law and the notice itself live in <a href="https://phoebefu6.github.io/learn-gdpr-with-phoebe/courses/b7-breach-response.html">GDPR breach response ↗</a>, <a href="https://phoebefu6.github.io/learn-pdpa-dnc-with-phoebe/courses/b7-breach-response.html">PDPA breach response ↗</a> and <a href="https://phoebefu6.github.io/learn-data-governance-with-phoebe/courses/05-protection-and-breach.html">data governance, protection and breach ↗</a>.</p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary><span class="mode self">Self-study</span>Why a smaller number is worth the work<span class="mini">2 min</span><span class="caret">▶</span></summary>
+      <div class="body">
+        <p>18,400, 12,800 and 8,400 are three answers to the same question from the same incident. Each one changes who has to be told, what the notice says and how the board hears it. Practice among responders is to treat a measured number as the most valuable thing the exposure response produces after the closed doors themselves, because every downstream decision is sized by it.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ DEMO ============ -->
+  <section class="section" id="demo-1">
+    <div class="section-kicker">
+      <span class="klabel">Build-along</span>
+      <h2>Write Quarrybank's exposure playbook</h2>
+      <span class="tag demo">★ 22 min · everyone builds</span>
+    </div>
+    <p class="lede">You are on call at 12:20Z on 24 February when the access-log alert fires. Read the leaked table's panel on the bench under four plans, then write the seven-step playbook that turns R2's 12,800 into R3's 8,400, with who is allowed to do each step.</p>
+
+    <figure class="zoomable">
+      <svg viewBox="0 0 880 222" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The exposure playbook as seven steps in order with an owner for each: 1 snapshot, on-call; 2 list doors, on-call; 3 revoke all, access owner; 4 rotate, access owner; 5 list copies, on-call; 6 deletion requests, commander; 7 privacy partner paged, commander. Steps 1 to 3 are done by containment, 0h50 after the signal on R3.">
+        <defs>
+          <filter id="ib4dSk" x="-3%" y="-3%" width="106%" height="106%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="79" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+          <marker id="ib4dAr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#0D1F14" stroke-width="1.6" stroke-linecap="round"/></marker>
+        </defs>
+        <style>
+          .ib4dL { font: 600 12px Inter, sans-serif; fill: #0D1F14; }
+          .ib4dS { font: 400 11px Inter, sans-serif; fill: #4A5F52; }
+          .ib4dK { font: 400 11px Inter, sans-serif; fill: #0D1F14; }
+          .ib4dA { font: 700 11px Inter, sans-serif; fill: #053D1E; }
+          .ib4dN { font: 400 12px Inter, sans-serif; fill: #4A5F52; }
+        </style>
+
+        <text class="ib4dA" x="24" y="56">done by containment: 0h50 after the signal on R3</text>
+
+        <g filter="url(#ib4dSk)" fill="none" stroke="#0D1F14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M24 78 L24 70 L374 70 L374 78"/>
+          <rect x="24" y="94" width="106" height="60" rx="8" fill="#ECF7F0" transform="rotate(-1.5 77 124)"/>
+          <rect x="146" y="94" width="106" height="60" rx="8" fill="#ECF7F0" transform="rotate(1.2 199 124)"/>
+          <rect x="268" y="94" width="106" height="60" rx="8" fill="#F2A900" transform="rotate(-1 321 124)"/>
+          <rect x="390" y="94" width="106" height="60" rx="8" fill="#FFFFFF" transform="rotate(1.4 443 124)"/>
+          <rect x="512" y="94" width="106" height="60" rx="8" fill="#FFFFFF" transform="rotate(-1.2 565 124)"/>
+          <rect x="634" y="94" width="106" height="60" rx="8" fill="#FFFFFF" transform="rotate(0.8 687 124)"/>
+          <rect x="756" y="94" width="106" height="60" rx="8" fill="#FFFFFF" transform="rotate(-0.9 809 124)"/>
+          <path d="M132 124 L144 124" marker-end="url(#ib4dAr)"/>
+          <path d="M254 124 L266 124" marker-end="url(#ib4dAr)"/>
+          <path d="M376 124 L388 124" marker-end="url(#ib4dAr)"/>
+          <path d="M498 124 L510 124" marker-end="url(#ib4dAr)"/>
+          <path d="M620 124 L632 124" marker-end="url(#ib4dAr)"/>
+          <path d="M742 124 L754 124" marker-end="url(#ib4dAr)"/>
+        </g>
+
+        <text class="ib4dL" x="34" y="120">1 snapshot</text>
+        <text class="ib4dS" x="34" y="140">on-call</text>
+        <text class="ib4dL" x="156" y="120">2 list doors</text>
+        <text class="ib4dS" x="156" y="140">on-call</text>
+        <text class="ib4dL" x="278" y="120">3 revoke all</text>
+        <text class="ib4dK" x="278" y="140">access owner</text>
+        <text class="ib4dL" x="400" y="120">4 rotate</text>
+        <text class="ib4dS" x="400" y="140">access owner</text>
+        <text class="ib4dL" x="522" y="120">5 list copies</text>
+        <text class="ib4dS" x="522" y="140">on-call</text>
+        <text class="ib4dL" x="644" y="120">6 deletions</text>
+        <text class="ib4dS" x="644" y="140">commander</text>
+        <text class="ib4dL" x="766" y="120">7 privacy</text>
+        <text class="ib4dS" x="766" y="140">commander</text>
+
+        <text class="ib4dS" x="24" y="178">Step 7 can be paged as early as step 1; it must not wait for step 6.</text>
+        <text class="ib4dN" x="24" y="204">Constructed Quarrybank example. Owners are a practice; your roles card from leader session 3 decides.</text>
+      </svg>
+      <figcaption>🔍 Click to zoom - evidence first, every door second, and the copies list after the doors are shut.</figcaption>
+    </figure>
+
+    <div data-ird-bench="lite" data-presets="r0,r2,r3,t2" data-start="r0"></div>
+
+    <div class="steps">
+      <div class="step">
+        <p><strong>Open the leaked table's panel on R0.</strong> In the bench, pick R0 and read the leaked table's "what it reached" panel. Record the customer rows exposed when containment landed and before every door closed, and the list of outside parties reached. Note who is marked never told. Panel deadline times are measured from the bad write, which for this incident is the share at 09:00Z.</p>
+      </div>
+      <div class="step">
+        <p><strong>Switch to R2, then R3, and fill the grid.</strong> Same two row counts and the same parties list for each plan. R2 should show 12,800 rows exposed and R3 8,400; if yours differ, check that the leaked table's panel is the one open.</p>
+        <div class="prompt-box good"><span class="label">★ Step 2 · bench grid, leaked table</span>plan  rows at containment  rows before every door closed  parties reached  never told
+R0    ____                 ____                           ____             ____
+R2    ____                 12,800                         ____             ____
+R3    ____                 8,400                          ____             ____
+T2    ____                 ____                           ____             ____</div>
+      </div>
+      <div class="step">
+        <p><strong>Run T2 and read the evidence line.</strong> The panel should say the evidence was dropped and every row must be assumed exposed: 18,400 instead of the 8,400 the logs could have measured. Write one sentence in your own words on why step 1 of the playbook is the snapshot.</p>
+      </div>
+      <div class="step">
+        <p><strong>List Quarrybank's doors and copies from Part 1.</strong> Two doors, four visitors, one downloaded copy, one holder who can never be told. Put each on its own line with a time; this is the list your playbook will make someone write in the first minutes.</p>
+      </div>
+      <div class="step">
+        <p><strong>Write the playbook.</strong> Seven steps, each with who may do it and what proves it done. Keep Quarrybank's names out; keep the shape.</p>
+        <div class="prompt-box good"><span class="label">★ Step 5 · plan, responder page 4, exposure playbook</span>QUARRYBANK INCIDENT RESPONSE PLAN · responder page 4 · exposure playbook
+Use when personal or confidential data is readable by someone who should not read it.
+1 SNAPSHOT   access log for the window, share/link/grant settings as they stand,
+             credentials that touched the object. Path in the record.   Who: on-call
+2 LIST DOORS every link, share, grant, credential, open copy and agent with access.
+             Ask the platform, not memory.                              Who: on-call
+3 REVOKE ALL every door on the list, then test each one shut; time per door.
+             Contained = the last door closed, not the first.           Who: access owner
+4 ROTATE     any key, account or secret the share carried or the data revealed.
+             Agent holding a share: kill switch + audit record.         Who: access owner
+5 LIST COPIES every download/export fetched before its door closed: holder, reachable?
+                                                                         Who: on-call
+6 DELETION   request delete of every copy incl. derived files, written confirmation
+             filed in the record. Unreachable holders listed as open.   Who: commander
+7 PRIVACY    page the privacy partner at step 1; hand over doors, times, rows measured,
+             copies and confirmations. Deadlines are theirs.            Who: commander
+Rule: never drop the table or its history. A revoke stops new reads; it recalls nothing.</div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <p><strong>"Contained" needs a door count.</strong> Write it as "contained 13:10Z, 2 of 2 doors closed and tested". A status that says only "contained" invites exactly the mistake R2 makes on the bench.</p>
+    </div>
+  </section>
+
+  <!-- ============ HOMEWORK ============ -->
+  <section class="section" id="exercise">
+    <div class="section-kicker">
+      <span class="klabel">Homework</span>
+      <h2>Before session 5</h2>
+      <span class="tag exercise">30 min</span>
+    </div>
+    <ol>
+      <li>Pick one table with personal data where you work and list every door it is open through today: links, shares, grants, credentials, open copies, agents. Note which ones you found only by asking the platform.</li>
+      <li>Find out where its access log lives, how long it is kept, and whether revoking a share on your tools erases that share's history. That answer decides how urgent step 1 is.</li>
+      <li>Name who may revoke and who may rotate on that table at 3am, and check they actually have the permission. Add any gap to your roles card.</li>
+      <li>Draft the deletion request you would send a vendor: what to delete, including derived files, and what written confirmation you need back. Keep it to five lines.</li>
+    </ol>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="section" id="quiz">
+    <div class="section-kicker">
+      <span class="klabel">Check yourself</span>
+      <h2>Three questions</h2>
+    </div>
+
+    <div class="quiz-q" data-answer="1">
+      <p class="qtext">The access-log alert has just fired on Quarrybank's customer table. Why snapshot the logs and share settings before revoking anything?</p>
+      <button class="qopt" type="button">A · Because the revoke cannot run until a backup exists</button>
+      <button class="qopt" type="button">B · Because revoking can erase the settings and history that measure who read which rows, and that data is evidence</button>
+      <button class="qopt" type="button">C · Because the privacy partner must approve every revoke</button>
+      <p class="qwhy">NIST RS.AN-07: collected data "is still considered evidence". Without the logs, every row must be assumed exposed: 18,400 on the bench instead of 8,400 measured.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="2">
+      <p class="qtext">Vendor analyst A downloaded a full copy at 0h30. The vendor share is revoked at 0h50 after the signal. What has the revoke done to A's copy?</p>
+      <button class="qopt" type="button">A · Deleted it, because the share it came through is gone</button>
+      <button class="qopt" type="button">B · Locked it until the share is restored</button>
+      <button class="qopt" type="button">C · Nothing; it needs a deletion request and written confirmation</button>
+      <p class="qwhy">A revoke stops new access. It does not recall a download. The copy goes on the copies list with a deletion request and a confirmation filed in the record.</p>
+    </div>
+
+    <div class="quiz-q" data-answer="0">
+      <p class="qtext">On the bench R2 exposes 12,800 rows of the leaked table and R3 exposes 8,400. Why?</p>
+      <button class="qopt" type="button">A · Without a playbook only the public link closes at containment, and the vendor share stays open until the close-out</button>
+      <button class="qopt" type="button">B · R3 notifies more consumers, so fewer of them read the table</button>
+      <button class="qopt" type="button">C · R3 drops the table, so fewer rows can be read</button>
+      <p class="qwhy">The playbook closes every door at containment, 0h50 after the signal. Without it the second door stays open until 8h35, and reads through it keep adding rows. Dropping the table is trap T2, which makes the number worse.</p>
+    </div>
+
+    <p class="quiz-score"></p>
+  </section>
+
+  <!-- ============ COVERAGE ============ -->
+  <section class="section" id="official">
+    <div class="section-kicker">
+      <span class="klabel">Sources covered</span>
+      <h2>What this session teaches, and where it came from</h2>
+    </div>
+    <div class="covered">
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, RS.MI-01 (read 2026-11-10)</span><span class="note">"Containment refers to preventing the expansion of an incident"</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">NIST SP 800-61 Rev. 3, RS.AN-07 (read 2026-11-10)</span><span class="note">Collected incident data "is still considered evidence": snapshot before revoke</span></div>
+      <div class="covered-row"><span class="status pill solid">✓</span><span class="name">GDPR Art. 33 deadline (read 2026-11-10, linked input)</span><span class="note">72 hours after becoming aware, owned by the privacy partner and the GDPR course; PDPA 3 days reported</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Door-by-door practice: list, revoke, test, rotate, copies</span><span class="note">Practitioner conventions built on the sources above</span></div>
+      <div class="covered-row"><span class="status pill light">◐</span><span class="name">Bench numbers (12,800, 8,400, 18,400 assumed; 4 and 2 parties)</span><span class="note">Computed in your browser by replaying a constructed event log</span></div>
+      <div class="covered-row"><span class="status pill inkpill">·</span><span class="name">Rotation mechanics and exfiltration detection</span><span class="note">Not covered here: owned by the access control and cyber security courses</span></div>
+    </div>
+    <p class="mono" style="margin-top:14px">Every fact on this page, and its verification tier, is recorded in the course's source map.</p>
+  </section>
+
+  <!-- ============ CHEAT SHEET ============ -->
+  <section class="cheat" id="cheatsheet">
+    <h3>Responder session 4 cheat sheet <span>· pin this</span></h3>
+    <div class="grid-2">
+      <div class="cheat-item"><b>List the doors first</b><span>Links, shares, grants, credentials, open copies, agents. Ask the platform.</span></div>
+      <div class="cheat-item"><b>Snapshot before revoke</b><span>The access log is evidence and the only way to measure rows exposed.</span></div>
+      <div class="cheat-item"><b>Contained = last door shut</b><span>Test each door closed. R2 shut one: 12,800 rows. R3 shut both: 8,400.</span></div>
+      <div class="cheat-item"><b>Rotate what it revealed</b><span>Keys and accounts the share carried. Agents need their kill switch.</span></div>
+      <div class="cheat-item"><b>A revoke recalls nothing</b><span>Copies list, deletion request, written confirmation in the record.</span></div>
+      <div class="cheat-item"><b>Never drop the table</b><span>T2: 18,400 rows assumed exposed instead of 8,400 measured.</span></div>
+    </div>
+  </section>
+
+  <div class="callout next">
+    <span class="nx-pill">Next session</span>
+    <p>The doors are shut and the bad rows are quarantined. Session 5 fixes the data itself: fix forward or roll back, and then the check most teams skip, proving that every consumer now reads the corrected rows, because copies do not refresh themselves.</p>
+  </div>
+
+  <footer class="pagefoot">
+    <span>Responder session 4 of 8 · learn-data-incident-response-with-phoebe · by Phoebe Fu &nbsp;·&nbsp; 📚 <a href="https://phoebefu6.github.io/learn-with-phoebe/">Learn with Phoebe ↗</a></span>
+    <span><a href="b3-stop-a-bad-load-spreading.html">← Prev: Stop a bad load spreading</a> &nbsp;·&nbsp; <a href="b5-correct-then-prove-it-landed.html">Next: Correct, then prove it landed →</a></span>
+  </footer>
+
+</main>
+
+<script src="../assets/app.js?v=1"></script>
+<script src="../assets/ird-sample.js?v=1"></script>
+<script src="../assets/ird-live.js?v=2"></script>
+</body>
+</html>
